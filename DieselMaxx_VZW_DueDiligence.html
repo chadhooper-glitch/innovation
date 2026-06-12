@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DieselMaxx / GasMaxx — VZW Due Diligence</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; background: #f4f4f4; color: #222; margin: 0; padding: 0; }
+
+  .header { background: #000; color: #fff; padding: 18px 32px 14px 32px; }
+  .header-brand { color: #cd040b; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .header h1 { margin: 0 0 4px 0; font-size: 22px; color: #fff; }
+  .header-sub { color: #aaa; font-size: 12px; }
+
+  .container { max-width: 1000px; margin: 24px auto; padding: 0 24px 48px 24px; }
+
+  h2 { color: #cd040b; border-bottom: 2px solid #cd040b; padding-bottom: 5px; margin-top: 36px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+  h3 { color: #000; font-size: 14px; margin: 18px 0 8px 0; border-left: 3px solid #cd040b; padding-left: 10px; }
+
+  .section-box { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 18px 22px; margin: 12px 0; }
+  .highlight-box { background: #e8f5e9; border: 2px solid #2e7d32; border-radius: 4px; padding: 14px 18px; margin: 14px 0; }
+  .warn-box { background: #fff8e1; border: 2px solid #f9a825; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+  .info-box { background: #e3f2fd; border: 2px solid #1565c0; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+  .red-box { background: #ffebee; border: 2px solid #cd040b; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 18px 0; font-size: 13px; }
+  th { background: #000; color: #fff; padding: 8px 12px; text-align: left; font-size: 12px; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; background: #fff; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+  td:first-child { font-weight: 600; color: #333; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+  .stat-card { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 14px 10px; text-align: center; }
+  .stat-card .num { font-size: 26px; font-weight: 700; line-height: 1.15; }
+  .stat-card .lbl { font-size: 11px; color: #666; margin-top: 4px; line-height: 1.4; }
+  .stat-card.red .num  { color: #cd040b; }
+  .stat-card.green .num { color: #2e7d32; }
+  .stat-card.blue .num  { color: #0057a8; }
+  .stat-card.orange .num { color: #e65100; }
+
+  .q-list { counter-reset: qcount; list-style: none; padding: 0; margin: 0; }
+  .q-list li { counter-increment: qcount; padding: 9px 12px 9px 44px; border-bottom: 1px solid #f0f0f0; position: relative; font-size: 13.5px; line-height: 1.55; }
+  .q-list li:last-child { border-bottom: none; }
+  .q-list li::before {
+    content: counter(qcount);
+    position: absolute; left: 10px; top: 9px;
+    background: #cd040b; color: #fff;
+    width: 22px; height: 22px;
+    border-radius: 50%; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+  .q-list li:nth-child(even) { background: #fafafa; }
+
+  .tag { display: inline-block; padding: 1px 7px; border-radius: 3px; font-size: 10px; font-weight: 700; margin-left: 6px; vertical-align: middle; }
+  .tag-gen  { background: #000; color: #fff; }
+  .tag-fleet { background: #0057a8; color: #fff; }
+  .tag-both { background: #cd040b; color: #fff; }
+  .tag-tech { background: #6a1b9a; color: #fff; }
+  .tag-comm { background: #2e7d32; color: #fff; }
+
+  .opportunity-bar { background: #fff; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; margin: 6px 0; }
+  .opportunity-bar .bar-label { padding: 6px 12px; font-size: 12px; font-weight: 600; }
+  .opportunity-bar .bar-track { background: #f0f0f0; height: 22px; margin: 0 12px 8px 12px; border-radius: 3px; overflow: hidden; }
+  .opportunity-bar .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; }
+
+  .steps { counter-reset: stepcount; list-style: none; padding: 0; margin: 0; }
+  .steps li { counter-increment: stepcount; padding: 10px 14px 10px 52px; border-left: 3px solid #cd040b; margin-bottom: 8px; background: #fff; border-radius: 0 4px 4px 0; position: relative; font-size: 13px; }
+  .steps li::before {
+    content: counter(stepcount);
+    position: absolute; left: -16px; top: 10px;
+    background: #cd040b; color: #fff;
+    width: 28px; height: 28px; border-radius: 50%;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .steps li strong { color: #cd040b; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 16px 0; }
+  .legend span { font-size: 11px; display: flex; align-items: center; gap: 4px; }
+
+  .footer { text-align: center; font-size: 11px; color: #888; margin-top: 48px; border-top: 1px solid #ddd; padding-top: 14px; }
+
+  @media print {
+    .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    th, .stat-card .num { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">Verizon &nbsp;|&nbsp; National CP&amp;G Planning</div>
+  <h1>DieselMaxx / GasMaxx &mdash; VZW Due Diligence Questions</h1>
+  <div class="header-sub">Chad Hooper &nbsp;&bull;&nbsp; chad.hooper@verizonwireless.com &nbsp;&bull;&nbsp; May 2026 &nbsp;&bull;&nbsp; <span style="color:#4caf50;font-weight:700;">&#10003; NDA Signed 2026-05-22</span></div>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>1. What We Are Evaluating</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <p><strong>DieselMaxx / GasMaxx</strong> is an inline fuel conditioning device installed between the fuel tank and injectors. The vendor claims it improves combustion efficiency, reducing fuel consumption by <strong>8–25%</strong> (independent technical report range: <strong>5–15%</strong>) and cutting carbon emissions by <strong>85–94%</strong> across diesel generators, diesel trucks, and gasoline fleet vehicles.</p>
+
+    <div class="highlight-box" style="margin:14px 0;">
+      <strong>&#10003; Mechanism Confirmed — NDA Technical Documents (received 2026-05-26)</strong>
+      <p style="margin:8px 0 4px 0;">Two technical documents received under NDA describe and independently support the operating mechanism:</p>
+      <ul style="margin:4px 0; font-size:13px;">
+        <li><strong>Active element:</strong> Steel tube containing copper mesh — no magnets, no chemicals, no electronics. Completely passive.</li>
+        <li><strong>Mechanism:</strong> Turbulent flow through copper mesh generates <em>electrostatic charge</em> on the fuel (flow electrification / streaming current — a documented phenomenon in fuel handling safety literature). The charged fuel breaks Van der Waals / hydrogen bonds between fuel molecules → smaller droplet diameter → better air/fuel mixing → more complete combustion → fuel savings and reduced emissions.</li>
+        <li><strong>Charge persistence:</strong> Fuel retains electrostatic charge from the device through the delivery system into the engine. Effect is pre-combustion and independent of engine brand (Generac, CAT, Kohler, Cummins).</li>
+        <li><strong>Independent support:</strong> 4 SAE technical papers cited (SAE 2000-01-2041, SAE 2002-01-3053, SAE 972987, SAE 2005-32-0090) confirming electrostatic charge improves diesel atomization.</li>
+      </ul>
+      <p style="margin:8px 0 0 0; font-size:12px;"><strong>Document authors:</strong> Richard Carlson, M.S. Environmental Engineering (UCLA), 25 yrs at independent vehicle/engine testing labs, SAE member; and Erin McBride, Siemens Senior Planning Engineer (independent of vendor).<br>
+      <strong>Note:</strong> Carlson's independent report cites a more conservative <strong>5–15%</strong> savings range vs. the vendor deck's 8–25% — use 5–15% as the basis for pilot success criteria.</p>
+    </div>
+
+    <p>Verizon is evaluating two distinct applications:</p>
+    <table>
+      <tr><th>Application</th><th>Product</th><th>VZW Scope</th><th>Primary Metric</th></tr>
+      <tr><td>Stationary diesel generators at macro cell sites</td><td>DieselMaxx</td><td>39,521 diesel generator sites</td><td>Gal/run-hr fuel consumption</td></tr>
+      <tr><td>Fleet vehicles — diesel service trucks</td><td>DieselMaxx</td><td>Thousands of diesel service vehicles</td><td>MPG / gal/100 miles</td></tr>
+      <tr><td>Fleet vehicles — gasoline light duty</td><td>GasMaxx</td><td>Light-duty pickups, SUVs</td><td>MPG / gal/100 miles</td></tr>
+    </table>
+    <p style="margin:0;font-size:12px;color:#666;">This document summarizes the VZW opportunity scale and lists due diligence questions to be addressed under NDA.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>2. VZW Generator Network — Opportunity Scale</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <div class="stat-grid">
+    <div class="stat-card blue">
+      <div class="num">80,259</div>
+      <div class="lbl">Total VZW Macro Sites</div>
+    </div>
+    <div class="stat-card red">
+      <div class="num">39,521</div>
+      <div class="lbl">Macro Sites with Diesel Generators<br><span style="font-size:10px;">(49.2% diesel penetration)</span></div>
+    </div>
+    <div class="stat-card orange">
+      <div class="num">21.3 hrs</div>
+      <div class="lbl">Avg Generator Run Hours/Year<br><span style="font-size:10px;">(maintenance + outage baseline)</span></div>
+    </div>
+    <div class="stat-card green">
+      <div class="num">$5.65</div>
+      <div class="lbl">Current Diesel Cost/Gallon<br><span style="font-size:10px;">(VZW standard assumption)</span></div>
+    </div>
+  </div>
+
+  <h3>Projected Annual Fuel Spend — Generator Fleet (Conservative Estimate)</h3>
+  <div class="section-box">
+    <table>
+      <tr><th>Assumption</th><th>Basis</th><th>Value</th></tr>
+      <tr><td>Average generator size</td><td>Mix of 35kW–100kW; typical Generac SG-series</td><td>~50 kW avg</td></tr>
+      <tr><td>Avg fuel consumption at 75% load</td><td>~3.5 gal/hr (50kW diesel at 75% load)</td><td>3.5 gal/hr</td></tr>
+      <tr><td>Annual fuel per site</td><td>3.5 gal/hr × 21.3 hrs/yr</td><td>~74.6 gal/yr</td></tr>
+      <tr><td>Network-wide fuel volume</td><td>39,521 sites × 74.6 gal/yr</td><td>~2.95M gal/yr</td></tr>
+      <tr><td>Annual fuel spend (network)</td><td>2.95M gal × $5.65/gal</td><td><strong>~$16.7M/yr</strong></td></tr>
+    </table>
+
+    <h3 style="margin-top:14px;">Savings Sensitivity — If DieselMaxx Claims Hold</h3>
+    <table>
+      <tr><th>Savings Rate</th><th>Gallons Saved/Yr</th><th>Annual Dollar Savings</th><th>10-Year Value</th></tr>
+      <tr><td>8% (low-end claim)</td><td>~236K gal</td><td><strong style="color:#2e7d32;">~$1.3M/yr</strong></td><td>~$13M</td></tr>
+      <tr><td>12% (school bus benchmark)</td><td>~354K gal</td><td><strong style="color:#2e7d32;">~$2.0M/yr</strong></td><td>~$20M</td></tr>
+      <tr><td>15% (transport benchmark)</td><td>~442K gal</td><td><strong style="color:#2e7d32;">~$2.5M/yr</strong></td><td>~$25M</td></tr>
+      <tr><td>25% (generator case study)</td><td>~737K gal</td><td><strong style="color:#2e7d32;">~$4.2M/yr</strong></td><td>~$42M</td></tr>
+    </table>
+
+    <div class="warn-box" style="margin-top:4px;">
+      <strong>&#9888; These projections are illustrative only</strong> — they assume vendor claims are validated by independent testing. No commitment to these figures should be made until a controlled pilot confirms measurable savings at VZW generator sites. Run hours also increase significantly during major storm/outage events (Helene, Milton, etc.), which would further amplify savings.
+    </div>
+  </div>
+
+  <h3>Generator Penetration by VZW Region — DieselMaxx Priority Map</h3>
+  <div class="section-box">
+    <p style="font-size:12px;color:#555;margin:0 0 12px 0;">Sorted by diesel generator count. Diesel Pct = diesel generators ÷ total macros. Propane (LP) and Natural Gas counts shown for context — DieselMaxx applies to diesel units only. Florida propane count (2,173) highlighted as an outlier.</p>
+    <table>
+      <tr><th>VZW Region</th><th style="text-align:right">Total Macros</th><th style="text-align:right">Diesel</th><th style="text-align:right">Propane (LP)</th><th style="text-align:right">Nat Gas</th><th style="text-align:right">Diesel Pct</th><th style="text-align:right">Est. Diesel Fuel/Yr (gal)</th></tr>
+      <tr><td>Carolina / Tennessee</td><td style="text-align:right">6,045</td><td style="text-align:right">3,660</td><td style="text-align:right">222</td><td style="text-align:right">99</td><td style="text-align:right;color:#2e7d32;font-weight:700">60.5%</td><td style="text-align:right">273,036</td></tr>
+      <tr><td>Mountain Plains</td><td style="text-align:right">5,913</td><td style="text-align:right">3,384</td><td style="text-align:right">322</td><td style="text-align:right">102</td><td style="text-align:right;color:#e65100;font-weight:700">57.2%</td><td style="text-align:right">252,446</td></tr>
+      <tr><td>Central Gulf Coast</td><td style="text-align:right">5,683</td><td style="text-align:right">3,240</td><td style="text-align:right">610</td><td style="text-align:right">230</td><td style="text-align:right;color:#e65100;font-weight:700">57.0%</td><td style="text-align:right">241,704</td></tr>
+      <tr><td>OPW</td><td style="text-align:right">4,847</td><td style="text-align:right">2,933</td><td style="text-align:right">344</td><td style="text-align:right">173</td><td style="text-align:right;color:#2e7d32;font-weight:700">60.5%</td><td style="text-align:right">218,802</td></tr>
+      <tr><td>Georgia / Alabama</td><td style="text-align:right">4,437</td><td style="text-align:right">2,824</td><td style="text-align:right">336</td><td style="text-align:right">40</td><td style="text-align:right;color:#2e7d32;font-weight:700">63.6%</td><td style="text-align:right">210,670</td></tr>
+      <tr><td>Central Texas</td><td style="text-align:right">5,305</td><td style="text-align:right">2,819</td><td style="text-align:right">264</td><td style="text-align:right">19</td><td style="text-align:right;color:#e65100;font-weight:700">53.1%</td><td style="text-align:right">210,297</td></tr>
+      <tr><td>Michigan / Indiana / KY</td><td style="text-align:right">4,693</td><td style="text-align:right">2,402</td><td style="text-align:right">823</td><td style="text-align:right">265</td><td style="text-align:right;color:#e65100;font-weight:700">51.2%</td><td style="text-align:right">179,189</td></tr>
+      <tr><td>Illinois / Wisconsin</td><td style="text-align:right">4,267</td><td style="text-align:right">2,279</td><td style="text-align:right">201</td><td style="text-align:right">246</td><td style="text-align:right;color:#e65100;font-weight:700">53.4%</td><td style="text-align:right">170,013</td></tr>
+      <tr><td>Great Plains</td><td style="text-align:right">4,256</td><td style="text-align:right">2,209</td><td style="text-align:right">160</td><td style="text-align:right">114</td><td style="text-align:right;color:#e65100;font-weight:700">51.9%</td><td style="text-align:right">164,791</td></tr>
+      <tr><td>Tri State</td><td style="text-align:right">4,253</td><td style="text-align:right">1,897</td><td style="text-align:right">163</td><td style="text-align:right">269</td><td style="text-align:right;color:#cd040b;font-weight:700">44.6%</td><td style="text-align:right">141,516</td></tr>
+      <tr><td>Southern California</td><td style="text-align:right">4,038</td><td style="text-align:right">1,684</td><td style="text-align:right">63</td><td style="text-align:right">104</td><td style="text-align:right;color:#cd040b;font-weight:700">41.7%</td><td style="text-align:right">125,626</td></tr>
+      <tr><td>Pacific Northwest</td><td style="text-align:right">3,375</td><td style="text-align:right">1,664</td><td style="text-align:right">151</td><td style="text-align:right">58</td><td style="text-align:right;color:#e65100;font-weight:700">49.3%</td><td style="text-align:right">124,134</td></tr>
+      <tr><td>New England</td><td style="text-align:right">3,907</td><td style="text-align:right">1,648</td><td style="text-align:right">514</td><td style="text-align:right">273</td><td style="text-align:right;color:#cd040b;font-weight:700">42.2%</td><td style="text-align:right">122,941</td></tr>
+      <tr><td>Northern California / Nevada</td><td style="text-align:right">3,649</td><td style="text-align:right">1,581</td><td style="text-align:right">114</td><td style="text-align:right">29</td><td style="text-align:right;color:#cd040b;font-weight:700">43.3%</td><td style="text-align:right">117,943</td></tr>
+      <tr><td>W-B / Virginia</td><td style="text-align:right">3,656</td><td style="text-align:right">1,569</td><td style="text-align:right">196</td><td style="text-align:right">169</td><td style="text-align:right;color:#cd040b;font-weight:700">42.9%</td><td style="text-align:right">117,047</td></tr>
+      <tr><td>New York</td><td style="text-align:right">4,739</td><td style="text-align:right">1,542</td><td style="text-align:right">144</td><td style="text-align:right">706</td><td style="text-align:right;color:#cd040b;font-weight:700">32.5%</td><td style="text-align:right">115,033</td></tr>
+      <tr><td>SouthWest</td><td style="text-align:right">3,401</td><td style="text-align:right">1,206</td><td style="text-align:right">95</td><td style="text-align:right">11</td><td style="text-align:right;color:#cd040b;font-weight:700">35.5%</td><td style="text-align:right">89,968</td></tr>
+      <tr><td>Florida</td><td style="text-align:right">3,900</td><td style="text-align:right">985</td><td style="text-align:right;color:#cd040b;font-weight:600">2,173</td><td style="text-align:right">106</td><td style="text-align:right;color:#cd040b;font-weight:700">25.3%</td><td style="text-align:right">73,481</td></tr>
+      <tr><td style="font-weight:700;background:#000;color:#fff">Network Total</td><td style="text-align:right;font-weight:700;background:#000;color:#fff">80,364</td><td style="text-align:right;font-weight:700;background:#000;color:#fff">39,521</td><td style="text-align:right;font-weight:700;background:#000;color:#fff">6,895</td><td style="text-align:right;font-weight:700;background:#000;color:#fff">3,013</td><td style="text-align:right;font-weight:700;background:#cd040b;color:#fff">49.2%</td><td style="text-align:right;font-weight:700;background:#000;color:#fff">~2.95M gal/yr</td></tr>
+    </table>
+    <p style="font-size:11px;color:#888;margin:4px 0 0 0;">Est. fuel/yr = sites × 74.6 gal/yr baseline. Network total updated 2026-05-20 from Penetration%_Manager Full Data (diesel only). Regional rows from SPIN Feasibility Analysis 2026-05-18 — pending refresh.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>3. Live Test Data &mdash; Bangalore Genset (May 2025)</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <div class="info-box" style="margin:0 0 14px 0;">
+      <strong>Test ID: GENSET INDIA 104</strong> &nbsp;&bull;&nbsp; Conducted by Sinewave Generators Private Limited (Authorized Cummins Dealer), Bengaluru, Karnataka, India &nbsp;&bull;&nbsp; May 13, 2025<br>
+      <strong>Equipment:</strong> Cummins 6BTAA5.9-G13 &mdash; 125 kVA &mdash; Diesel &mdash; Serial 22B84532792 &mdash; Age: 3 years (02/2022)<br>
+      <strong>Source:</strong> PDF test report (received June 2026); ECO system = DieselMaxx device installed on fuel line
+    </div>
+
+    <h3>Test Results &mdash; Side by Side</h3>
+    <table>
+      <tr><th>Parameter</th><th>Test #1 &mdash; Without ECO</th><th>Test #2 &mdash; With ECO</th></tr>
+      <tr><td>Test Date</td><td>13th May 2025</td><td>13th May 2025</td></tr>
+      <tr><td>Start / End Time</td><td>12:41 &ndash; 13:41</td><td>13:51 &ndash; 14:51</td></tr>
+      <tr><td>Run Duration</td><td>1 Hour</td><td>1 Hour</td></tr>
+      <tr><td>Declared Load</td><td>50%</td><td>50%</td></tr>
+      <tr><td>kWh Start / End</td><td>10,331 &rarr; 10,341</td><td>10,341 &rarr; 10,352</td></tr>
+      <tr><td>kWh Output (measured)</td><td>10 kWh</td><td>11 kWh</td></tr>
+      <tr><td>Fuel Consumed</td><td><strong>14 litres</strong></td><td><strong>12 litres</strong></td></tr>
+      <tr><td>Specific Fuel Consumption</td><td>1.40 L/kWh</td><td>1.09 L/kWh</td></tr>
+    </table>
+
+    <div class="highlight-box">
+      <strong>Claimed Result:</strong> 2 litres/hour saved &mdash; <strong>14.28% raw fuel reduction</strong><br>
+      <strong>Normalized result</strong> (fuel per kWh output): 1.40 &rarr; 1.09 L/kWh &mdash; <strong>~22% improvement in specific fuel consumption</strong><br>
+      <span style="font-size:12px; color:#555;">Note: the normalized figure is stronger but is also more sensitive to the load discrepancy flagged below.</span>
+    </div>
+
+    <h3>VZW-Scale Projection at 14.28% Savings Rate</h3>
+    <table>
+      <tr><th>Metric</th><th>Value</th></tr>
+      <tr><td>Network fuel volume (baseline)</td><td>~2.95M gal/yr</td></tr>
+      <tr><td>Gallons saved at 14.28%</td><td>~421K gal/yr</td></tr>
+      <tr><td>Dollar savings at $5.65/gal</td><td><strong style="color:#2e7d32;">~$2.38M/yr</strong></td></tr>
+      <tr><td>Sensitivity table position</td><td>Between 12% ($2.0M) and 15% ($2.5M) benchmarks</td></tr>
+    </table>
+
+    <div class="warn-box">
+      <strong>&#9888; Methodology Flags &mdash; Review Before Citing This Data:</strong>
+      <ul style="margin:8px 0 0 0;">
+        <li><strong>Load was not equal between tests.</strong> Test 1 produced 10 kWh; Test 2 produced 11 kWh &mdash; 10% more electrical output. A valid controlled comparison requires identical load. When normalized for output, specific fuel consumption improved ~22% with ECO, but the unequal loads make either figure unreliable until explained.</li>
+        <li><strong>kWh readings appear inconsistent with 50% load.</strong> At 50% of 125 kVA (~50 kW real power), expected output over 1 hour &asymp; 50 kWh. Actual measured: 10&ndash;11 kWh &mdash; roughly 80% below expected. Either the load was far below 50% of rated, or the kWh meter is measuring a single phase of a 3-phase output. Must be clarified before citing the savings figure.</li>
+        <li><strong>Not an independent test lab.</strong> Sinewave Generators Private Limited is an Authorized Cummins Dealer &mdash; operationally credible but not a neutral third-party testing facility.</li>
+        <li><strong>Fuel measurement resolution.</strong> Fuel measured in whole litres only. &plusmn;1 litre uncertainty = &plusmn;7.1% on a 14-litre measurement &mdash; the 2-litre claimed saving is within 2&times; the measurement error band.</li>
+        <li><strong>Single run, no replication.</strong> One test run each direction; no statistical confidence interval possible.</li>
+        <li><strong>Warm-up asymmetry.</strong> Test 1 had a 10-minute warm-up (cold-start fuel penalty absorbed before measurement); Test 2 ran on an already-warm engine &mdash; a slight fuel advantage built into the ECO baseline.</li>
+        <li><strong>Emissions testing pending.</strong> The report explicitly notes carbon emissions testing is still to be done &mdash; no emissions data from this test.</li>
+      </ul>
+      <p style="margin:10px 0 0 0; font-size:12px;"><strong>Bottom line:</strong> Direction is correct and the 14.28% magnitude aligns with the conservative 5&ndash;15% technical range from the Carlson independent report. Real equipment, real serial number, and a Cummins-authorized tester gives this more weight than a vendor case-study slide. However, the unequal kWh output and unexplained kWh magnitude are legitimate methodological issues. Use as supporting evidence alongside the pilot &mdash; not primary proof.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>4. Legend — Question Tags</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="legend">
+    <span><span class="tag tag-both">BOTH</span> Applies to generators AND fleet</span>
+    <span><span class="tag tag-gen">GEN</span> Generator-specific</span>
+    <span><span class="tag tag-fleet">FLEET</span> Fleet vehicle-specific</span>
+    <span><span class="tag tag-tech">TECH</span> Technology / science</span>
+    <span><span class="tag tag-comm">COMM</span> Commercial / pilot structure</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>5. Technology &amp; Science</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <div class="highlight-box" style="margin:0 0 14px 0; font-size:12px;">
+      <strong>&#10003; Q1, Q2, Q3 below — answered by NDA technical documents; Q2 SAE citations independently verified on SAE Mobilus (2026-05-26).</strong> Questions remain in the list for formal vendor confirmation; outstanding questions begin at Q4.
+    </div>
+    <ol class="q-list">
+      <li><span style="color:#2e7d32;font-weight:700;">[ANSWERED]</span> What is the underlying mechanism of action — is this a catalytic, magnetic, ionization, or thermal-based technology, and what physical or chemical change does it produce in the fuel before combustion? <span class="tag tag-both">BOTH</span> <span class="tag tag-tech">TECH</span>
+        <div style="margin-top:6px; padding:8px 10px; background:#e8f5e9; border-left:3px solid #2e7d32; font-size:12px; border-radius:2px;">
+          <strong>Answer (per NDA docs):</strong> Electrostatic charging via turbulent flow through copper mesh. Flow electrification generates streaming current; charged fuel breaks molecular hydrogen bonds, producing smaller droplets and improved atomization. Mechanism rules out magnetic, catalytic, chemical, or external electrical explanations.
+        </div>
+      </li>
+      <li><span style="color:#2e7d32;font-weight:700;">[ANSWERED &amp; VERIFIED]</span> Has the technology been peer-reviewed or published in any SAE, DOE, EPRI, or academic journal? Can you provide citations? <span class="tag tag-both">BOTH</span> <span class="tag tag-tech">TECH</span>
+        <div style="margin-top:6px; padding:8px 10px; background:#e8f5e9; border-left:3px solid #2e7d32; font-size:12px; border-radius:2px;">
+          <strong>Answer (per NDA docs + independent verification via SAE Mobilus, 2026-05-26):</strong> All 4 cited SAE papers confirmed real, titles accurate, subjects on-point for electrostatic fuel atomization.
+          <table style="margin:8px 0 0 0; font-size:11px; width:100%;">
+            <tr><th style="font-size:11px;">Paper ID</th><th style="font-size:11px;">Authors</th><th style="font-size:11px;">Title</th><th style="font-size:11px;">Verified?</th></tr>
+            <tr><td>SAE 2000-01-2041</td><td>Leuteritz, Velji, Bach (Univ. of Applied Sciences Dresden)</td><td>A Novel Injection System for Combustion Engines Based on Electrostatic Fuel Atomization</td><td style="color:#2e7d32;font-weight:700;">&#10003; Fully verified</td></tr>
+            <tr><td>SAE 2002-01-3053</td><td>DiSalvo, Thomas, Makar (CFD Research Corp / National Automotive Center)</td><td>Electrostatic Atomization Insertion into Compression Ignition Engines</td><td style="color:#2e7d32;font-weight:700;">&#10003; Fully verified</td></tr>
+            <tr><td>SAE 972987</td><td>Hetrick &amp; Parsons (Ford Motor Co.) — cited as "Parsons" but Hetrick is lead author</td><td>Electrospray for Fuel Injection</td><td style="color:#e65100;font-weight:700;">&#10003; Verified (minor attribution note)</td></tr>
+            <tr><td>SAE 2005-32-0090</td><td>Allen &amp; Ravenhill (Scion-Sprays Ltd, Norwich Research Park, UK)</td><td>Experimental Test Results from a Novel Low Power Electrostatic Port Fuel Injector for Small Engines</td><td style="color:#2e7d32;font-weight:700;">&#10003; Fully verified</td></tr>
+          </table>
+          <p style="margin:6px 0 0 0;"><strong>Note on SAE 972987:</strong> The DieselMaxx document cites this as "Parsons" — Parsons is a real co-author (Ford) but Hetrick is the lead. Minor attribution issue, not a credibility concern. The paper is real and on-subject.</p>
+        </div>
+      </li>
+      <li><span style="color:#2e7d32;font-weight:700;">[ANSWERED]</span> Does the device have any active components or electronics, or is it entirely passive once installed? What is the expected service life? <span class="tag tag-both">BOTH</span> <span class="tag tag-tech">TECH</span>
+        <div style="margin-top:6px; padding:8px 10px; background:#e8f5e9; border-left:3px solid #2e7d32; font-size:12px; border-radius:2px;">
+          <strong>Answer (per NDA docs):</strong> Entirely passive — steel tube with copper mesh, no electronics, no moving parts, no consumables. <em>Outstanding: expected service life / copper mesh degradation rate not yet specified.</em>
+        </div>
+      </li>
+      <li>How does performance vary by fuel type — specifically ULSD (Ultra Low Sulfur Diesel), B5/B20 biodiesel blends, and 87/89 octane gasoline? Verizon generators run ULSD; fleet vehicles run ULSD and 87/89 octane. <span class="tag tag-both">BOTH</span> <span class="tag tag-tech">TECH</span></li>
+      <li>Does the device interact with or affect DEF (Diesel Exhaust Fluid) systems on EPA Tier 4 Final engines? Many Verizon generators and newer fleet vehicles are Tier 4. <span class="tag tag-both">BOTH</span> <span class="tag tag-tech">TECH</span></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>6. Independent Validation &amp; Certifications</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <ol class="q-list">
+      <li>Do you have SAE J1321 or SAE J1526 certified fuel economy test results from an independent third-party lab — not customer testimonials? <span class="tag tag-both">BOTH</span></li>
+      <li>Has the device been tested, certified, or evaluated by the EPA, CARB, DOE, or any equivalent regulatory body? <span class="tag tag-both">BOTH</span></li>
+      <li>Can you share the raw data — not summary slides — from any independent test, including full methodology, baseline measurement approach, load conditions, ambient conditions, and test duration? <span class="tag tag-both">BOTH</span></li>
+      <li>The case studies in your deck show savings ranging from 8% to 25%. What variables drive that spread? Is there a documented performance model that predicts expected savings based on engine type, load factor, and fuel quality? <span class="tag tag-both">BOTH</span></li>
+      <li>Has any national fleet organization — NTEA, ATA, NPTC — or utility/telecom industry group independently evaluated or endorsed the product? <span class="tag tag-fleet">FLEET</span></li>
+      <li>The Ireland 80kW generator case study claims 94% carbon reduction. What specific emissions were measured (CO, NOx, particulates, CO₂), by what instrument and standard, and can you provide the full unedited test report? <span class="tag tag-gen">GEN</span></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>7. Generator-Specific Questions</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <div class="info-box" style="margin:0 0 14px 0;">
+      <strong>VZW Generator Context:</strong> 39,521 macro sites with permanent standby diesel generators. Typical units: Generac SG-series 35–100kW, Caterpillar, Kohler, Cummins. Fuel: ULSD. Runtime: ~21.3 hrs/yr baseline (maintenance tests + estimated outage hours), significantly higher during major storm events. Monitoring: Asentria SiteBoss SNMP with fuel level sensors at most sites.
+    </div>
+    <ol class="q-list">
+      <li>What is the tested performance envelope for stationary diesel generators at 50%, 75%, and 100% load factor? The 80kW Ireland case study is the only generator reference — do you have data across other kW classes? <span class="tag tag-gen">GEN</span></li>
+      <li>Does installation void or affect generator OEM warranty with Generac, Caterpillar, Kohler, or Cummins? Verizon generator warranties are contractually protected — this is a hard requirement. <span class="tag tag-gen">GEN</span></li>
+      <li>Is the device compatible with both subbase belly tanks and separate day tanks? Our sites use both configurations. <span class="tag tag-gen">GEN</span></li>
+      <li>Does performance degrade over time with low-use generators that run only 20–100 hours per year? Our generators average 21.3 hrs/yr — far below a prime power application. <span class="tag tag-gen">GEN</span></li>
+      <li>Is there a minimum runtime or load threshold required for the device to produce measurable effect? A generator that runs only 4 hours for a monthly load test may not accumulate enough run time to show benefit. <span class="tag tag-gen">GEN</span></li>
+      <li>What is the installation procedure for a typical subbase-tank generator — is there a fuel line access point, and does it require draining the tank or taking the generator offline? <span class="tag tag-gen">GEN</span></li>
+      <li>How does the device perform on generators equipped with electronic governor systems and common-rail injection (Tier 4 engines)? Older Verizon generators may be mechanical injection; newer units are fully electronic. <span class="tag tag-gen">GEN</span></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>8. Fleet Vehicle Questions</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <div class="info-box" style="margin:0 0 14px 0;">
+      <strong>VZW Fleet Context:</strong> Verizon operates one of the largest corporate vehicle fleets in the US. Mix includes light-duty pickups and SUVs (gasoline), medium-duty service trucks and aerial lift trucks (diesel), and specialty vehicles. Fleet is managed nationally through Verizon Fleet Operations. Any product affecting OEM warranty or requiring non-standard maintenance must clear Fleet Procurement approval.
+    </div>
+    <ol class="q-list">
+      <li>What vehicle classes and engine families have been independently tested — light duty (Class 1–2), medium duty (Class 4–6), and heavy duty (Class 7–8)? The deck shows pickup trucks and one semi; we need a complete performance matrix. <span class="tag tag-fleet">FLEET</span></li>
+      <li>Is the product compatible with modern common-rail direct injection diesel systems and GDI (Gasoline Direct Injection) gasoline engines, which are now standard on most Ford and GM light-duty platforms? <span class="tag tag-fleet">FLEET</span></li>
+      <li>Does installation affect OEM powertrain warranty on Ford, GM, Ram, or other fleet platforms? Any warranty impact is a disqualifying factor without OEM written approval. <span class="tag tag-fleet">FLEET</span></li>
+      <li>What is the expected fuel savings range for a light-duty service truck (F-150/Silverado class) versus a medium-duty bucket truck (F-550/Ram 5500 class) in stop-and-go urban driving patterns typical of field technician routes? <span class="tag tag-fleet">FLEET</span></li>
+      <li>Does the GasMaxx version perform differently on flex-fuel vehicles (E15/E85 capable) common in the Verizon fleet? <span class="tag tag-fleet">FLEET</span></li>
+      <li>What happens to fuel system performance if the device is damaged, fails, or is removed mid-service interval? Is there a fail-safe condition? <span class="tag tag-fleet">FLEET</span></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>9. Installation &amp; Operations</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <ol class="q-list">
+      <li>What is the installation time per vehicle and per generator, and does it require a factory-certified technician or can it be performed by a qualified fleet mechanic / generator technician? <span class="tag tag-both">BOTH</span></li>
+      <li>Can fleet vehicle installations be performed at our existing fleet service centers, or does it require DieselMaxx-trained installers onsite? <span class="tag tag-fleet">FLEET</span></li>
+      <li>What are the ongoing maintenance requirements — is there any filter media, fluid, or component that requires periodic replacement? <span class="tag tag-both">BOTH</span></li>
+      <li>How does the device survive extreme temperature cycling? VZW generator sites range from &minus;40°F (Alaska/Mountain Plains) to +140°F shelter ambient in the Southwest and Gulf Coast. <span class="tag tag-gen">GEN</span></li>
+      <li>Is the device resistant to diesel fuel contamination, water intrusion, and the vibration environment of a running generator or vehicle engine? <span class="tag tag-both">BOTH</span></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>10. Commercial Structure &amp; Pilot</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <ol class="q-list">
+      <li>What is the per-unit cost for fleet vehicles and for generators — is pricing tiered by volume, and at what volume thresholds? Given potential scale of 39,000+ generator units and thousands of fleet vehicles, what does enterprise pricing look like? <span class="tag tag-both">BOTH</span> <span class="tag tag-comm">COMM</span></li>
+      <li>Do you offer a performance guarantee with a defined measurement methodology? What is the remediation process if agreed savings targets are not achieved? <span class="tag tag-both">BOTH</span> <span class="tag tag-comm">COMM</span></li>
+      <li>What does a structured pilot program look like — minimum unit count, duration, measurement support, and data you provide to us? We require SAE J1321-equivalent methodology for fleet and matched before/after fuel metering for generators. <span class="tag tag-both">BOTH</span> <span class="tag tag-comm">COMM</span></li>
+      <li>Can you provide 3–5 referenceable enterprise customers — preferably utility, telecom, or large commercial fleet — at national scale that we can contact directly? Customer testimonials in a sales deck are not sufficient for a VZW procurement decision. <span class="tag tag-both">BOTH</span> <span class="tag tag-comm">COMM</span></li>
+      <li>What is your current production and fulfillment capacity? If a VZW pilot expands to full network deployment, can you support 10,000+ units per year with consistent quality? <span class="tag tag-both">BOTH</span> <span class="tag tag-comm">COMM</span></li>
+      <li>Are you on any existing government, utility, or telecom cooperative purchasing contracts (e.g. Sourcewell, NASPO, US Communities)? This would accelerate VZW procurement approval. <span class="tag tag-comm">COMM</span></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>11. Recommended Pilot Structure</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <p>Before any network-wide or fleet-wide commitment, Verizon would require a controlled pilot with documented methodology. Suggested structure:</p>
+    <ol class="steps">
+      <li><strong>Generator Pilot (Priority 1)</strong> — Select 10–15 sites with clean fuel consumption baselines (subbase tank with calibrated level sensors already reporting to SiteBoss). Install DieselMaxx on half; leave half as controls. Run 90 days. Compare gallons consumed per run-hour, matched for load and ambient temperature.</li>
+      <li><strong>Fleet Pilot (Priority 2)</strong> — Matched-pair test: same vehicle class, same route geography, same driver population, half with device / half without. 60–90 days. Measure gal/100 miles. Eliminate seasonal and payload variables through randomization.</li>
+      <li><strong>Emissions Verification</strong> — If generator pilot shows fuel savings, engage an independent emissions lab to verify carbon reduction claims with calibrated instruments. This supports any VZW sustainability reporting if claims hold.</li>
+      <li><strong>Fleet Procurement Review</strong> — Regardless of pilot results, any device installed in a VZW fleet vehicle must clear Fleet Operations and Fleet Procurement review for warranty and liability implications.</li>
+      <li><strong>Scale Decision</strong> — If pilot validates savings at even the low end (8%), the generator ROI alone justifies rapid scale-up. Full network deployment decision by Q1 2027.</li>
+    </ol>
+
+    <div class="highlight-box" style="margin-top:16px;">
+      <strong>Why generators first:</strong> Generator fuel consumption is precisely measurable — gallons in, run-hours out, load known. It eliminates the driver behavior, route, payload, and traffic variables that make fleet fuel economy claims difficult to control. A clean generator pilot result is the fastest path to a credible go/no-go decision.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>12. Flags to Watch</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="highlight-box" style="margin-bottom:12px;">
+    <strong>&#10003; Resolved since initial assessment (2026-05-26):</strong>
+    <ul style="margin:6px 0 0 0; font-size:13px;">
+      <li><strong>Active element confirmed:</strong> Steel tube with copper mesh — not magnetic, not catalytic, not chemical. Electrostatic charging mechanism documented in two independent technical papers (Carlson / McBride) and supported by 4 SAE citations.</li>
+      <li><strong>Savings range recalibrated:</strong> Independent technical report (Carlson) cites 5–15%, which is more conservative and defensible than the vendor deck's 8–25%. Use 5–15% as pilot success criteria baseline.</li>
+    </ul>
+  </div>
+  <div class="red-box">
+    <strong>Remaining due diligence cautions — do not proceed to scale without resolving these:</strong>
+    <ul style="margin:8px 0 0 0;">
+      <li>All case studies in the introductory deck are vendor-supplied with no independent certification — must be replaced with verified data before any commitment</li>
+      <li>The 94% carbon reduction claim is extraordinary — request full emissions test report with instrument calibration records</li>
+      <li>SAE papers cited (2000-01-2041, 2002-01-3053, 972987, 2005-32-0090) independently verified as real on SAE Mobilus (2026-05-26) — all on-subject for electrostatic fuel atomization. Papers support the physics but do not certify this specific device's performance claims.</li>
+      <li>OEM generator warranty impact must be confirmed in writing from Generac, CAT, Kohler, and Cummins before any generator installations proceed</li>
+      <li>Fleet vehicle OEM warranty impact must be cleared through Verizon Fleet Procurement before any fleet installations proceed</li>
+      <li>Copper mesh service life / degradation rate not yet specified — add to Q3 follow-up</li>
+      <li>Absence of SAE J1321 or equivalent certified data at this stage is not disqualifying, but must be produced before pilot expansion</li>
+    </ul>
+  </div>
+
+</div><!-- end container -->
+
+<div class="footer">
+  Chad Hooper &nbsp;&bull;&nbsp; National CP&amp;G Planning &nbsp;&bull;&nbsp; Verizon &nbsp;&bull;&nbsp; chad.hooper@verizonwireless.com<br>
+  Generator data sourced from Penetration%_Manager Full Data export 2026-05-20 (diesel fuel type, 39,521 unique sites) &nbsp;&bull;&nbsp; Fuel cost assumptions per GeneratorROI.html (R2.6) &nbsp;&bull;&nbsp; NDA Signed 2026-05-22 &nbsp;&bull;&nbsp; Mechanism docs added 2026-05-26 &nbsp;&bull;&nbsp; Bangalore live test data added 2026-06-08
+</div>
+
+</body>
+</html>

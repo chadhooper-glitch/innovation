@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Carbon Fuel Services / Solutions — VZW Due Diligence</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; background: #f4f4f4; color: #222; margin: 0; padding: 0; }
+
+  .header { background: #000; color: #fff; padding: 18px 32px 14px 32px; }
+  .header-brand { color: #cd040b; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .header h1 { margin: 0 0 4px 0; font-size: 22px; color: #fff; }
+  .header-sub { color: #aaa; font-size: 12px; }
+
+  .container { max-width: 1000px; margin: 24px auto; padding: 0 24px 48px 24px; }
+
+  h2 { color: #cd040b; border-bottom: 2px solid #cd040b; padding-bottom: 5px; margin-top: 36px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+  h3 { color: #000; font-size: 14px; margin: 18px 0 8px 0; border-left: 3px solid #cd040b; padding-left: 10px; }
+
+  .section-box { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 18px 22px; margin: 12px 0; }
+  .highlight-box { background: #e8f5e9; border: 2px solid #2e7d32; border-radius: 4px; padding: 14px 18px; margin: 14px 0; }
+  .warn-box { background: #fff8e1; border: 2px solid #f9a825; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+  .info-box { background: #e3f2fd; border: 2px solid #1565c0; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+  .red-box { background: #ffebee; border: 2px solid #cd040b; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+  .purple-box { background: #f3e5f5; border: 2px solid #6a1b9a; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 18px 0; font-size: 13px; }
+  th { background: #000; color: #fff; padding: 8px 12px; text-align: left; font-size: 12px; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; background: #fff; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+  td:first-child { font-weight: 600; color: #333; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+  .stat-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .stat-card { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 14px 10px; text-align: center; }
+  .stat-card .num { font-size: 26px; font-weight: 700; line-height: 1.15; }
+  .stat-card .lbl { font-size: 11px; color: #666; margin-top: 4px; line-height: 1.4; }
+  .stat-card.red .num  { color: #cd040b; }
+  .stat-card.green .num { color: #2e7d32; }
+  .stat-card.blue .num  { color: #0057a8; }
+  .stat-card.orange .num { color: #e65100; }
+  .stat-card.purple .num { color: #6a1b9a; }
+
+  .q-list { counter-reset: qcount; list-style: none; padding: 0; margin: 0; }
+  .q-list li { counter-increment: qcount; padding: 9px 12px 9px 44px; border-bottom: 1px solid #f0f0f0; position: relative; font-size: 13.5px; line-height: 1.55; }
+  .q-list li:last-child { border-bottom: none; }
+  .q-list li::before {
+    content: counter(qcount);
+    position: absolute; left: 10px; top: 9px;
+    background: #cd040b; color: #fff;
+    width: 22px; height: 22px;
+    border-radius: 50%; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+  .q-list li:nth-child(even) { background: #fafafa; }
+
+  .tag { display: inline-block; padding: 1px 7px; border-radius: 3px; font-size: 10px; font-weight: 700; margin-left: 6px; vertical-align: middle; }
+  .tag-tank  { background: #1565c0; color: #fff; }
+  .tag-add   { background: #6a1b9a; color: #fff; }
+  .tag-both  { background: #cd040b; color: #fff; }
+  .tag-comm  { background: #2e7d32; color: #fff; }
+  .tag-tech  { background: #e65100; color: #fff; }
+
+  .prod-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 16px 0; }
+  .prod-card { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 16px; border-top: 4px solid #6a1b9a; }
+  .prod-card.blue-top { border-top-color: #1565c0; }
+  .prod-card.teal-top { border-top-color: #00796b; }
+  .prod-name { font-size: 13px; font-weight: 700; color: #222; margin-bottom: 10px; }
+  .prod-claim { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #f0f0f0; font-size: 12px; }
+  .prod-claim:last-child { border-bottom: none; }
+  .prod-val { font-weight: 700; color: #2e7d32; }
+
+  .steps { counter-reset: stepcount; list-style: none; padding: 0; margin: 0; }
+  .steps li { counter-increment: stepcount; padding: 10px 14px 10px 52px; border-left: 3px solid #cd040b; margin-bottom: 8px; background: #fff; border-radius: 0 4px 4px 0; position: relative; font-size: 13px; }
+  .steps li::before {
+    content: counter(stepcount);
+    position: absolute; left: -16px; top: 10px;
+    background: #cd040b; color: #fff;
+    width: 28px; height: 28px; border-radius: 50%;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .steps li strong { color: #cd040b; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 16px 0; }
+  .legend span { font-size: 11px; display: flex; align-items: center; gap: 4px; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 14px 0; }
+
+  .footnote { font-size: 11px; color: #888; margin: 4px 0 0 0; }
+  .footer { text-align: center; font-size: 11px; color: #888; margin-top: 48px; border-top: 1px solid #ddd; padding-top: 14px; }
+
+  @media print {
+    .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    th, .stat-card .num, .prod-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body spellcheck="false" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false">
+
+<div class="header">
+  <div class="header-brand">Verizon &nbsp;|&nbsp; National CP&amp;G Planning</div>
+  <h1>Carbon Fuel Services / Carbon Fuel Solutions &mdash; VZW Due Diligence</h1>
+  <div class="header-sub">Chad Hooper &nbsp;&bull;&nbsp; chad.hooper@verizonwireless.com &nbsp;&bull;&nbsp; June 2026 &nbsp;&bull;&nbsp; <span style="color:#4caf50;font-weight:700;">&#10003; NDA Signed 2026-05-02 (CW2654798)</span></div>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>1. What We Are Evaluating</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <p>Same diamond logo, two separate but complementary businesses under the Carbon Fuel brand:</p>
+
+    <div class="two-col">
+      <div style="background:#e3f2fd;border:2px solid #1565c0;border-radius:4px;padding:16px;">
+        <div style="font-size:13px;font-weight:700;color:#1565c0;margin-bottom:10px;">TRACK 1 — Carbon Fuel Services LLC</div>
+        <div style="font-size:12px;color:#444;line-height:1.8;">
+          <strong>What:</strong> Fuel tank services company<br>
+          <strong>Services:</strong> Fuel polishing, tank cleaning, STI SP001 inspections, NFPA 110 compliance testing, ASTM D975 fuel lab analysis<br>
+          <strong>Phone:</strong> (833) 329-0317<br>
+          <strong>Web:</strong> carbonfuelservices.com<br>
+          <strong>Offices:</strong> Charlotte NC (HQ), Charleston SC, Tampa FL, Dallas TX, Las Vegas NV<br>
+          <strong>Contact:</strong> Travis Wall — t.walls@carbonfuelservices.com
+        </div>
+      </div>
+      <div style="background:#f3e5f5;border:2px solid #6a1b9a;border-radius:4px;padding:16px;">
+        <div style="font-size:13px;font-weight:700;color:#6a1b9a;margin-bottom:10px;">TRACK 2 — Carbon Fuel Solutions</div>
+        <div style="font-size:12px;color:#444;line-height:1.8;">
+          <strong>What:</strong> Diesel and fleet fuel additive brand<br>
+          <strong>Products:</strong> Critical Power + Fleet (general), Critical Power + Fleet Cold Climate, Cold Weather + Quick Start<br>
+          <strong>Chemistry:</strong> NitroGenesis™ / Power Kleen™ / Hydrotex® base<br>
+          <strong>Phone:</strong> (855) 698-7577<br>
+          <strong>Web:</strong> carbonfuelsolutions.com
+        </div>
+      </div>
+    </div>
+
+    <div class="purple-box" style="margin-top:14px;">
+      <strong>Relationship to DieselMaxx — These Are Complementary, Not Competitive</strong>
+      <div style="font-size:12px;color:#444;margin-top:8px;line-height:1.8;">
+        <strong>DieselMaxx</strong> = passive electrostatic copper mesh device; improves atomization and combustion efficiency at the point of injection. Works on the <em>physics</em> of fuel delivery.<br>
+        <strong>CFS Additive</strong> = chemical treatment; cleans injectors, improves cetane, scavenges water, stabilizes stored fuel. Works on the <em>chemistry</em> of the fuel itself.<br>
+        <strong>CFS Tank Services</strong> = periodic physical maintenance; polishes fuel, removes water and microbes, ensures NFPA 110 compliance. Works on the <em>condition</em> of the fuel and tank.<br><br>
+        All three address different failure modes. A VZW generator site could use all three simultaneously — clean fuel (CFS services), chemically optimized fuel (CFS additive), and better combustion (DieselMaxx) — without interference.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>2. VZW Opportunity Scale</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <div class="stat-grid">
+      <div class="stat-card red">
+        <div class="num">39,521</div>
+        <div class="lbl">VZW Macro Sites — Diesel Generators<br><span style="font-size:10px;">49.2% diesel penetration</span></div>
+      </div>
+      <div class="stat-card blue">
+        <div class="num">21.3 hrs</div>
+        <div class="lbl">Avg Generator Runtime / Year<br><span style="font-size:10px;">Maintenance + outage baseline</span></div>
+      </div>
+      <div class="stat-card orange">
+        <div class="num">~2.95M</div>
+        <div class="lbl">Gallons Diesel / Year (network)<br><span style="font-size:10px;">39,521 sites × 74.6 gal/yr baseline</span></div>
+      </div>
+      <div class="stat-card green">
+        <div class="num">$16.7M</div>
+        <div class="lbl">Annual Network Fuel Spend<br><span style="font-size:10px;">@ $5.65/gal</span></div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h3>Track 1 — Tank Services Opportunity</h3>
+        <p style="font-size:12px;color:#555;line-height:1.8;">NFPA 110 Section 8.3.8 requires annual fuel quality testing. NFPA 25 Section 8.3.4.1 requires annual fuel degradation testing per ASTM D975. STI SP001 tank inspections are a compliance requirement for aboveground storage tanks. VZW generators average 21.3 hrs/yr — fuel sits in tanks for 11+ months between significant runs, creating ideal conditions for microbial growth, water accumulation, and sludge. Most sites are likely <strong>never serviced</strong> for fuel quality unless a generator fails to start. 39,521 diesel sites = direct addressable market. Annual contract model preferred.</p>
+      </div>
+      <div>
+        <h3>Track 2 — Additive Opportunity</h3>
+        <p style="font-size:12px;color:#555;line-height:1.8;">At 1:3000 treat ratio, Critical Power + Fleet treats 3,000 gallons per unit of additive. At 74.6 gal/yr average per site, one treatment per refueling covers the entire year at most sites. Claims: 5% typical fuel economy improvement, up to 70% emissions reduction, cetane +8, injector protection. Key question: does the additive need to be re-dosed each refueling cycle or does one dose stabilize the full tank? For fleet vehicles, GasMaxx (gasoline) and DieselMaxx applications overlap — need to understand product differentiation vs. DieselMaxx across the fleet vehicle mix.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>3. Track 1 — Tank Services Detail</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <h3>Why Generator Fuel Degrades — CFS Technical Summary</h3>
+    <table>
+      <tr><th>Degradation Cause</th><th>Mechanism</th><th>Result</th></tr>
+      <tr><td>Excess head space / low fuel</td><td>Moist air trapped above fuel level</td><td>Condensation, water accumulation</td></tr>
+      <tr><td>Water (free, entrained, emulsified)</td><td>Food source for microbial growth</td><td>Microbial colonies, fuel acidity</td></tr>
+      <tr><td>Microbial growth</td><td>Bacteria/fungi metabolize fuel sulfur compounds</td><td>H₂S production, steel pitting, sludge</td></tr>
+      <tr><td>Polysaccharide slimes</td><td>Bacterial/fungal consortia produce biofilm</td><td>Filter plugging, emulsification</td></tr>
+      <tr><td>Organic acids</td><td>Bacterial/fungal metabolic byproducts</td><td>Fuel acidification, corrosion</td></tr>
+      <tr><td>Biodiesel / diesel mix</td><td>Chemical reaction produces crude glycerin</td><td>Sludge at tank bottom</td></tr>
+    </table>
+
+    <h3>Three-Stage Filtration Process</h3>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0;">
+      <div style="background:#f8f8f8;padding:14px;border-top:3px solid #1565c0;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#1565c0;font-weight:700;margin-bottom:6px;">Stage 1 — Particulates</div>
+        <div style="font-size:12px;color:#444;line-height:1.7;">Primary bag filters (1–5 micron absolute). 1–7 filter housings with pressure gauges. Removes solids and microbial contamination per circulation. Stainless steel housing (no rust contamination).</div>
+      </div>
+      <div style="background:#f8f8f8;padding:14px;border-top:3px solid #1565c0;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#1565c0;font-weight:700;margin-bottom:6px;">Stage 2 — Water Coalescing</div>
+        <div style="font-size:12px;color:#444;line-height:1.7;">Aviation fuel grade micro-glass coalescer. Pleated cellulose inner filter with polyester glass fibers. Inside-to-outside flow coalesces tiny water droplets into larger drops for separation. Same process used for military jet fuel.</div>
+      </div>
+      <div style="background:#f8f8f8;padding:14px;border-top:3px solid #1565c0;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#1565c0;font-weight:700;margin-bottom:6px;">Stage 3 — Water Separator</div>
+        <div style="font-size:12px;color:#444;line-height:1.7;">Stainless steel/Teflon hydrophobic water separator cartridge. Physical barrier prevents any water from passing through with fuel. Result exceeds ISO 18/16/13 cleanliness standard (engine manufacturer recommended spec).</div>
+      </div>
+    </div>
+
+    <h3>NFPA &amp; Regulatory Compliance Standards CFS Services</h3>
+    <table spellcheck="false">
+      <tr><th>Standard</th><th>Requirement</th><th>CFS Service</th></tr>
+      <tr><td>NFPA 110 §8.3.8</td><td>Annual fuel quality testing per ASTM international standards for standby power systems</td><td>ASTM D975 lab analysis, on-site sampling</td></tr>
+      <tr><td>NFPA 25 §8.3.4.1</td><td>Annual diesel fuel degradation testing for fire pump systems</td><td>Lab testing + polishing if deficient</td></tr>
+      <tr><td>NFPA 25 §8.3.4.2</td><td>If fuel deficient: recondition/replace, clean tank internally, change fuel filters</td><td>Full polishing + tank cleaning service</td></tr>
+      <tr><td>NFPA 30 §21.8.8</td><td>Tank owners must establish procedure for checking and removing water from tank bottoms</td><td>Water removal, bottom sampling</td></tr>
+      <tr><td>STI SP001</td><td>Steel Tank Institute certification for aboveground storage tank inspections</td><td>Certified STI SP001 inspections up to 75,000 gal</td></tr>
+      <tr><td>ASTM D975</td><td>Standard specification for diesel fuel to verify fuel meets combustion quality standard</td><td>ASTM lab analysis, cetane, sulfur PPM, microbial, water content</td></tr>
+    </table>
+
+    <h3>Full STI SP001 Inspection Scope</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;">
+      <ul style="margin:0;padding-left:18px;line-height:2;">
+        <li>Ultrasonic Steel Thickness Testing (UT)</li>
+        <li>Paint &amp; Coating Thickness Testing</li>
+        <li>Rupture Basin Leak Detection Sensor Test (double-wall tanks)</li>
+        <li>MIC (Microbial Induced Corrosion) Testing — internal &amp; external</li>
+        <li>Steel Tank Pitting Testing &amp; Inspection</li>
+        <li>Automatic Tank Gauge (ATG) Testing &amp; Inspection</li>
+        <li>Leak Detection Probe/Sensor Testing</li>
+        <li>DEF Fluid Urea % Testing for Tier 4 Engines (on-site results)</li>
+        <li>Concrete Tank Pad, Bollard(s), &amp; Containment Inspection</li>
+      </ul>
+      <ul style="margin:0;padding-left:18px;line-height:2;">
+        <li>Tank Ladder &amp; Platform Inspection</li>
+        <li>Verify Tank Grounding</li>
+        <li>Verify all tank components: vent, fuel gauge, seals, alarms, sensors, overfill prevention, ball valves, anti-siphon valve</li>
+        <li>Verify automated fuel management &amp; permanently mounted polishing systems</li>
+        <li>Fuel Sampling &amp; ASTM D975 Lab Testing</li>
+        <li>ATG systems: floats, cap, wiring, connection terminals</li>
+        <li>Fuel quality: microbial, cetane, sulfur PPM, bacteria, color, appearance, water</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>4. Track 2 — Additive Products Detail</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-name">Critical Power + Fleet</div>
+        <div style="font-size:11px;color:#999;margin-bottom:10px;">A01001 | General use — power gen &amp; fleet | Treat rate 1:3000</div>
+        <div class="prod-claim"><span>Fuel Economy Recovery</span><span class="prod-val">Up to 10%</span></div>
+        <div class="prod-claim"><span>Typical Fuel Economy</span><span class="prod-val">5% avg</span></div>
+        <div class="prod-claim"><span>Emissions Reduction</span><span class="prod-val">Up to 70%</span></div>
+        <div class="prod-claim"><span>Cetane Improvement</span><span class="prod-val">Up to +8</span></div>
+        <div class="prod-claim"><span>Lubricity Improvement</span><span class="prod-val">Up to 120 µm</span></div>
+        <div class="prod-claim"><span>Injector Cleaning</span><span class="prod-val">Yes</span></div>
+        <div class="prod-claim"><span>Fuel Stabilization</span><span class="prod-val">Yes</span></div>
+        <div class="prod-claim"><span>Water Scavenging</span><span class="prod-val">Yes</span></div>
+        <div class="prod-claim"><span>Cold Protection</span><span class="prod-val">No</span></div>
+      </div>
+      <div class="prod-card blue-top">
+        <div class="prod-name">Critical Power + Fleet Cold Climate</div>
+        <div style="font-size:11px;color:#999;margin-bottom:10px;">A01002 | Cold weather power gen &amp; fleet | Treat rate 1:1500</div>
+        <div class="prod-claim"><span>Fuel Economy Recovery</span><span class="prod-val">Up to 10%</span></div>
+        <div class="prod-claim"><span>Typical Fuel Economy</span><span class="prod-val">5% avg</span></div>
+        <div class="prod-claim"><span>Emissions Reduction</span><span class="prod-val">Up to 70%</span></div>
+        <div class="prod-claim"><span>Cetane Improvement</span><span class="prod-val">Up to +8</span></div>
+        <div class="prod-claim"><span>Lubricity Improvement</span><span class="prod-val">Up to 120 µm</span></div>
+        <div class="prod-claim"><span>CFPP Improvement</span><span class="prod-val">Up to 36°F</span></div>
+        <div class="prod-claim"><span>Water Freezing Point</span><span class="prod-val">-18°F</span></div>
+        <div class="prod-claim"><span>Injector Cleaning</span><span class="prod-val">Yes</span></div>
+        <div class="prod-claim"><span>Fuel Stabilization</span><span class="prod-val">Yes</span></div>
+      </div>
+      <div class="prod-card teal-top">
+        <div class="prod-name">Cold Weather + Quick Start</div>
+        <div style="font-size:11px;color:#999;margin-bottom:10px;">A01003 | Cold weather only | Treat rate 1:500–1:2000</div>
+        <div class="prod-claim"><span>CFPP Improvement</span><span class="prod-val">Up to 36°F</span></div>
+        <div class="prod-claim"><span>CFPP Result (tested)</span><span class="prod-val">12°F → -23°F</span></div>
+        <div class="prod-claim"><span>Water Freezing Point</span><span class="prod-val">-18°F</span></div>
+        <div class="prod-claim"><span>Cetane Improvement</span><span class="prod-val">Up to +8</span></div>
+        <div class="prod-claim"><span>Lubricity Improvement</span><span class="prod-val">Up to 60 µm</span></div>
+        <div class="prod-claim"><span>Biodiesel Compatible</span><span class="prod-val">Yes (all blends)</span></div>
+        <div class="prod-claim"><span>Generator Dosing</span><span class="prod-val">1:500</span></div>
+        <div class="prod-claim"><span>Mild Cold Dosing</span><span class="prod-val">1:2000</span></div>
+        <div class="prod-claim"><span>vs. Kerosene Blend</span><span class="prod-val">More effective &amp; cheaper</span></div>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top:4px;">
+      <strong>Chemistry Base — Hydrotex® Power Kleen™</strong><br>
+      <span style="font-size:12px;line-height:1.8;">All three products use NitroGenesis™ additives built on Power Kleen™ chemistry from Hydrotex® (industrial lubricant/fuel treatment company). CFS claims a "third-party engineering firm" study of 100+ heavy-duty engines showed 5% average fuel consumption reduction and 50%+ particulate emission reduction. The Peugeot DW10B injector fouling test is cited — this is a real standardized test used by additive manufacturers to demonstrate injector deposit cleaning performance.</span>
+    </div>
+
+    <h3>Independent Test Data — What Exists vs. What Is Needed</h3>
+    <table>
+      <tr><th>Claim</th><th>Evidence Provided</th><th>What VZW Needs</th></tr>
+      <tr><td>5–10% fuel economy improvement</td><td>Peugeot DW10B engine dynamometer test; "100+ heavy duty engine" study via Hydrotex</td><td>SAE J1321 or equivalent independent field test; full methodology and raw data</td></tr>
+      <tr><td>Up to 70% emissions reduction</td><td>Referenced in product sheet; Hydrotex study cited</td><td>Full emissions test report with instrument calibration; EPA/CARB methodology</td></tr>
+      <tr><td>Cetane +8 improvement</td><td>Stated claim, standard for cetane improvers</td><td>ASTM D613 cetane test results from independent lab</td></tr>
+      <tr><td>CFPP improvement up to 36°F</td><td>Independent CFPP study cited (12°F → -23°F tested)</td><td>Full study report; confirm test fuel grade and ambient conditions</td></tr>
+      <tr><td>Lubricity 120 µm improvement</td><td>Stated; HFRR (High Frequency Reciprocating Rig) implied</td><td>ASTM D6079 HFRR test results from independent lab</td></tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>5. Legend — Question Tags</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="legend">
+    <span><span class="tag tag-tank">TANK</span> Tank services / NFPA compliance</span>
+    <span><span class="tag tag-add">ADD</span> Additive products</span>
+    <span><span class="tag tag-both">BOTH</span> Applies to both tracks</span>
+    <span><span class="tag tag-tech">TECH</span> Technology / chemistry</span>
+    <span><span class="tag tag-comm">COMM</span> Commercial / contract structure</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>6. Tank Services Questions for Travis</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <div class="info-box" style="margin:0 0 14px 0;">
+      <strong>VZW Generator Context:</strong> 39,521 macro sites with permanent standby diesel generators. Monitoring via Asentria SiteBoss SNMP — fuel level sensors at most sites. Average runtime 21.3 hrs/yr — fuel sits in tanks 11+ months between significant runs. Typical tanks: generator subbase belly tanks (50–500 gal) and separate day tanks. Sites are unattended; access requires climbing tower or entering equipment shelters.
+    </div>
+    <ol class="q-list">
+      <li>VZW has 39,521 diesel generator sites across 18 regions nationwide. What is CFS's current geographic coverage model, and which regions can you currently support with field technicians? What are the coverage gaps, and how are remote sites in Alaska, Hawaii, Puerto Rico, and mountain-region markets handled? <span class="tag tag-tank">TANK</span> <span class="tag tag-comm">COMM</span></li>
+      <li>What is the cost structure for a standard annual NFPA 110 fuel quality test + fuel polishing visit at a typical VZW macro site — is pricing per visit, per gallon polished, or annual contract? What does enterprise volume pricing look like at 1,000, 5,000, and 10,000+ sites/year? <span class="tag tag-tank">TANK</span> <span class="tag tag-comm">COMM</span></li>
+      <li>Most VZW generators use <strong>subbase belly tanks</strong> (integral to the generator enclosure) rather than standalone ASTs. Do you have experience with subbase belly tank polishing and inspection, and does your STI SP001 certification cover subbase-style tanks? What is the access and service procedure for a typical Generac or Caterpillar subbase tank? <span class="tag tag-tank">TANK</span></li>
+      <li>VZW's SiteBoss monitors fuel level via SNMP at most generator sites. Can CFS integrate with or leverage that existing telemetry data for pre-visit diagnostics — for example, flagging sites with unexpected fuel level drops (potential microbial degradation or theft) that should be prioritized for service? <span class="tag tag-tank">TANK</span> <span class="tag tag-tech">TECH</span></li>
+      <li>What does a typical ASTM D975 fuel analysis reveal at a cell site generator that has never been serviced? Do you have aggregate data on microbial contamination rates, water content, and cetane degradation from first-service findings at telecom or utility generator sites? <span class="tag tag-tank">TANK</span></li>
+      <li>NFPA 110 §8.3.4.2.1 requires re-testing every 6 months after a fuel quality failure until the fuel demonstrates stable storage. If a VZW site fails initial testing, what is your remediation process and how do you document it for NFPA compliance records? <span class="tag tag-tank">TANK</span></li>
+      <li>VZW generators include Tier 4 Final engines (common-rail injection with DEF systems). Your STI SP001 scope includes on-site DEF fluid urea % testing — what percentage of your generator service clients have Tier 4 engines, and do you have established procedures for DEF tank inspection alongside fuel tank work? <span class="tag tag-tank">TANK</span></li>
+      <li>What insurance, bonding, and liability coverage does CFS carry for work at active cell sites — specifically work performed inside generator enclosures and fuel tank areas on live infrastructure? What is your safety protocol for confined space entry at unattended sites? <span class="tag tag-tank">TANK</span> <span class="tag tag-comm">COMM</span></li>
+      <li>What is your typical scheduling lead time for a non-emergency fuel polishing visit? For a VZW planned maintenance program where we want all sites in a given market visited within a 90-day window, can CFS schedule and execute at that density? <span class="tag tag-tank">TANK</span> <span class="tag tag-comm">COMM</span></li>
+      <li>Do you offer an ongoing <strong>annual maintenance contract</strong> model that bundles NFPA 110 annual testing, fuel polishing, and STI SP001 inspection into a single per-site fee? What does that model include vs. a la carte services? <span class="tag tag-tank">TANK</span> <span class="tag tag-comm">COMM</span></li>
+      <li>Can you provide 3–5 referenceable enterprise customers in telecom, utility, or data center / critical infrastructure with generator fleets of 500+ sites who can speak to CFS's service quality, documentation, and scheduling reliability at scale? <span class="tag tag-tank">TANK</span> <span class="tag tag-comm">COMM</span></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>7. Additive Product Questions for Travis</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <ol class="q-list">
+      <li>The product sheets cite a "third-party engineering firm study of 100+ heavy-duty engines" demonstrating 5% fuel consumption reduction and 50%+ particulate reduction. Who conducted this study, what was the full methodology, and can you share the complete report under NDA? The Peugeot DW10B test cited is an injector fouling test — not a real-world fuel economy measurement. Is there SAE J1321 or equivalent independent road/field test data? <span class="tag tag-add">ADD</span> <span class="tag tag-tech">TECH</span></li>
+      <li>For VZW generator sites averaging 21.3 hrs/yr of operation, does Critical Power + Fleet need to be re-dosed with every refueling cycle, or does a single dose at tank fill stabilize the fuel for the full storage period? What is the effective stabilization duration of one treatment? <span class="tag tag-add">ADD</span> <span class="tag tag-tech">TECH</span></li>
+      <li>How does Critical Power + Fleet <strong>interact with DieselMaxx</strong>, which VZW is evaluating simultaneously? DieselMaxx uses an electrostatic copper mesh to improve atomization at the point of injection — is there any known interference or synergy between that mechanism and the NitroGenesis™ / Power Kleen™ chemistry? Can both be used simultaneously without counteracting each other? <span class="tag tag-add">ADD</span> <span class="tag tag-tech">TECH</span></li>
+      <li>Does installation or use of Critical Power + Fleet affect OEM generator warranty with Generac, CAT, Kohler, or Cummins? VZW generator warranties are contractually protected — any additive that voids or restricts warranty coverage is a hard stop. Do you have written confirmation from any of these OEMs? <span class="tag tag-add">ADD</span></li>
+      <li>Is Critical Power + Fleet ASTM D975 compliant? Does adding the product change the fuel's classification under D975, affect the cetane number in a way that needs to be documented, or create any reporting obligation under EPA or CARB regulations? <span class="tag tag-add">ADD</span> <span class="tag tag-tech">TECH</span></li>
+      <li>The Cold Climate product is important for VZW's Mountain Plains, Great Plains, Pacific Northwest, and New England markets. What is the lowest ambient temperature at which Cold Climate + Critical Power is effective before transitioning to Cold Weather + Quick Start? Is there a temperature-based decision framework for which product to use by geography/season? <span class="tag tag-add">ADD</span></li>
+      <li>What is the all-in cost per gallon of treated fuel at the standard treat rates — 1:3000 (Critical Power + Fleet) and 1:1500 (Cold Climate)? At VZW's network fuel volume (~2.95M gal/yr), what is the estimated annual additive cost? <span class="tag tag-add">ADD</span> <span class="tag tag-comm">COMM</span></li>
+      <li>The Power Kleen™ chemistry is from Hydrotex® — is Hydrotex an independent company, and can VZW access Hydrotex's own test data and certifications directly as a secondary reference? What is CFS's relationship with Hydrotex — licensed distributor, private label, or something else? <span class="tag tag-add">ADD</span> <span class="tag tag-tech">TECH</span></li>
+      <li>For Verizon fleet vehicles — do you have GasMaxx data specific to the Ford F-150, Silverado 1500, and Ram 1500 platforms (VZW's primary light-duty fleet)? Do you have data on medium-duty diesel platforms (F-550, Ram 5500 class) used by field technicians? <span class="tag tag-add">ADD</span></li>
+      <li>Can CFS provide an additive in-tank blending service bundled with tank polishing visits — i.e., when your technician services a VZW site, they also dose the tank with Critical Power + Fleet as part of the same visit? What does that bundled service model look like? <span class="tag tag-add">ADD</span> <span class="tag tag-comm">COMM</span></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>8. Recommended Pilot Structure</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <ol class="steps">
+      <li><strong>Track 1 Pilot — Tank Services (Priority 1)</strong> — Select one VZW market with a high concentration of diesel generator sites (Carolina/Tennessee or Central Gulf Coast — both ~3,200–3,600 diesel sites). Commission CFS to perform NFPA 110 annual fuel testing + STI SP001 inspection on 50–100 sites. Document baseline fuel quality findings. This is immediately actionable — NFPA 110 compliance is a real requirement, and CFS either performs or doesn't. No methodology dispute possible.</li>
+      <li><strong>Track 2 Pilot — Additive (Priority 2, concurrent or sequential)</strong> — Select 20–30 generator sites with clean SiteBoss fuel consumption baselines. Divide into treated (Critical Power + Fleet dosed at each refueling) and control groups. Run 12 months minimum (to capture full maintenance run cycles). Measure gallons consumed per run-hour. Require CFS/Hydrotex to provide full independent test data before expanding beyond pilot.</li>
+      <li><strong>DieselMaxx Coordination</strong> — If DieselMaxx pilot is running concurrently on any of the same sites, discuss with both vendors whether co-deployment is appropriate or if isolation is needed to attribute savings. Goal is compatible deployment — not competitive testing.</li>
+      <li><strong>Bundled Model Evaluation</strong> — If both Track 1 and Track 2 show positive results, evaluate a bundled annual service contract: CFS visits each diesel site once per year, performs NFPA 110 testing, polishes fuel, doses tank with Critical Power + Fleet (or Cold Climate by region), and delivers compliance documentation. One vendor, one visit, one contract covering regulatory requirement + fuel optimization.</li>
+    </ol>
+
+    <div class="highlight-box" style="margin-top:16px;">
+      <strong>Why Tank Services First:</strong> The NFPA 110 compliance angle is a pull, not a push — VZW has a regulatory obligation to test fuel annually, and many sites are likely non-compliant. CFS performing inspections is immediately defensible to management and procurement without requiring a performance study. If they execute well on the inspection program, the additive add-on becomes a natural extension.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>9. Flags to Watch</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="red-box">
+    <strong>Do not proceed to scale without resolving:</strong>
+    <ul style="margin:8px 0 0 0;">
+      <li><strong>Geographic coverage gaps</strong> — CFS offices are in Charlotte, Charleston, Tampa, Dallas, Las Vegas. Large VZW markets (Mountain Plains, Great Plains, Pacific Northwest, New England, New York) may have limited CFS coverage — confirm field capacity before committing to a national program</li>
+      <li><strong>Subbase belly tank experience</strong> — Most VZW gen tanks are integral subbase tanks, not standalone ASTs. STI SP001 is primarily for ASTs — confirm certification and procedure applies to subbase configurations</li>
+      <li><strong>Additive independent data</strong> — "100+ engine study" and Peugeot DW10B test are not SAE J1321 equivalent; need full methodology before citing 5–10% savings in any VZW business case</li>
+      <li><strong>OEM warranty confirmation</strong> — Written confirmation from Generac, CAT, Kohler, and Cummins that additive use does not void warranty is required before any fleet deployment</li>
+      <li><strong>DieselMaxx compatibility</strong> — Must confirm no interference between CFS chemical additive and DieselMaxx electrostatic mechanism before co-deploying on the same sites</li>
+      <li><strong>NFPA 110 documentation format</strong> — CFS must produce compliance-grade documentation (FSR reports) that satisfy VZW's facilities management and any third-party auditors; confirm format meets VZW requirements</li>
+    </ul>
+  </div>
+
+</div><!-- end container -->
+
+<div class="footer">
+  Chad Hooper &nbsp;&bull;&nbsp; National CP&amp;G Planning &nbsp;&bull;&nbsp; Verizon &nbsp;&bull;&nbsp; chad.hooper@verizonwireless.com<br>
+  Source materials: CFS Presentation of Fuel Tank Services.pdf, Critical Power + Fleet PVG (A01001), Critical Power + Fleet Cold Climate PVG (A01002), Cold Weather + Quick Start PVG (A01003) &nbsp;&bull;&nbsp; NDA CW2654798 Signed 2026-05-02 &nbsp;&bull;&nbsp; Created 2026-06-09
+</div>
+
+</body>
+</html>

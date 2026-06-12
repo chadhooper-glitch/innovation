@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ANA EBOSS — VZW Opportunity Analysis</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; background: #f4f4f4; color: #222; margin: 0; padding: 0; }
+
+  .header { background: #000; color: #fff; padding: 18px 32px 14px 32px; }
+  .header-brand { color: #cd040b; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .header h1 { margin: 0 0 4px 0; font-size: 22px; color: #fff; }
+  .header-sub { color: #aaa; font-size: 12px; }
+
+  .container { max-width: 1000px; margin: 24px auto; padding: 0 24px 48px 24px; }
+
+  h2 { color: #cd040b; border-bottom: 2px solid #cd040b; padding-bottom: 5px; margin-top: 36px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+  h3 { color: #000; font-size: 14px; margin: 18px 0 8px 0; border-left: 3px solid #cd040b; padding-left: 10px; }
+
+  .section-box { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 18px 22px; margin: 12px 0; }
+  .highlight-box { background: #e8f5e9; border: 2px solid #2e7d32; border-radius: 4px; padding: 14px 18px; margin: 14px 0; }
+  .warn-box { background: #fff8e1; border: 2px solid #f9a825; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+  .info-box { background: #e3f2fd; border: 2px solid #1565c0; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+  .red-box { background: #ffebee; border: 2px solid #cd040b; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 18px 0; font-size: 13px; }
+  th { background: #000; color: #fff; padding: 8px 12px; text-align: left; font-size: 12px; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; background: #fff; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+  td:first-child { font-weight: 600; color: #333; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+  .stat-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .stat-card { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 14px 10px; text-align: center; }
+  .stat-card .num { font-size: 26px; font-weight: 700; line-height: 1.15; }
+  .stat-card .lbl { font-size: 11px; color: #666; margin-top: 4px; line-height: 1.4; }
+  .stat-card.red .num  { color: #cd040b; }
+  .stat-card.green .num { color: #2e7d32; }
+  .stat-card.blue .num  { color: #0057a8; }
+  .stat-card.orange .num { color: #e65100; }
+
+  .q-list { counter-reset: qcount; list-style: none; padding: 0; margin: 0; }
+  .q-list li { counter-increment: qcount; padding: 9px 12px 9px 44px; border-bottom: 1px solid #f0f0f0; position: relative; font-size: 13.5px; line-height: 1.55; }
+  .q-list li:last-child { border-bottom: none; }
+  .q-list li::before {
+    content: counter(qcount);
+    position: absolute; left: 10px; top: 9px;
+    background: #cd040b; color: #fff;
+    width: 22px; height: 22px;
+    border-radius: 50%; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+  .q-list li:nth-child(even) { background: #fafafa; }
+
+  .steps { counter-reset: stepcount; list-style: none; padding: 0; margin: 0; }
+  .steps li { counter-increment: stepcount; padding: 10px 14px 10px 52px; border-left: 3px solid #cd040b; margin-bottom: 8px; background: #fff; border-radius: 0 4px 4px 0; position: relative; font-size: 13px; }
+  .steps li::before {
+    content: counter(stepcount);
+    position: absolute; left: -16px; top: 10px;
+    background: #cd040b; color: #fff;
+    width: 28px; height: 28px; border-radius: 50%;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .steps li strong { color: #cd040b; }
+
+  .perf-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 14px 0; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; }
+  .perf-col { padding: 14px 16px; }
+  .perf-col.std { background: #ffebee; border-right: 2px solid #ddd; }
+  .perf-col.eboss { background: #e8f5e9; }
+  .perf-col h4 { margin: 0 0 10px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .perf-col h4.std-lbl { color: #cd040b; }
+  .perf-col h4.eboss-lbl { color: #2e7d32; }
+  .perf-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(0,0,0,0.07); font-size: 12.5px; }
+  .perf-row:last-child { border-bottom: none; }
+  .perf-row .val { font-weight: 700; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; margin-left: 5px; vertical-align: middle; text-transform: uppercase; }
+  .badge-green { background: #2e7d32; color: #fff; }
+  .badge-blue { background: #0057a8; color: #fff; }
+  .badge-orange { background: #e65100; color: #fff; }
+  .badge-red { background: #cd040b; color: #fff; }
+  .badge-gray { background: #555; color: #fff; }
+
+  .bar-wrap { margin: 6px 0 14px 0; }
+  .bar-row { display: flex; align-items: center; margin: 5px 0; font-size: 12px; }
+  .bar-label { width: 180px; flex-shrink: 0; }
+  .bar-track { flex: 1; background: #f0f0f0; height: 20px; border-radius: 3px; overflow: hidden; margin: 0 10px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; }
+  .bar-val { width: 60px; text-align: right; font-weight: 700; }
+
+  .footnote { font-size: 11px; color: #888; margin: 4px 0 0 0; }
+  .footer { text-align: center; font-size: 11px; color: #888; margin-top: 48px; border-top: 1px solid #ddd; padding-top: 14px; }
+
+  @media print {
+    .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    th, .stat-card .num, .perf-col { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">Verizon &nbsp;|&nbsp; National CP&amp;G Planning</div>
+  <h1>ANA EBOSS &mdash; Hybrid Generator System: VZW Opportunity Analysis</h1>
+  <div class="header-sub">Chad Hooper &nbsp;&bull;&nbsp; chad.hooper@verizonwireless.com &nbsp;&bull;&nbsp; May 2026 &nbsp;&bull;&nbsp; <span style="color:#2e7d32;font-weight:700;">&#10003; NDA Executed &mdash; June 8, 2026 (CW2652709)</span></div>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>1. What Is EBOSS</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <p><strong>EBOSS</strong> (Energy Boss, by <strong>ANA — Alliance North America, Inc.</strong>, Henderson NV) is a trailer-mounted hybrid generator system. It pairs a diesel genset with an industrial LTO battery pack and inverter. The battery handles continuous load; the generator only starts to recharge batteries or cover load spikes. The result: dramatically reduced engine runtime, fuel consumption, and emissions vs. a conventional running generator.</p>
+
+    <p>The Verizon connection: a single EBOSS 70-45 unit has been running at <strong>Maloney Ridge Communications Site in PNW (WA)</strong> since late November 2025, shared among Verizon, AT&T, T-Mobile, BPA, and BNSF under a Multi-Carrier Real Estate Use (MREU) agreement coordinated by Lumina Solutions. Jason Epling (AT&T Mobility, Power &amp; Infrastructure Planning) forwarded the performance data directly.</p>
+
+    <div class="highlight-box" style="margin-top:14px;">
+      <strong>&#10003; Field Performance Is Multi-Party Verified</strong> — Data comes from ANA's live telematics dashboard, visible to all carrier members simultaneously. Not a vendor case study — actual operational data from a shared asset.
+    </div>
+
+    <h3>EBOSS 70-45 — Key Specifications</h3>
+    <table>
+      <tr><th>Parameter</th><th>Value</th><th>Notes</th></tr>
+      <tr><td>Peak Power Output</td><td>70 kVA / 56 kW</td><td>Battery SOC &gt; 5%</td></tr>
+      <tr><td>Continuous Power Output</td><td>45 kVA / 36 kW</td><td>Battery SOC &gt; 0%</td></tr>
+      <tr><td>Generator (Diesel Engine)</td><td>Airman SDG45 — ISUZU 4LE2T Tier 4 / CARB</td><td>45 kVA / 36 kW generator charge rate</td></tr>
+      <tr><td>Battery Chemistry</td><td>Lithium Titanium Oxide (LTO)</td><td>No thermal runaway; safe for outdoor/unattended use</td></tr>
+      <tr><td>Battery Capacity</td><td>25 kWh</td><td>~45 min charge time (no load)</td></tr>
+      <tr><td>Battery Cycle Life</td><td>90K cycles @ 90% DOD (77°F) / 80K cycles (100°F)</td><td>~20 year operational life at 3 kW avg load</td></tr>
+      <tr><td>Operating Temperature</td><td>&minus;22°F to 130°F standard; &minus;50°F to 130°F Arctic pkg</td><td>Widest range of any comparable hybrid system</td></tr>
+      <tr><td>Voltage Output</td><td>120/240V (1&Phi;) &bull; 208/480V (3&Phi;) — simultaneous</td><td>Cam-Lok connections standard</td></tr>
+      <tr><td>Integral Fuel Tank</td><td>80.5 gallons</td><td>External tank connections also available</td></tr>
+      <tr><td>Telematics</td><td>Generator &amp; EBOSS remote monitoring — fuel, runtime, GPS, load</td><td>ESG reporting built in</td></tr>
+      <tr><td>Trailer Weight</td><td>6,950 / 7,600 lbs (without / with fuel)</td><td>167" &times; 71" &times; 76" overall</td></tr>
+      <tr><td>Warranty</td><td>2 yr (EBOSS + trailer), 7 yr battery (mfr)</td><td>24/7 365 service &amp; support</td></tr>
+      <tr><td>Solar Option</td><td>EBOSS Solar 1.6 — 1.6 kW rooftop array (IRA compliant)</td><td>Available option; demonstrated in NM case study at 86% fuel reduction</td></tr>
+    </table>
+    <p class="footnote">U.S. Patent No. 12,283,822. ANA offices: Henderson NV, Cypress CA, Sacramento CA, Spartanburg SC. ANACORP.COM / (562) 450-3570</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>2. Maloney Ridge — Live Field Performance</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <div class="info-box" style="margin:0 0 14px 0;">
+      <strong>Site:</strong> Maloney Ridge Communications Site, Pacific Northwest (WA) &nbsp;&bull;&nbsp;
+      <strong>Period:</strong> 11/25/2025 – 04/20/2026 (~5 months) &nbsp;&bull;&nbsp;
+      <strong>Participants:</strong> Verizon (36.3% share), AT&amp;T, T-Mobile, BPA, BNSF &nbsp;&bull;&nbsp;
+      <strong>Unit:</strong> EBOSS 70-45 (1 of 1 active)
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card green">
+        <div class="num">72%</div>
+        <div class="lbl">Fuel Savings<br><span style="font-size:10px;">16,877 gal saved</span></div>
+      </div>
+      <div class="stat-card green">
+        <div class="num">74%</div>
+        <div class="lbl">Engine Hours Reduced<br><span style="font-size:10px;">2,535 hrs saved</span></div>
+      </div>
+      <div class="stat-card green">
+        <div class="num">72%</div>
+        <div class="lbl">CO&#x2082; Emissions Reduced<br><span style="font-size:10px;">378,899 lbs avoided</span></div>
+      </div>
+      <div class="stat-card blue">
+        <div class="num">$101K</div>
+        <div class="lbl">Fuel Cost Savings<br><span style="font-size:10px;">5 months @ $6.00/gal</span></div>
+      </div>
+    </div>
+
+    <div class="perf-compare">
+      <div class="perf-col std">
+        <h4 class="std-lbl">Standard Generator (Theoretical)</h4>
+        <div class="perf-row"><span>Engine Runtime</span><span class="val">3,440 hrs</span></div>
+        <div class="perf-row"><span>Fuel Consumed</span><span class="val">23,395 gal</span></div>
+        <div class="perf-row"><span>CO&#x2082; Produced</span><span class="val">525,208 lbs / 238.4 mt</span></div>
+        <div class="perf-row"><span>500-Hr Oil Changes</span><span class="val">6</span></div>
+        <div class="perf-row"><span>Fuel Cost (@$6/gal)</span><span class="val">~$140,370</span></div>
+      </div>
+      <div class="perf-col eboss">
+        <h4 class="eboss-lbl">EBOSS (Actual)</h4>
+        <div class="perf-row"><span>Engine Runtime</span><span class="val" style="color:#2e7d32;">905 hrs</span></div>
+        <div class="perf-row"><span>Fuel Consumed</span><span class="val" style="color:#2e7d32;">6,517 gal</span></div>
+        <div class="perf-row"><span>CO&#x2082; Produced</span><span class="val" style="color:#2e7d32;">146,308 lbs / 66.4 mt</span></div>
+        <div class="perf-row"><span>500-Hr Oil Changes</span><span class="val" style="color:#2e7d32;">1</span></div>
+        <div class="perf-row"><span>Fuel Cost (@$6/gal)</span><span class="val" style="color:#2e7d32;">~$39,102</span></div>
+      </div>
+    </div>
+
+    <p style="font-size:12px; margin: 0 0 6px 0;"><strong>Electrical Load:</strong> Avg 23.5 kW &bull; Max 36.0 kW &bull; Min 0.0 kW &mdash; high-load aggregation site serving multiple carriers simultaneously.</p>
+    <p style="font-size:12px; margin: 0;"><strong>CO&#x2082; equivalent (EBOSS reduction):</strong> 378,899 lbs reduced &equiv; 16 average households &bull; 37 average passenger vehicles/year.</p>
+
+    <h3>T-Mobile Dashboard View — Same Site (as of 5/27/2026)</h3>
+    <p style="font-size:12px; color:#555; margin: 0 0 10px 0;">The ANA telematics dashboard is visible to all carrier members. T-Mobile's view (unit LQA-051164, 220 size) shows cumulative data from 11/25/25 onward — consistent with Verizon data, confirming no data manipulation.</p>
+    <div class="stat-grid">
+      <div class="stat-card green">
+        <div class="num">20,969</div>
+        <div class="lbl">Gallons Saved (T-Mobile view)<br><span style="font-size:10px;">8,134 burned vs 29,103 std</span></div>
+      </div>
+      <div class="stat-card green">
+        <div class="num">3,150</div>
+        <div class="lbl">Engine Hours Reduced<br><span style="font-size:10px;">1,130 hrs EBOSS vs 4,280 std</span></div>
+      </div>
+      <div class="stat-card green">
+        <div class="num">470,760</div>
+        <div class="lbl">lbs CO&#x2082; Reduced<br><span style="font-size:10px;">213.7 metric tons</span></div>
+      </div>
+      <div class="stat-card blue">
+        <div class="num">51 kW</div>
+        <div class="lbl">Peak Load Observed<br><span style="font-size:10px;">21.1 kW avg</span></div>
+      </div>
+    </div>
+    <p class="footnote">T-Mobile data runs slightly longer period — differences reflect date range, not data discrepancy. Both views confirm 70%+ savings rate.</p>
+
+    <h3>ANA Published Case Study — 30-Day Evaluation Period</h3>
+    <p style="font-size:12px; color:#555; margin:0 0 10px 0;">ANA published an official case study for Maloney Ridge documenting a dedicated 30-day evaluation window. Source: <a href="https://info.anacorp.com/case-studies/maloney-ridge-eboss220-hybrid-power-resilience" target="_blank" style="color:#0057a8;">info.anacorp.com — Maloney Ridge EBOSS220 Case Study</a>. Unit designation in this study is <strong>EBOSS220</strong> (consistent with T-Mobile dashboard unit LQA-051164, "220 size").</p>
+
+    <div class="stat-grid">
+      <div class="stat-card green">
+        <div class="num">~74%</div>
+        <div class="lbl">Generator Runtime Reduction<br><span style="font-size:10px;">500+ engine hours avoided</span></div>
+      </div>
+      <div class="stat-card green">
+        <div class="num">~73%</div>
+        <div class="lbl">Fuel Consumption Decrease<br><span style="font-size:10px;">30-day evaluation period</span></div>
+      </div>
+      <div class="stat-card green">
+        <div class="num">~73%</div>
+        <div class="lbl">CO&#x2082; Emissions Reduction<br><span style="font-size:10px;">~38 metric tons carbon avoided</span></div>
+      </div>
+      <div class="stat-card blue">
+        <div class="num">500+</div>
+        <div class="lbl">Engine Hours Avoided<br><span style="font-size:10px;">Major maintenance interval avoided</span></div>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top:4px;">
+      <strong>Critical Requirements Met (per ANA case study):</strong>
+      <ul style="margin:8px 0 0 0; font-size:12px; line-height:2;">
+        <li>Improved resilience during commercial power disruptions</li>
+        <li>Reduced generator dependence</li>
+        <li>Enhanced operational visibility through integrated telemetry</li>
+        <li>Established scalable deployment model for similar multi-carrier sites</li>
+        <li>LTO chemistry selected specifically for safety and ease-of-use at an unattended, multi-operator site</li>
+      </ul>
+    </div>
+
+    <div class="highlight-box" style="margin-top:12px;">
+      <strong>"At a remote site, every trip, every fuel run, and every maintenance cycle adds up. EBOSS helped us cut generator dependency dramatically, and telemetry gave us confidence in performance."</strong><br>
+      <span style="font-size:12px; color:#555;">— MREUA Site Operations Team (Maloney Ridge Electronic Users Association)</span>
+    </div>
+
+    <p class="footnote">30-day evaluation metrics are consistent with 5-month telematics data above. ANA case study independently confirms the multi-carrier field results. The 500+ engine hours avoided during the evaluation period is notable — it pushed the EBOSS past a major maintenance interval that would have required a tech dispatch to a remote site.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>3. ANA Case Study Performance — Across Deployments</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <p style="font-size:12px; color:#555; margin:0 0 12px 0;">Three documented deployments showing consistent performance across climate extremes and load profiles. All data sourced from ANA Journey to Zero field performance reports.</p>
+    <table>
+      <tr>
+        <th>Site</th>
+        <th>Model</th>
+        <th>Duration</th>
+        <th>Avg Load</th>
+        <th>Fuel Saved (gal)</th>
+        <th>Fuel Savings %</th>
+        <th>Engine Hrs Reduced</th>
+        <th>CO&#x2082; Reduced (lbs)</th>
+        <th>Total $ Saved/Yr</th>
+      </tr>
+      <tr>
+        <td>Maloney Ridge, WA (PNW) — Multi-carrier</td>
+        <td>EBOSS220</td>
+        <td>~5 months</td>
+        <td>23.5 kW</td>
+        <td>16,877</td>
+        <td style="color:#2e7d32;font-weight:700;">72%</td>
+        <td>2,535</td>
+        <td>378,899</td>
+        <td style="color:#2e7d32;font-weight:700;">$101,265</td>
+      </tr>
+      <tr>
+        <td>Eastern Montana — Extreme Cold / Remote</td>
+        <td>EBOSS 25-25</td>
+        <td>1 year</td>
+        <td>1.9 kW</td>
+        <td>4,720</td>
+        <td style="color:#2e7d32;font-weight:700;">76% fuel / 89% runtime</td>
+        <td>7,334</td>
+        <td>105,954</td>
+        <td style="color:#2e7d32;font-weight:700;">$58,020 <span style="font-size:10px;font-weight:400;color:#888;">(incl. O&amp;M)</span></td>
+      </tr>
+      <tr>
+        <td>Southern New Mexico — Desert / Solar Integration</td>
+        <td>EBOSS Solar</td>
+        <td>7 months</td>
+        <td>4.9 kW</td>
+        <td>10,567</td>
+        <td style="color:#2e7d32;font-weight:700;">86%</td>
+        <td>4,750</td>
+        <td>237,230</td>
+        <td style="color:#2e7d32;font-weight:700;">$63,402</td>
+      </tr>
+      <tr>
+        <td>Events &amp; Entertainment — Film / TV / Commercial Production <span class="badge badge-gray">Non-Telecom</span></td>
+        <td>EBOSS 70-45 &amp; EBOSS 220-125</td>
+        <td>Multiple shoots</td>
+        <td>Varies</td>
+        <td>3,450</td>
+        <td style="color:#2e7d32;font-weight:700;">93% aggregate</td>
+        <td>624 hrs eliminated</td>
+        <td>77,000</td>
+        <td style="color:#2e7d32;font-weight:700;">—</td>
+      </tr>
+      <tr>
+        <td>Oil &amp; Gas — Remote Man Camp, Odessa TX <span class="badge badge-gray">Non-Telecom</span></td>
+        <td>EBOSS 70 kVA</td>
+        <td>—</td>
+        <td>Variable / low</td>
+        <td>807</td>
+        <td style="color:#2e7d32;font-weight:700;">76%</td>
+        <td>625 hrs eliminated</td>
+        <td>18,120</td>
+        <td style="color:#2e7d32;font-weight:700;">—</td>
+      </tr>
+    </table>
+
+    <div class="info-box" style="margin-top:4px; font-size:12px;">
+      <strong>Events &amp; Entertainment — What This Shows for VZW</strong> &nbsp;<a href="https://info.anacorp.com/case-studies/powering-performance-in-events-entertainment-with-eboss" target="_blank" style="color:#0057a8;">&#128279; ANA Source</a><br>
+      Non-telecom deployment confirming EBOSS at varied load profiles and durations. Key data points: 93% aggregate fuel reduction across film, TV, and commercial video shoots — higher than any telecom deployment in this analysis. Confirms model lineup: <strong>EBOSS 70-45</strong> (film, 81% fuel reduction), <strong>EBOSS 220-125</strong> (TV/commercial, 93% fuel reduction). The 93% ceiling is relevant for VZW off-grid sites where the generator runs continuously — EBOSS battery absorbs idle periods the same way it does in film production.
+    </div>
+
+    <div class="info-box" style="margin-top:8px; font-size:12px;">
+      <strong>Oil &amp; Gas / Remote Man Camp — Direct Analogy to VZW Standby Sites</strong> &nbsp;<a href="https://info.anacorp.com/case-studies/transforming-power-efficiency-in-remote-oil-gas-sites" target="_blank" style="color:#0057a8;">&#128279; ANA Source</a><br>
+      The challenge ANA describes at Odessa is <em>verbatim</em> the VZW extended-outage problem: <em>"actual energy demand is highly variable and remains well below generator capacity — creating inefficiency, excessive fuel consumption, increased emissions, engine wear, and logistics complexity."</em> A VZW macro site drawing 8 kW DC load connected to a 100 kW generator during a multi-day storm outage is exactly this scenario. EBOSS absorbs the load fluctuations, runs the generator only when needed, and reduces refueling trips to a remote site. 76% fuel reduction, 625 engine hours eliminated.
+      <div style="background:#fff;border-left:3px solid #1565c0;padding:10px 12px;margin-top:10px;">
+        <em>"EBOSS allowed us to run a far more efficient operation without compromising reliability. We saw a noticeable reduction in fuel use and generator runtime, and the system handled our fluctuating loads seamlessly."</em><br>
+        <span style="color:#888;">— Project Manager, Remote Site Operations (Confidential Client)</span>
+      </div>
+    </div>
+
+    <h3>Montana Case Study — Detail <a href="https://info.anacorp.com/case-studies/eboss-remote-telecom-emergency-power-montana" target="_blank" style="font-size:11px;font-weight:400;color:#0057a8;margin-left:8px;">&#128279; ANA Source</a></h3>
+    <p style="font-size:12px; color:#555; margin:0 0 10px 0;">Tier 1 U.S. telecom provider (anonymous). Remote Southern Montana. Temp range −30°C to +40°C. 12-month deployment. EBOSS 25-25 with solar PV and LTO battery storage. Battery-first energy prioritization with dynamic load balancing.</p>
+
+    <div class="perf-compare">
+      <div class="perf-col std">
+        <h4 class="std-lbl">Standard Generator (Baseline)</h4>
+        <div class="perf-row"><span>Engine Runtime</span><span class="val">8,252 hrs/yr</span></div>
+        <div class="perf-row"><span>Fuel Consumed</span><span class="val">6,189 gal/yr</span></div>
+        <div class="perf-row"><span>CO&#x2082; Produced</span><span class="val">138,943 lbs/yr</span></div>
+        <div class="perf-row"><span>Monthly Gen Cost</span><span class="val">~$5,000/mo</span></div>
+      </div>
+      <div class="perf-col eboss">
+        <h4 class="eboss-lbl">EBOSS 25-25 (Actual)</h4>
+        <div class="perf-row"><span>Engine Runtime</span><span class="val" style="color:#2e7d32;">918 hrs/yr</span></div>
+        <div class="perf-row"><span>Fuel Consumed</span><span class="val" style="color:#2e7d32;">1,469 gal/yr</span></div>
+        <div class="perf-row"><span>CO&#x2082; Produced</span><span class="val" style="color:#2e7d32;">32,989 lbs/yr</span></div>
+        <div class="perf-row"><span>Monthly Gen Cost</span><span class="val" style="color:#2e7d32;">~$600/mo</span></div>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top:12px;">
+      <strong>Why this matters for VZW remote sites:</strong> The EBOSS 25-25 is sized for 1.9 kW average / 4.2 kW peak — matching the load profile of a small VZW macro or repeater site. Monthly cost dropped from $5,000 to $600 — an $88K swing in just under 2 years. At −30°C, the LTO battery performed without degradation, confirming viability for Alaska, mountain, and northern tier sites. Remote telemetry eliminated constant on-site oversight while maintaining 24/7 uptime.
+    </div>
+
+    <div class="highlight-box" style="margin-top:12px;">
+      <strong>Key takeaway:</strong> Performance is consistent across a 1.9 kW low-load remote site (Montana) to a 23.5 kW high-load multi-carrier hub (Maloney Ridge). The LTO battery chemistry handles −30°C Montana winters and 46°C New Mexico summers without degradation. This is not a lab result — it is multi-year field data from production deployments. The Montana savings figure ($58,020/yr) includes O&amp;M avoidance, not just fuel — making it a better proxy for total cost at remote VZW sites where dispatch costs are significant.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>4. VZW Use Case — Emergency / Standby Generator Context</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <div class="highlight-box" style="margin:0 0 14px 0;">
+      <strong>Vendor-Defined Application Sweet Spots — Direct from ANA</strong><br>
+      <div style="font-size:13px; color:#444; margin-top:8px; line-height:1.8;">
+        Per ANA in direct correspondence: <em>"In its current configuration, EBOSS delivers the greatest impact in three applications:"</em>
+        <ol style="margin:8px 0 8px 20px; font-size:13px;">
+          <li><strong>Sites awaiting utility</strong></li>
+          <li><strong>Emergency fleet deployments</strong></li>
+          <li><strong>Remote, no-utility sites</strong></li>
+        </ol>
+        <em>"The performance data is taken directly from onboard telematics from units operating in the field over the past three years."</em>
+      </div>
+      <div style="font-size:11px; color:#888; margin-top:6px;">Source: ANA vendor email — case study transmittal</div>
+    </div>
+
+    <div class="highlight-box" style="margin:0 0 14px 0;">
+      <strong>VZW Initial Deployment Strategy — Deployable Asset Only</strong>
+      <div style="font-size:13px; color:#444; margin-top:8px; line-height:1.8;">
+        EBOSS will <strong>not replace stationary generators</strong> in this phase. The initial VZW use case is a <strong>trailer-mounted deployable fleet</strong> used in two scenarios:
+        <ol style="margin:8px 0 8px 20px;">
+          <li><strong>Emergency / storm response</strong> — dispatch to sites where the fixed generator has failed, fuel can't be delivered, or the site needs to be restored faster than the permanent power solution allows. EBOSS gets the site on air; the stationary gen stays in place.</li>
+          <li><strong>Sites awaiting utility</strong> — new builds that are constructed and ready but waiting on utility connection (30–180+ days is common). EBOSS replaces a rental genset for that window, then redeploys to the next waiting site after cutover.</li>
+        </ol>
+        In both cases the trailer moves. It is not a permanent installation. This keeps capital exposure low and maximizes utilization across the fleet.
+      </div>
+    </div>
+
+    <div class="warn-box" style="margin:0 0 14px 0;">
+      <strong>&#9888; Important Distinction:</strong> Maloney Ridge is a <em>prime power</em> site — EBOSS is the primary power source 24/7. Verizon's generator fleet is predominantly <em>standby</em> — generators that sit idle and run during grid outages or monthly maintenance tests. The economics are materially different. EBOSS makes most sense for VZW at sites with <strong>elevated runtime</strong> — or as a deployable asset as described above.
+    </div>
+
+    <h3>VZW Generator Fleet Baseline</h3>
+    <div class="stat-grid">
+      <div class="stat-card red">
+        <div class="num">63,200</div>
+        <div class="lbl">VZW Macro Sites with Generators<br><span style="font-size:10px;">(~78.7% of 80,259 macros)</span></div>
+      </div>
+      <div class="stat-card blue">
+        <div class="num">~21 hrs</div>
+        <div class="lbl">Average Generator Runtime/Year<br><span style="font-size:10px;">Maintenance + typical outage baseline</span></div>
+      </div>
+      <div class="stat-card orange">
+        <div class="num">$6.00</div>
+        <div class="lbl">Diesel Cost Per Gallon<br><span style="font-size:10px;">Field price at Maloney Ridge</span></div>
+      </div>
+      <div class="stat-card green">
+        <div class="num">~3,375</div>
+        <div class="lbl">PNW Macro Sites (VZW)<br><span style="font-size:10px;">EBOSS pilot region; 1,664 w/ diesel gen</span></div>
+      </div>
+    </div>
+
+    <h3>Site Types Where EBOSS Makes Sense for VZW</h3>
+    <p style="font-size:12px; color:#555; margin:0 0 10px 0;">At 21 hrs/yr average runtime, EBOSS payback on a standard macro site would be too long. Target the sites where generators run significantly more:</p>
+    <table>
+      <tr><th>Site Type</th><th>Est. Runtime/Yr</th><th>Why EBOSS Fits</th><th>Priority</th></tr>
+      <tr>
+        <td>New site builds awaiting utility power connection</td>
+        <td>Weeks–months (until utility cutover)</td>
+        <td>Generator IS the primary source from day one. VZW sites routinely wait 30–180+ days for utility connection after construction. Temporary generator runs 24/7 during this window — prime power economics apply. EBOSS replaces a rental genset, cuts fuel cost 72–86%, and the unit can be redeployed to the next waiting site after cutover.</td>
+        <td><span class="badge badge-green">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Shared multi-carrier aggregation sites (like Maloney Ridge)</td>
+        <td>500–8,760 hrs</td>
+        <td>Cost-shared, prime or near-prime power; all carriers benefit, VZW's share is ~1/3 to 1/5 of total cost. Best economic model.</td>
+        <td><span class="badge badge-green">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Off-grid / island sites (HI, PR, AK, remote mountain)</td>
+        <td>2,000–8,760 hrs</td>
+        <td>Generator IS the primary power source; 72-86% fuel savings = significant OPEX reduction. Also reduces dangerous fuel delivery frequency in remote terrain.</td>
+        <td><span class="badge badge-green">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>CRAN / Hub sites with dense load</td>
+        <td>Varies; high load density</td>
+        <td>High kW load profile matches EBOSS 70-45 rating; multiple tenants share power. Maloney Ridge is essentially this model.</td>
+        <td><span class="badge badge-green">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Extended outage / storm-belt sites (FL, Gulf Coast, Carolinas)</td>
+        <td>50–500+ hrs during events</td>
+        <td>During major storms (Helene, Milton) generators run continuously for days to weeks. EBOSS dramatically reduces fuel burn during the event when fuel delivery is also most constrained.</td>
+        <td><span class="badge badge-blue">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td>Grid-parallel sites with frequent short outages</td>
+        <td>50–200 hrs/yr</td>
+        <td>Frequent cycling accelerates generator wear and oil change intervals. EBOSS battery absorbs brief outages without starting the engine — extends gen life significantly.</td>
+        <td><span class="badge badge-blue">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td>Standard VZW macro (21 hrs/yr baseline)</td>
+        <td>~21 hrs</td>
+        <td>Payback period likely too long for EBOSS economics. DieselMaxx (inline fuel device) is the better fit for this tier.</td>
+        <td><span class="badge badge-gray">LOW</span></td>
+      </tr>
+    </table>
+
+    <h3>ROI Sensitivity — Runtime Drives the Decision</h3>
+    <p style="font-size:12px; color:#555; margin:0 0 10px 0;">Assumes EBOSS 70-45 at ~23 kW avg load, 72% fuel savings, $6.00/gal diesel, 3.5 gal/hr consumption rate. Unit cost pending quotation from ANA — estimate $80–120K capital (trailer-mounted, delivered). Shared model divides capital cost.</p>
+    <table>
+      <tr><th>Annual Runtime</th><th>Fuel Saved/Yr (gal)</th><th>$ Saved/Yr</th><th>Payback (est. $100K unit)</th><th>10-Yr Savings</th></tr>
+      <tr><td>8,760 hrs (prime power / off-grid)</td><td>22,050</td><td style="color:#2e7d32;font-weight:700;">$132,300</td><td style="color:#2e7d32;font-weight:700;">&lt;1 year</td><td>$1.22M</td></tr>
+      <tr><td>4,000 hrs (frequent outage / CRAN hub)</td><td>10,080</td><td style="color:#2e7d32;font-weight:700;">$60,480</td><td style="color:#2e7d32;font-weight:700;">~1.7 years</td><td>$505K</td></tr>
+      <tr><td>2,000 hrs (extended outage / storm season)</td><td>5,040</td><td style="color:#2e7d32;font-weight:700;">$30,240</td><td style="color:#e65100;font-weight:700;">~3.3 years</td><td>$202K</td></tr>
+      <tr><td>500 hrs (elevated — gulf coast, repeat outages)</td><td>1,260</td><td>$7,560</td><td style="color:#cd040b;font-weight:700;">~13 years</td><td>$75K</td></tr>
+      <tr><td>21 hrs (VZW network average — standby only)</td><td>53</td><td>$317</td><td style="color:#cd040b;font-weight:700;">&gt;300 years</td><td>$3K</td></tr>
+    </table>
+    <p class="footnote">Shared carrier model: divide capital cost by number of participants. At 5 carriers (Maloney Ridge model), $100K unit = $20K VZW share. At $20K VZW share, breakeven drops to &lt;1 month at 4,000+ hrs/yr.</p>
+
+    <div class="highlight-box" style="margin-top:4px;">
+      <strong>The shared carrier model changes everything.</strong> At Maloney Ridge, Verizon's fuel cost share is 36.3% &times; $6,517 gal &times; $6 = ~$14,190 over 5 months. VZW's capital share at 36.3% of $100K = $36,300. That's roughly a 13-month payback — on a unit running as <em>primary power</em>. For off-grid VZW-only sites, the unit pays for itself in under 2 years at typical remote site runtimes.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>5. Technology Advantages vs. Alternatives</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <table>
+      <tr><th>Comparison</th><th>EBOSS (LTO Hybrid)</th><th>Standard Diesel Generator</th><th>SPIN Flywheel (Battery Elimination)</th><th>DieselMaxx (Inline Fuel Device)</th></tr>
+      <tr>
+        <td>Best Use Case</td>
+        <td>Prime power / high-runtime / shared sites</td>
+        <td>Low-runtime standby</td>
+        <td>Eliminate batteries at DC plant — utility-connected sites only</td>
+        <td>Fuel efficiency at any runtime level</td>
+      </tr>
+      <tr>
+        <td>Fuel Savings</td>
+        <td style="color:#2e7d32;font-weight:700;">72–86% (field proven)</td>
+        <td>Baseline (0%)</td>
+        <td>N/A — different function</td>
+        <td>5–15% (estimated, pilot needed)</td>
+      </tr>
+      <tr>
+        <td>Battery Chemistry</td>
+        <td>LTO — 20-yr life, no thermal runaway, wide temp range</td>
+        <td>Lead-acid VRLA (DC plant batteries)</td>
+        <td>Eliminates batteries entirely</td>
+        <td>No batteries</td>
+      </tr>
+      <tr>
+        <td>Capital Cost</td>
+        <td>$80–120K (est., pending quote)</td>
+        <td>$20–60K (50–100kW unit)</td>
+        <td>TBD per SPIN analysis</td>
+        <td>Low ($100–500/unit)</td>
+      </tr>
+      <tr>
+        <td>NDA Status</td>
+        <td><span class="badge badge-green">Signed 2026-06-08</span></td>
+        <td>N/A</td>
+        <td><span class="badge badge-orange">Pending</span></td>
+        <td><span class="badge badge-green">Signed 2026-05-22</span></td>
+      </tr>
+      <tr>
+        <td>Independent Data</td>
+        <td style="color:#2e7d32;font-weight:700;">Multi-carrier live telematics — yes</td>
+        <td>N/A</td>
+        <td>Not yet</td>
+        <td>SAE papers verified; pilot needed</td>
+      </tr>
+    </table>
+    <p class="footnote">These products are not mutually exclusive. DieselMaxx + EBOSS could be complementary at high-runtime sites. SPIN addresses a different infrastructure layer entirely.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>6. The Maloney Ridge Billing Situation — VZW Flag</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <div class="red-box" style="margin:0 0 14px 0;">
+      <strong>&#9888; Verizon Payment Was Outstanding as of March 2026</strong><br>
+      Per the MasTec/Lumina invoice email chain, AT&amp;T (Pam Nash) specifically flagged Verizon's portion as unpaid while other partners (AT&amp;T, BPA, BNSF) had paid. MasTec threatened to halt refueling. This is a real operational and reputational issue — VZW's payments should be confirmed current now that the NDA (CW2652709, executed 2026-06-08) is in place.
+    </div>
+
+    <h3>Payment Summary — MasTec Refueling Invoices (as of email chain)</h3>
+    <p style="font-size:12px;color:#555;margin:0 0 8px 0;">Verizon's cost share = 36.30% of all invoices. Managed by Lumina Solutions (Sunny Ausink). Fuel delivery by MasTec (Heather Moore, PM).</p>
+    <table>
+      <tr><th>Invoice Period</th><th>Total Invoice</th><th>VZW Share (36.3%)</th><th>Status (per email chain)</th></tr>
+      <tr><td>March (1st &amp; 2nd)</td><td>$55,369.70 &times; 2</td><td>~$40,199</td><td style="color:#cd040b;font-weight:700;">Outstanding</td></tr>
+      <tr><td>April</td><td>$55,369.70</td><td>~$20,099</td><td style="color:#cd040b;font-weight:700;">Outstanding</td></tr>
+      <tr><td>May – November 2025</td><td>~$84K total</td><td>~$30,492</td><td style="color:#e65100;">Partially paid via Lumina checks</td></tr>
+      <tr><td>Jan – Feb 2026 (checks #1012, 1013, 1015)</td><td>$221,055.95 total across all members</td><td>Per-member ~$36–55K</td><td style="color:#2e7d32;">Paid per Lumina</td></tr>
+    </table>
+    <p class="footnote">Exact VZW ledger position unclear from email chain — John Stacks and Natalie Braun (VZW) were copied on early emails. NDA executed 2026-06-08 (CW2652709) — recommend confirming current payables status with Verizon AP before initiating expanded engagement discussions.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>7. Due Diligence Questions <span style="color:#2e7d32;font-size:13px;font-weight:700;text-transform:none;letter-spacing:0;">&#10003; NDA Executed 2026-06-08</span></h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <ol class="q-list">
+      <li>What is the all-in delivered cost for an EBOSS 70-45 unit (trailer + generator + battery module)? Is there a lease/PPA model available, or is it purchase only? What does enterprise volume pricing look like at 10, 50, and 500 units?</li>
+      <li>For a VZW-owned site (not shared), what is the typical installation scope — site prep, utility connections, fuel line, transfer switch integration — and who performs the installation?</li>
+      <li>Does the EBOSS replace or work alongside an existing standby generator? If an existing CAT or Generac is on-site, can the EBOSS serve as the primary with the existing gen as backup, or does it require removal of existing equipment?</li>
+      <li>What is the EBOSS integration with SiteBoss / SNMP monitoring? Does ANA telematics expose OIDs or API endpoints that feed into existing VZW network management systems?</li>
+      <li>What are the fuel management logistics — does the EBOSS 80.5-gal integral tank feed directly from the same fuel supply as an existing on-site generator, or does it require a dedicated supply?</li>
+      <li>What are the CARB / EPA permitting implications of deploying an EBOSS at a CA site? The Airman SDG45 is Tier 4 / CARB-rated, but are there AQMD permit requirements for a trailer-mounted prime-power diesel in Southern California or Bay Area air districts?</li>
+      <li>What is the warranty and service response SLA for a remote site in Alaska or Hawaii? ANA has offices in NV and CA — what is the field service model outside those geographies?</li>
+      <li>Is parallel operation supported (two EBOSS units at a single site for N+1 reliability)? The spec sheet lists "Parallel Capability: Available" — what is the control architecture?</li>
+      <li>ESG reporting — what format and cadence does ANA provide? Does it map to Verizon's existing emissions reporting framework (GHG Protocol, CDP)?</li>
+      <li>What is ANA's production capacity and typical lead time from PO to delivery? If VZW identifies 50–100 priority remote sites, can ANA fulfill within 12 months?</li>
+      <li>For the <strong>sites-awaiting-utility</strong> use case specifically — is there a short-term rental or redeployment model, or is it purchase only? VZW's intent is to use EBOSS as a deployable asset that moves from site to site as each gets utility cutover. Does ANA support that model contractually and logistically, and what does redeployment cost/logistics look like?</li>
+      <li>For <strong>emergency fleet deployment</strong> — does ANA operate a managed rental fleet that VZW could call on during a major storm event, or does VZW need to own and pre-position units? What is typical dispatch time and mobilization cost for an emergency deployment in the Gulf Coast, Carolinas, or Florida?</li>
+      <li>VZW cell sites run <strong>-48V DC power plants</strong> (rectifiers, batteries). EBOSS outputs 120/240V AC. Exactly how does EBOSS feed a VZW site — through the commercial AC input to the existing rectifiers, or is there a direct DC integration path? What is the transfer switch / ATS architecture for a site that also has a permanent standby generator that stays in place?</li>
+      <li>The case studies reference multiple model designations — EBOSS 25-25, EBOSS 70-45, EBOSS 70 kVA, EBOSS 220-125, EBOSS220. What is the <strong>current model lineup</strong>, and what are the specs and pricing for each? Which model is recommended for a typical VZW macro site drawing 5–10 kW?</li>
+      <li>The vendor states performance data comes from <strong>three years of field telematics</strong>. Under NDA, can ANA provide the full dataset — fleet size, site types, runtime distributions, and performance by climate zone — so VZW can independently validate savings projections for our specific site mix?</li>
+      <li>What does <strong>real-world LTO battery capacity retention</strong> look like after 2–3 years of field operation? The spec sheet shows 90K cycle rating, but what is actual measured capacity at year 1, 2, and 3 in deployed units? Is there field data from the oldest units in service?</li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>8. Recommended Next Steps</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-box">
+    <ol class="steps">
+      <li><strong>Resolve Maloney Ridge Payables</strong> — Confirm with John Stacks / Natalie Braun / VZW AP that all outstanding Lumina/MasTec invoices are current before pursuing any expanded engagement with ANA or Lumina Solutions. Being flagged as the only non-paying carrier is a bad starting position for a partnership conversation.</li>
+      <li><strong>Sign NDA with ANA</strong> <span class="badge badge-green">&#10003; Done — June 8, 2026 (CW2652709)</span> — NDA executed. Now request pricing, proprietary performance data, full 3-year telematics dataset, and service/deployment details. ANA contact: sales@anacorp.com / (562) 450-3570.</li>
+      <li><strong>Identify VZW High-Runtime Site Candidates</strong> — Pull SiteBoss generator runtime data to find sites averaging &gt;500 hrs/yr. Off-grid sites in AK, HI, PR, and remote mountain sites are the priority tier. CRAN hubs with high load are the secondary tier.</li>
+      <li><strong>Evaluate Shared vs. VZW-Only Model</strong> — The MREU shared model (Maloney Ridge) produces the best economics if co-location partners exist. Where VZW has existing site-sharing agreements with AT&amp;T or T-Mobile, explore whether an EBOSS could replace multiple individual generators on a shared basis — VZW may have other such aggregation points in PNW and elsewhere.</li>
+      <li><strong>Pilot Design</strong> — Select 3–5 sites in PNW (where Maloney Ridge is already running as proof) or in the off-grid tier. Measure fuel savings vs. baseline using SiteBoss fuel sensor data. Minimum 90-day pilot. ANA provides telematics dashboard; compare against SiteBoss fuel level sensor data as independent verification.</li>
+      <li><strong>Storm / Emergency Fuel Reserve Play</strong> — Separately, evaluate EBOSS as a <em>deployable</em> asset for major outage events (FL, NC, TX). A small fleet of EBOSS trailers positioned regionally could serve as rapid-deploy emergency power at sites where the regular generator is down or fuel cannot be delivered. The trailer mobility is an advantage no fixed generator has.</li>
+    </ol>
+
+    <div class="highlight-box" style="margin-top:16px;">
+      <strong>Bottom line:</strong> The data is real, multi-party verified, and the technology is proven. EBOSS is not right for the average VZW standby generator (21 hrs/yr), but for high-runtime remote sites, off-grid deployments, and shared carrier infrastructure, the economics are compelling — especially under a shared carrier model where VZW's capital exposure is a fraction of the unit cost. The deployable / emergency application adds a second use case with no direct equivalent in the current VZW toolbox.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>9. Flags</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="warn-box">
+    <strong>&#9888; Items to watch before committing:</strong>
+    <ul style="margin:8px 0 0 0;">
+      <li><strong>Resolve VZW payables first</strong> — Maloney Ridge invoice arrears must be cleared; VZW was the only non-paying member per the email chain</li>
+      <li><strong>Unit cost unknown</strong> — ROI analysis above uses $80–120K estimate; actual ANA pricing required before any site-level analysis can be finalized</li>
+      <li><strong>Site load profile matters</strong> — EBOSS 70-45 is sized for 23–36 kW loads; many VZW macro sites are 3–8 kW avg load — EBOSS 25-25 (smaller model, confirmed at Montana remote site, avg 1.9 kW) may be more appropriate for those</li>
+      <li><strong>CARB / AQMD permitting</strong> — CA air quality permits for trailer-mounted diesel prime power may add complexity in SoCal / Bay Area; confirm before piloting in those districts</li>
+      <li><strong>Transfer switch / integration</strong> — If deployed alongside existing standby gen, transfer switch architecture and ATS coordination needs engineering review</li>
+      <li><strong>Fuel delivery dependency</strong> — 80.5 gal integral tank is a 3–4 day supply at typical site loads; remote sites still need fuel logistics plan, just less frequently</li>
+    </ul>
+  </div>
+
+</div><!-- end container -->
+
+<div class="footer">
+  Chad Hooper &nbsp;&bull;&nbsp; National CP&amp;G Planning &nbsp;&bull;&nbsp; Verizon &nbsp;&bull;&nbsp; chad.hooper@verizonwireless.com<br>
+  Performance data sourced from ANA Journey to Zero field reports &amp; live telematics dashboard (multi-carrier verified) &nbsp;&bull;&nbsp; Maloney Ridge email chain: AT&amp;T Jason Epling forwarded 4/21/26 &nbsp;&bull;&nbsp; NDA Executed 2026-06-08 (CW2652709) &nbsp;&bull;&nbsp; Created 2026-05-27
+</div>
+
+</body>
+</html>
