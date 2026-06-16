@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Eaton Cabinet HVAC Monitor &mdash; VZW Trial</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; background: #f4f4f4; color: #222; margin: 0; padding: 0; }
+
+  .header { background: #000; color: #fff; padding: 18px 32px 14px 32px; }
+  .header-brand { color: #cd040b; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .header h1 { margin: 0 0 4px 0; font-size: 22px; color: #fff; }
+  .header-sub { color: #aaa; font-size: 12px; }
+
+  .container { max-width: 1000px; margin: 24px auto; padding: 0 24px 48px 24px; }
+
+  h2 { color: #cd040b; border-bottom: 2px solid #cd040b; padding-bottom: 5px; margin-top: 36px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+  h3 { color: #000; font-size: 14px; margin: 18px 0 8px 0; border-left: 3px solid #cd040b; padding-left: 10px; }
+
+  .section-box { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 18px 22px; margin: 12px 0; }
+  .highlight-box { background: #e8f5e9; border: 2px solid #2e7d32; border-radius: 4px; padding: 14px 18px; margin: 14px 0; }
+  .warn-box { background: #fff8e1; border: 2px solid #f9a825; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+  .info-box { background: #e3f2fd; border: 2px solid #1565c0; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+  .red-box { background: #ffebee; border: 2px solid #cd040b; border-radius: 4px; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 18px 0; font-size: 13px; }
+  th { background: #000; color: #fff; padding: 8px 12px; text-align: left; font-size: 12px; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; background: #fff; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+  td:first-child { font-weight: 600; color: #333; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+  .stat-card { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 14px 10px; text-align: center; }
+  .stat-card .num { font-size: 26px; font-weight: 700; line-height: 1.15; }
+  .stat-card .lbl { font-size: 11px; color: #666; margin-top: 4px; line-height: 1.4; }
+  .stat-card.red .num  { color: #cd040b; }
+  .stat-card.green .num { color: #2e7d32; }
+  .stat-card.blue .num  { color: #0057a8; }
+  .stat-card.orange .num { color: #e65100; }
+
+  .steps { counter-reset: stepcount; list-style: none; padding: 0; margin: 0; }
+  .steps li { counter-increment: stepcount; padding: 10px 14px 10px 52px; border-left: 3px solid #cd040b; margin-bottom: 8px; background: #fff; border-radius: 0 4px 4px 0; position: relative; font-size: 13px; }
+  .steps li::before {
+    content: counter(stepcount);
+    position: absolute; left: -16px; top: 10px;
+    background: #cd040b; color: #fff;
+    width: 28px; height: 28px; border-radius: 50%;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .steps li strong { color: #cd040b; }
+
+  .oid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+  .oid-item { background: #fff; border: 1px solid #e0e0e0; border-radius: 3px; padding: 8px 12px; font-size: 12px; }
+  .oid-item .oid-name { font-weight: 700; color: #000; }
+  .oid-item .oid-desc { color: #666; margin-top: 2px; }
+
+  .timeline { margin: 12px 0; }
+  .tl-item { display: flex; gap: 16px; margin-bottom: 12px; align-items: flex-start; }
+  .tl-dot { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; margin-top: 2px; }
+  .tl-dot.done { background: #cd040b; color: #fff; }
+  .tl-dot.pending { background: #e0e0e0; color: #888; border: 2px solid #bbb; }
+  .tl-body { flex: 1; }
+  .tl-date { font-size: 11px; color: #888; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tl-title { font-size: 14px; font-weight: 700; color: #000; margin: 2px 0; }
+  .tl-desc { font-size: 12px; color: #555; line-height: 1.5; }
+
+  .tag { display: inline-block; padding: 1px 7px; border-radius: 3px; font-size: 10px; font-weight: 700; margin-left: 6px; vertical-align: middle; }
+  .tag-snmp { background: #0057a8; color: #fff; }
+  .tag-http { background: #6a1b9a; color: #fff; }
+  .tag-ctrl { background: #cd040b; color: #fff; }
+  .tag-mon  { background: #2e7d32; color: #fff; }
+
+  .footer { text-align: center; font-size: 11px; color: #888; margin-top: 48px; border-top: 1px solid #ddd; padding-top: 14px; }
+
+  @media print {
+    .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    th, .stat-card .num, .tl-dot.done { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">Verizon &nbsp;|&nbsp; National CP&amp;G Planning</div>
+  <h1>Eaton Cabinet HVAC Monitor &mdash; VZW Trial</h1>
+  <div class="header-sub">Chad Hooper &nbsp;&bull;&nbsp; chad.hooper@verizonwireless.com &nbsp;&bull;&nbsp; June 2026 &nbsp;&bull;&nbsp; <span style="color:#4caf50;font-weight:700;">&#10003; Script Built 2026-06-12</span></div>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>1. Overview</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <div class="stat-grid">
+    <div class="stat-card blue">
+      <div class="num">14,792</div>
+      <div class="lbl">Outdoor Cabinet Sites<br><span style="font-size:10px;">(Ericsson + SE markets; Samsung pending)</span></div>
+    </div>
+    <div class="stat-card red">
+      <div class="num">20</div>
+      <div class="lbl">OIDs Monitored<br><span style="font-size:10px;">per cabinet HVAC unit</span></div>
+    </div>
+    <div class="stat-card green">
+      <div class="num">$1.2M&ndash;$3.1M</div>
+      <div class="lbl">Estimated Annual Savings<br><span style="font-size:10px;">pending trial validation</span></div>
+    </div>
+    <div class="stat-card orange">
+      <div class="num">Jun 12</div>
+      <div class="lbl">Script Built<br><span style="font-size:10px;">SiteBoss Lua &mdash; ready to deploy</span></div>
+    </div>
+  </div>
+
+  <div class="section-box">
+    <p>Verizon operates <strong>14,792 outdoor cabinet sites</strong> (Ericsson and Southeast markets; Samsung markets analysis pending) equipped with Eaton / Tripp-Lite precision cooling units managed by the <strong>WEBCARDLX LX Platform</strong>. These cabinets have no existing remote temperature monitoring or setpoint control capability in the standard SiteBoss alarming configuration &mdash; operators cannot view real-time cooling conditions or adjust setpoints without a physical site visit.</p>
+
+    <p>This initiative deploys a <strong>SiteBoss Lua script</strong> that polls each cabinet HVAC unit every 5 minutes via SNMPv2c and controls cooling setpoints remotely via the PADM20 HTTP REST API. The script is fully integrated with the existing SiteBoss infrastructure &mdash; no new hardware required.</p>
+
+    <div class="highlight-box">
+      <strong>&#10003; No new hardware required</strong> &mdash; leverages existing SiteBoss 550A units already deployed at cabinet sites.<br>
+      <strong>&#10003; Dual control path</strong> &mdash; SNMP monitoring + HTTP setpoint write in a single Lua script.<br>
+      <strong>&#10003; Fleet-ready</strong> &mdash; script accepts configurable IP, community, and credentials; deployable at scale via SiteBoss Lua slot.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>2. Problem Statement</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <div class="section-box">
+    <h3>Current State &mdash; Outdoor Cabinet HVAC Blind Spots</h3>
+    <table>
+      <tr><th>Gap</th><th>Current State</th><th>Impact</th></tr>
+      <tr><td>Temperature visibility</td><td>No remote view of return/supply air temps</td><td>Overheating events go undetected until equipment failure or high-temp alarm</td></tr>
+      <tr><td>Setpoint control</td><td>Default factory setpoints (often 65&ndash;68&deg;F) &mdash; no remote adjustment</td><td>Overcooling wastes energy; setpoints can only be changed on-site</td></tr>
+      <tr><td>Compressor/fan health</td><td>Not monitored</td><td>No early warning for compressor failure, refrigerant loss, or VFD issues</td></tr>
+      <tr><td>Pressure monitoring</td><td>Not monitored</td><td>High/low refrigerant pressure faults go unreported until unit shuts down</td></tr>
+      <tr><td>Cooling output (kW)</td><td>Not tracked</td><td>Energy consumption unknown; no baseline for efficiency improvements</td></tr>
+    </table>
+
+    <div class="warn-box">
+      <strong>&#9888; Setpoint Gap:</strong> Factory default cooling setpoints on Eaton/Tripp-Lite units are typically <strong>65&ndash;68&deg;F</strong>. Verizon's NSTD thermal standard permits <strong>77&deg;F</strong> return air in most cabinet configurations. Each 1&deg;F increase in cooling setpoint saves approximately <strong>2&ndash;3% of HVAC energy</strong> (ASHRAE guideline). A 9&deg;F setpoint raise represents a potential <strong>18&ndash;27% cooling energy reduction per site</strong>.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>3. Solution &mdash; SiteBoss Lua Script</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <div class="section-box">
+    <p>The script runs inside the SiteBoss 550A Lua slot and communicates with the WEBCARDLX card over the cabinet's internal Ethernet. No VPN or WAN access to the HVAC unit is needed &mdash; the SiteBoss acts as the local proxy.</p>
+
+    <h3>SNMP Layer &mdash; Monitoring <span class="tag tag-snmp">SNMP</span> <span class="tag tag-mon">READ ONLY</span></h3>
+    <p style="font-size:13px;">SNMPv2c GET against enterprise OID <strong>1.3.6.1.4.1.850.1.1.3.5</strong> (Tripp-Lite cooling). Full BER encoder/decoder in pure Lua using LuaSocket UDP &mdash; no external SNMP library required. 20 OIDs polled in a single GET request every 5 minutes:</p>
+
+    <div class="oid-grid">
+      <div class="oid-item"><div class="oid-name">Return Air Temp</div><div class="oid-desc">Primary thermal health indicator &mdash; units of 0.1&deg;F</div></div>
+      <div class="oid-item"><div class="oid-name">Supply Air Temp</div><div class="oid-desc">Cold aisle delivery temp &mdash; units of 0.1&deg;F</div></div>
+      <div class="oid-item"><div class="oid-name">Condenser Temp</div><div class="oid-desc">Refrigerant heat rejection temp</div></div>
+      <div class="oid-item"><div class="oid-name">Evaporator Temp</div><div class="oid-desc">Cold-side refrigerant temp</div></div>
+      <div class="oid-item"><div class="oid-name">Suction Temp</div><div class="oid-desc">Compressor suction line temp</div></div>
+      <div class="oid-item"><div class="oid-name">High Side PSI</div><div class="oid-desc">Condenser refrigerant pressure</div></div>
+      <div class="oid-item"><div class="oid-name">Low Side PSI</div><div class="oid-desc">Evaporator refrigerant pressure</div></div>
+      <div class="oid-item"><div class="oid-name">Unit Current (A)</div><div class="oid-desc">Total unit amperage draw</div></div>
+      <div class="oid-item"><div class="oid-name">Compressor Current (A)</div><div class="oid-desc">Compressor-specific draw</div></div>
+      <div class="oid-item"><div class="oid-name">Fan Current (A)</div><div class="oid-desc">Fan motor amperage</div></div>
+      <div class="oid-item"><div class="oid-name">Operating Mode</div><div class="oid-desc">Cooling / heating / free cooling / standby</div></div>
+      <div class="oid-item"><div class="oid-name">Alarm Status</div><div class="oid-desc">Active alarm bitmask</div></div>
+      <div class="oid-item"><div class="oid-name">Compressor On/Off</div><div class="oid-desc">Compressor run state</div></div>
+      <div class="oid-item"><div class="oid-name">Condensate Level</div><div class="oid-desc">Drain pan level indicator</div></div>
+      <div class="oid-item"><div class="oid-name">Cool Output (kW)</div><div class="oid-desc">Instantaneous cooling power delivered</div></div>
+      <div class="oid-item"><div class="oid-name">VFD Frequency (Hz)</div><div class="oid-desc">Variable-frequency drive speed &mdash; fan efficiency</div></div>
+      <div class="oid-item"><div class="oid-name">EEV Steps</div><div class="oid-desc">Electronic expansion valve position</div></div>
+      <div class="oid-item"><div class="oid-name">Unit Status</div><div class="oid-desc">Overall operational status register</div></div>
+      <div class="oid-item"><div class="oid-name">Free Cooling State</div><div class="oid-desc">Economizer / free cooling active flag</div></div>
+      <div class="oid-item"><div class="oid-name">Fault Code</div><div class="oid-desc">Active fault register for diagnostics</div></div>
+    </div>
+
+    <p style="font-size:12px;color:#666;margin:4px 0 0 0;">All temperature OIDs return Integer32 in units of 0.1&deg;F; script divides by 10 for display. MIB source: TRIPPLITE-PRODUCTS.MIB v20.0.2.</p>
+
+    <h3>HTTP Layer &mdash; Setpoint Control <span class="tag tag-http">HTTP</span> <span class="tag tag-ctrl">READ/WRITE</span></h3>
+    <p style="font-size:13px;">Setpoint control uses the <strong>PADM20 REST API</strong> &mdash; the only remote path for cooling setpoint writes (setpoint is not exposed in the SNMP MIB).</p>
+    <table>
+      <tr><th>Operation</th><th>Method</th><th>Endpoint</th><th>Notes</th></tr>
+      <tr><td>Authenticate</td><td>POST</td><td>/api/oauth/token</td><td>Returns Bearer token; cached and auto-refreshed on 401</td></tr>
+      <tr><td>Discover variables</td><td>GET</td><td>/api/variables?filter[device_id]=1</td><td>Cached after first call; run once to map setpoint variable ID</td></tr>
+      <tr><td>Write setpoint</td><td>PATCH</td><td>/api/variables/{id}</td><td>JSON API body; target label: "Cooling Setpoint" or "Return Air Setpoint"</td></tr>
+    </table>
+
+    <h3>Script Functions</h3>
+    <table>
+      <tr><th>Function</th><th>Description</th></tr>
+      <tr><td>cabinet_check()</td><td>Main 5-min polling loop &mdash; reads all 20 OIDs, logs to SiteBoss event log</td></tr>
+      <tr><td>cabinet_set_setpoint(temp_f)</td><td>Writes cooling setpoint via PADM20 PATCH</td></tr>
+      <tr><td>cabinet_on() / cabinet_off()</td><td>SNMP SET for unit on/off control</td></tr>
+      <tr><td>cabinet_set_fan(0&ndash;6)</td><td>SNMP SET for fan speed control</td></tr>
+      <tr><td>cabinet_discover_vars()</td><td>Logs all PADM20 variable labels+IDs &mdash; run once per new site to confirm setpoint variable name</td></tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>4. Financial Opportunity</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <div class="section-box">
+    <div class="info-box">
+      <strong>Basis:</strong> Eaton / Tripp-Lite SRCOOL cabinet units are typically 1&ndash;2 ton (12,000&ndash;24,000 BTU/hr), drawing <strong>1.2&ndash;2.0 kW</strong> electrical input under typical load. ASHRAE data supports <strong>2&ndash;3% cooling energy savings per 1&deg;F setpoint increase</strong>. Verizon's NSTD thermal standard permits 77&deg;F return air &mdash; most sites running factory default 65&ndash;68&deg;F have a <strong>9&ndash;12&deg;F setpoint headroom</strong>.
+    </div>
+
+    <h3>Annual Savings Estimate &mdash; Setpoint Optimization Only</h3>
+    <table>
+      <tr><th>Scenario</th><th>Avg HVAC Load</th><th>Setpoint Savings</th><th>Sites</th><th>kWh/Site/Yr</th><th>Annual Savings</th></tr>
+      <tr><td>Conservative</td><td>1.2 kW</td><td>8%</td><td>14,792</td><td>841</td><td><strong style="color:#2e7d32;">~$1.24M/yr</strong></td></tr>
+      <tr><td>Middle</td><td>1.5 kW</td><td>10%</td><td>14,792</td><td>1,314</td><td><strong style="color:#2e7d32;">~$1.94M/yr</strong></td></tr>
+      <tr><td>High</td><td>2.0 kW</td><td>12%</td><td>14,792</td><td>2,103</td><td><strong style="color:#2e7d32;">~$3.11M/yr</strong></td></tr>
+    </table>
+    <p style="font-size:11px;color:#888;margin:0 0 14px 0;">Assumes $0.10/kWh blended energy rate; 8,760 hr/yr continuous operation; savings = HVAC load &times; savings % &times; 8,760 hr &times; $0.10/kWh &times; 14,792 sites. Samsung markets not yet included.</p>
+
+    <h3>Additional Value Streams (Not Yet Quantified)</h3>
+    <table>
+      <tr><th>Opportunity</th><th>Mechanism</th><th>Status</th></tr>
+      <tr><td>Free cooling activation</td><td>Script can enable economizer mode when ambient temp permits &mdash; eliminates compressor run hours</td><td>Pending ambient temp data from trial sites</td></tr>
+      <tr><td>Proactive failure detection</td><td>Compressor current drop, high PSI, condensate level alerts &mdash; catch failures before thermal shutdown</td><td>Qualitative; avoids emergency dispatch costs</td></tr>
+      <tr><td>Samsung market expansion</td><td>Same WEBCARDLX platform used in Samsung cabinet deployments</td><td>Market analysis pending</td></tr>
+      <tr><td>OAM / reduced truck rolls</td><td>Remote setpoint changes eliminate on-site visits for HVAC commissioning</td><td>Truck roll cost TBD</td></tr>
+    </table>
+
+    <div class="warn-box">
+      <strong>&#9888; These projections are illustrative.</strong> Actual savings depend on current setpoint configuration per site, ambient climate, equipment utilization, and blended energy rates by market. Trial data will provide site-level validation before fleet commitment.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>5. Trial Plan &amp; Timeline</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <div class="section-box">
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-dot done">&#10003;</div>
+        <div class="tl-body">
+          <div class="tl-date">June 12, 2026 &mdash; Complete</div>
+          <div class="tl-title">Script Built</div>
+          <div class="tl-desc">SiteBoss Lua script developed and unit-tested. Full SNMP BER encoder/decoder, PADM20 HTTP auth, 20-OID monitoring, setpoint write, and on/off/fan controls implemented. MIB verified against TRIPPLITE-PRODUCTS.MIB v20.0.2.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot pending">2</div>
+        <div class="tl-body">
+          <div class="tl-date">July 2026 &mdash; Pending</div>
+          <div class="tl-title">Trial Site Selection &amp; Deployment</div>
+          <div class="tl-desc">Select 3&ndash;5 Ericsson cabinet sites with accessible SiteBoss 550A units and confirmed WEBCARDLX cards. Deploy Lua script, validate SNMP connectivity, run cabinet_discover_vars() to confirm setpoint variable ID per site.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot pending">3</div>
+        <div class="tl-body">
+          <div class="tl-date">August &mdash; September 2026 &mdash; Pending</div>
+          <div class="tl-title">Data Collection &amp; Setpoint Optimization</div>
+          <div class="tl-desc">Baseline 30 days at current setpoints. Then raise setpoints from factory default (65&ndash;68&deg;F) to NSTD-permitted 77&deg;F. Log return air temp, compressor current, cooling kW before/after. Compare SiteBoss power plant current (total site load) pre/post adjustment.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot pending">4</div>
+        <div class="tl-body">
+          <div class="tl-date">October 2026 &mdash; Pending</div>
+          <div class="tl-title">Data Review &amp; Savings Validation</div>
+          <div class="tl-desc">Analyze 60-day trial dataset. Quantify kWh savings per site. Extrapolate to 14,792-site fleet with regional climate weighting. Present findings to CP&amp;G leadership.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot pending">5</div>
+        <div class="tl-body">
+          <div class="tl-date">November &mdash; December 2026 &mdash; Pending</div>
+          <div class="tl-title">Rollout Decision</div>
+          <div class="tl-desc">If trial validates savings target, submit NSTD update to include cabinet HVAC setpoint standard. Deploy script fleet-wide via SiteBoss Lua provisioning. Expand to Samsung markets.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>6. Fleet Scope &mdash; Cabinet Sites by Market</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <div class="section-box">
+    <div class="info-box" style="margin:0 0 14px 0;">
+      <strong>Source:</strong> Cabinet_Sites_Master.xlsx (Downloads) &mdash; 14,792 live cabinet sites across Ericsson and Southeast markets as of June 2026. Three tabs: Tripp-Lite WEBCARDLX, non-WEBCARDLX HVAC, and no HVAC. Samsung market analysis in progress.
+    </div>
+    <table>
+      <tr><th>Market Segment</th><th style="text-align:right">Sites</th><th>HVAC Controller</th><th>Script Compatible</th></tr>
+      <tr><td>Ericsson markets</td><td style="text-align:right">~12,000</td><td>Eaton / Tripp-Lite WEBCARDLX</td><td style="color:#2e7d32;font-weight:700;">&#10003; Yes</td></tr>
+      <tr><td>Southeast markets</td><td style="text-align:right">~2,792</td><td>Eaton / Tripp-Lite WEBCARDLX</td><td style="color:#2e7d32;font-weight:700;">&#10003; Yes</td></tr>
+      <tr><td>Samsung markets</td><td style="text-align:right">TBD</td><td>WEBCARDLX (same platform)</td><td style="color:#e65100;font-weight:700;">&#9888; Analysis pending</td></tr>
+      <tr><td style="background:#000;color:#fff;font-weight:700;">Current Total</td><td style="text-align:right;background:#000;color:#fff;font-weight:700;">14,792</td><td style="background:#000;color:#fff;"></td><td style="background:#cd040b;color:#fff;font-weight:700;">&#10003; Ready to deploy</td></tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>7. Hardware Reference</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <div class="section-box">
+    <table>
+      <tr><th>Component</th><th>Details</th></tr>
+      <tr><td>HVAC controller</td><td>Eaton / Tripp-Lite WEBCARDLX LX Platform (network management card)</td></tr>
+      <tr><td>SNMP enterprise OID</td><td>1.3.6.1.4.1.850 (Tripp-Lite); cooling subtree: 1.3.6.1.4.1.850.1.1.3.5</td></tr>
+      <tr><td>HTTP API</td><td>PADM20 REST API &mdash; OAuth Bearer token auth; JSON API spec</td></tr>
+      <tr><td>Default credentials</td><td>localadmin / localadmin (change per site before deployment)</td></tr>
+      <tr><td>SiteBoss unit</td><td>Asentria SiteBoss 550A &mdash; Lua script slot, LuaSocket UDP for SNMP BER</td></tr>
+      <tr><td>Script file</td><td>Chad Trial Folder\HVAC Cabinet\eaton_cabinet_monitor.lua</td></tr>
+      <tr><td>MIB source</td><td>Chad Trial Folder\HVAC Cabinet\tripplite-mib.zip (TRIPPLITE-PRODUCTS.MIB v20.0.2)</td></tr>
+      <tr><td>Cooling capacity</td><td>Typical: 1&ndash;2 ton (12,000&ndash;24,000 BTU/hr); 1.2&ndash;2.0 kW electrical input</td></tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>8. Next Steps</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <div class="section-box">
+    <ol class="steps">
+      <li><strong>Identify trial sites</strong> &mdash; Select 3&ndash;5 Ericsson cabinet sites with SiteBoss 550A and WEBCARDLX confirmed. IL/WI market preferred for mid-summer ambient temp data.</li>
+      <li><strong>Verify WEBCARDLX connectivity</strong> &mdash; Confirm SiteBoss can reach WEBCARDLX IP on local subnet; run cabinet_discover_vars() to map setpoint variable ID.</li>
+      <li><strong>Deploy script</strong> &mdash; Load eaton_cabinet_monitor.lua into SiteBoss Lua slot; configure CFG fields (cabinet_ip, communities, credentials, setpoint_var).</li>
+      <li><strong>Baseline 30 days</strong> &mdash; Log all 20 OIDs plus SiteBoss DC plant current at factory setpoints. Establish energy baseline per site.</li>
+      <li><strong>Raise setpoints to 77&deg;F</strong> &mdash; Use cabinet_set_setpoint(77.0) via script; monitor return air for 30 days at new setpoint.</li>
+      <li><strong>Quantify savings</strong> &mdash; Compare DC plant current pre/post; calculate kWh delta; validate against ASHRAE 2&ndash;3%/&deg;F model.</li>
+      <li><strong>Submit NSTD update</strong> &mdash; If trial validates, formalize 77&deg;F cabinet setpoint in CP&amp;G thermal standards.</li>
+    </ol>
+  </div>
+
+</div>
+
+<div class="footer" style="max-width:1000px;margin:0 auto;padding:0 24px 24px 24px;">
+  Verizon confidential and proprietary. Unauthorized disclosure, reproduction or other use prohibited. May include AI-generated content. &copy; 2026 Verizon.<br>
+  Chad Hooper &mdash; National CP&amp;G Planning &mdash; chad.hooper@verizonwireless.com
+</div>
+
+</body>
+</html>
