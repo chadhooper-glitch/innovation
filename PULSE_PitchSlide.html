@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PULSE — Power Usage &amp; Load Sensing Engine</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    background: #000;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    flex-shrink: 0;
+  }
+  .top-bar-left { display: flex; align-items: center; gap: 18px; }
+  .vzw-logo {
+    font-size: 28px;
+    font-weight: 900;
+    color: #cd040b;
+    letter-spacing: -1px;
+    font-family: Arial Black, Arial, sans-serif;
+  }
+  .top-divider { width: 2px; height: 32px; background: #444; }
+  .top-title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .live-badge {
+    background: #2e7d32;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .red-bar { background: #cd040b; height: 5px; flex-shrink: 0; }
+
+  /* ── BODY ── */
+  .body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  /* LEFT */
+  .left {
+    background: #f9f9f9;
+    padding: 26px 36px 22px 40px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .headline-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #cd040b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .headline {
+    font-size: 30px;
+    font-weight: 900;
+    color: #000;
+    line-height: 1.12;
+    margin-bottom: 6px;
+    font-family: Arial Black, Arial, sans-serif;
+  }
+  .headline span { color: #cd040b; }
+  .subhead {
+    font-size: 12.5px;
+    color: #555;
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat-box {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-top: 3px solid #cd040b;
+    border-radius: 3px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .stat-box .num {
+    font-size: 22px;
+    font-weight: 900;
+    color: #cd040b;
+    font-family: Arial Black, Arial, sans-serif;
+    line-height: 1.1;
+  }
+  .stat-box .num.blue { color: #0057a8; }
+  .stat-box .num.green { color: #2e7d32; }
+  .stat-box .lbl { font-size: 10px; color: #666; margin-top: 3px; line-height: 1.3; }
+
+  .lever-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .lever-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    padding: 9px 12px;
+  }
+  .lever-card.blue { border-left: 3px solid #0057a8; }
+  .lever-card.red  { border-left: 3px solid #cd040b; }
+  .lever-card .lc-title {
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+  .lever-card.blue .lc-title { color: #0057a8; }
+  .lever-card.red  .lc-title { color: #cd040b; }
+  .lever-card .lc-body { font-size: 11px; color: #444; line-height: 1.4; }
+
+  /* RIGHT */
+  .right {
+    padding: 24px 36px 22px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #0057a8;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  /* Funnel */
+  .funnel-block { margin-bottom: 14px; }
+  .funnel-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+  .funnel-lbl { font-size: 11px; color: #555; width: 190px; flex-shrink: 0; text-align: right; }
+  .funnel-track { flex: 1; background: #f0f0f0; height: 20px; border-radius: 2px; overflow: hidden; }
+  .funnel-fill { height: 100%; border-radius: 2px; display: flex; align-items: center; padding-left: 8px; font-size: 10px; font-weight: 700; color: #fff; }
+  .funnel-val { font-size: 11px; font-weight: 700; color: #333; width: 52px; text-align: right; }
+
+  /* Savings breakdown */
+  .savings-block {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .savings-header {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    background: #000;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 6px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    gap: 6px;
+  }
+  .savings-row {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    font-size: 11px;
+    padding: 5px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 6px;
+    align-items: center;
+  }
+  .savings-row:last-child { border-bottom: none; background: #000; color: #fff; font-weight: 700; }
+  .savings-row:nth-child(even) { background: #fafafa; }
+  .savings-row .green { color: #2e7d32; font-weight: 700; }
+  .savings-row:last-child .green { color: #66bb6a; }
+
+  .hw-strip {
+    background: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    border-left: 4px solid #2e7d32;
+    border-radius: 0 3px 3px 0;
+    padding: 8px 12px;
+    font-size: 11.5px;
+    color: #1b5e20;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .hw-strip strong { font-weight: 700; }
+
+  .next-block {
+    background: #000;
+    border-radius: 3px;
+    padding: 11px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .next-block .nb-step {
+    background: #cd040b;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .next-block .nb-text { font-size: 11.5px; color: #ddd; line-height: 1.45; }
+  .next-block .nb-text strong { color: #fff; }
+
+  /* BOTTOM BAR */
+  .bottom-bar {
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    flex-shrink: 0;
+  }
+  .bottom-vzw-logo {
+    font-family: Arial Black, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: #cd040b;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    text-transform: lowercase;
+  }
+  .bottom-confidential { font-size: 10px; color: #555; text-align: center; flex: 1; padding: 0 20px; }
+
+  .print-hint {
+    position: fixed;
+    bottom: 12px;
+    right: 16px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 3px;
+    font-family: Arial, sans-serif;
+  }
+
+  @media print {
+    body { background: #fff; display: block; }
+    .slide { width: 100%; height: auto; page-break-after: avoid; }
+    .print-hint { display: none; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="vzw-logo">verizon</div>
+      <div class="top-divider"></div>
+      <div class="top-title">CP&amp;G National Planning &nbsp;|&nbsp; Energy Optimization Platform</div>
+    </div>
+    <div class="live-badge">&#9679; Live Tested &mdash; NE843_M1</div>
+  </div>
+
+  <div class="red-bar"></div>
+
+  <div class="body">
+
+    <!-- LEFT -->
+    <div class="left">
+      <div>
+        <div class="headline-label">PULSE &mdash; Power Usage &amp; Load Sensing Engine</div>
+        <div class="headline"><span>$5.2M/yr</span> Demand Savings<br>Zero New Hardware</div>
+        <div class="subhead">
+          Software-only energy optimization running on <strong>existing Asentria SiteBoss infrastructure</strong>.
+          PULSE monitors DC power plant, HVAC, and rectifiers at macro cell sites and autonomously
+          fires two coordinated demand reduction levers during the 15-minute utility billing peak window —
+          cutting peak demand charges without any network impact.
+        </div>
+      </div>
+
+      <div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="num">23,873</div>
+            <div class="lbl">Sites w/ Communicating<br>HVAC (Phase 1)</div>
+          </div>
+          <div class="stat-box">
+            <div class="num blue">80,398</div>
+            <div class="lbl">Total VZW<br>Macro Sites</div>
+          </div>
+          <div class="stat-box">
+            <div class="num green">$5.2M</div>
+            <div class="lbl">Annual Savings<br>Potential</div>
+          </div>
+        </div>
+
+        <div class="lever-grid">
+          <div class="lever-card blue">
+            <div class="lc-title">Lever 1 — HVAC Setpoint</div>
+            <div class="lc-body">Raise cooling setpoint within 3&deg;F dead band (79&deg;&rarr;82&deg;F) during peak window. Compressor draw drops. Auto-restores after event. Battery temp protected.</div>
+          </div>
+          <div class="lever-card red">
+            <div class="lc-title">Lever 2 — Rectifier Standby</div>
+            <div class="lc-body">Place one N+1 spare rectifier in STANDBY via HTTP POST. Removes 1.5&ndash;1.7 kW AC input. Remaining units handle full load — N+1 guarantees network safety.</div>
+          </div>
+          <div class="lever-card blue" style="border-left-color:#555;">
+            <div class="lc-title" style="color:#555;">Combined Effect</div>
+            <div class="lc-body">HVAC + rectifier = <strong>2.5&ndash;4 kW reduction</strong> per peak event. At $10/kW/month: <strong>$300&ndash;$480/site/yr</strong> from demand charges alone.</div>
+          </div>
+          <div class="lever-card red" style="border-left-color:#2e7d32;">
+            <div class="lc-title" style="color:#2e7d32;">Existing Infrastructure</div>
+            <div class="lc-body">SiteBoss SNMP SET &rarr; Modbus RTU &rarr; HVAC controller. HTTP POST &rarr; rectifier controller. No new sensors, no new gateways.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+
+      <div>
+        <div class="section-label">Eligible Site Funnel &mdash; VZW Macro Fleet</div>
+        <div class="funnel-block">
+          <div class="funnel-row">
+            <div class="funnel-lbl">Total macro sites</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:100%;background:#000;">80,398</div></div>
+            <div class="funnel-val">80,398</div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-lbl">SiteBoss monitored</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:84.7%;background:#0057a8;">68,075</div></div>
+            <div class="funnel-val">68,075</div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-lbl">Communicating HVAC (Phase 1)</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:29.7%;background:#cd040b;">23,873</div></div>
+            <div class="funnel-val">23,873</div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-lbl">Advanced rectifier control</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:9.95%;background:#2e7d32;">8,000</div></div>
+            <div class="funnel-val">8,000</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Annual Savings Breakdown</div>
+        <div class="savings-block">
+          <div class="savings-header">
+            <span>Control Path</span>
+            <span>Sites</span>
+            <span>$/Site/Yr</span>
+            <span>Annual $</span>
+          </div>
+          <div class="savings-row">
+            <span>HVAC setpoint (Phase 1)</span>
+            <span>23,873</span>
+            <span>~$120</span>
+            <span class="green">~$2.9M</span>
+          </div>
+          <div class="savings-row">
+            <span>Rectifier standby (Phase 2)</span>
+            <span>8,000</span>
+            <span>~$180</span>
+            <span class="green">~$1.4M</span>
+          </div>
+          <div class="savings-row">
+            <span>Block heater scheduling</span>
+            <span>Fleet</span>
+            <span>~$110</span>
+            <span class="green">~$0.9M</span>
+          </div>
+          <div class="savings-row">
+            <span>Total</span>
+            <span>&mdash;</span>
+            <span>&mdash;</span>
+            <span class="green">~$5.2M/yr</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hw-strip">
+        <strong>&#10003; Phase 1: Zero new hardware.</strong> Leverages existing SiteBoss 550A + communicating HVAC controllers (Bard MC4000, Marvair Commstat) already deployed. Lua script loaded into SiteBoss slot — deployable at scale via remote provisioning.
+      </div>
+
+      <div class="next-block">
+        <div class="nb-step">Next Step</div>
+        <div class="nb-text">
+          <strong>Expand from NE843_M1 live test to 10-site Phase 1 pilot.</strong>
+          Identify communicating HVAC sites in 2 markets. Measure before/after 15-min interval demand data.
+          Validate $300&ndash;$480/site/yr model against real utility bills.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="bottom-vzw-logo">verizon</div>
+    <div class="bottom-confidential">Verizon confidential and proprietary. Unauthorized disclosure, reproduction or other use prohibited.</div>
+    <div style="width:40px;"></div>
+  </div>
+
+</div>
+
+<div class="print-hint">Ctrl+P &rarr; Save as PDF &nbsp;|&nbsp; Set paper size to 16:9 / landscape</div>
+
+</body>
+</html>
