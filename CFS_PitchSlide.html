@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Carbon Fuel Solutions — VZW Evaluation</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    background: #000;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    flex-shrink: 0;
+  }
+  .top-bar-left { display: flex; align-items: center; gap: 18px; }
+  .vzw-logo {
+    font-size: 28px;
+    font-weight: 900;
+    color: #cd040b;
+    letter-spacing: -1px;
+    font-family: Arial Black, Arial, sans-serif;
+  }
+  .top-divider { width: 2px; height: 32px; background: #444; }
+  .top-title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .nda-badge {
+    background: #2e7d32;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .red-bar { background: #cd040b; height: 5px; flex-shrink: 0; }
+
+  /* ── BODY ── */
+  .body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  /* LEFT */
+  .left {
+    background: #f9f9f9;
+    padding: 26px 36px 22px 40px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .headline-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #cd040b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .headline {
+    font-size: 27px;
+    font-weight: 900;
+    color: #000;
+    line-height: 1.15;
+    margin-bottom: 6px;
+    font-family: Arial Black, Arial, sans-serif;
+  }
+  .headline span { color: #cd040b; }
+  .subhead {
+    font-size: 12.5px;
+    color: #555;
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat-box {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-top: 3px solid #cd040b;
+    border-radius: 3px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .stat-box .num {
+    font-size: 21px;
+    font-weight: 900;
+    color: #cd040b;
+    font-family: Arial Black, Arial, sans-serif;
+    line-height: 1.1;
+  }
+  .stat-box .num.blue { color: #0057a8; }
+  .stat-box .num.orange { color: #e65100; }
+  .stat-box .lbl { font-size: 10px; color: #666; margin-top: 3px; line-height: 1.3; }
+
+  .degrade-block {
+    background: #fff3e0;
+    border-left: 4px solid #e65100;
+    border-radius: 0 3px 3px 0;
+    padding: 10px 14px;
+  }
+  .degrade-block .db-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #e65100;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  .degrade-list { list-style: none; padding: 0; }
+  .degrade-list li {
+    font-size: 11.5px;
+    color: #444;
+    padding: 2px 0 2px 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .degrade-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: #e65100;
+    font-weight: 700;
+  }
+
+  /* RIGHT */
+  .right {
+    padding: 24px 36px 22px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #0057a8;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  /* Two-track cards */
+  .track-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .track-card {
+    border-radius: 3px;
+    padding: 11px 13px;
+  }
+  .track-card.blue {
+    background: #e3f2fd;
+    border: 1px solid #bbdefb;
+    border-top: 3px solid #1565c0;
+  }
+  .track-card.purple {
+    background: #f3e5f5;
+    border: 1px solid #ce93d8;
+    border-top: 3px solid #6a1b9a;
+  }
+  .track-card .tc-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .track-card.blue .tc-label { color: #1565c0; }
+  .track-card.purple .tc-label { color: #6a1b9a; }
+  .track-card .tc-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 5px;
+  }
+  .track-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    padding: 2px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    color: #444;
+  }
+  .track-row:last-child { border-bottom: none; }
+  .track-row .val { font-weight: 700; color: #2e7d32; }
+
+  /* Complementary block */
+  .complement-block {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .complement-header {
+    background: #000;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 6px 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .complement-row {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1.2fr;
+    font-size: 11px;
+    padding: 5px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 6px;
+    align-items: start;
+  }
+  .complement-row:last-child { border-bottom: none; }
+  .complement-row:nth-child(even) { background: #fafafa; }
+  .complement-row .product { font-weight: 700; color: #000; }
+  .complement-row .layer { color: #555; }
+  .complement-row .mode { color: #2e7d32; font-weight: 600; }
+
+  .nfpa-strip {
+    background: #e3f2fd;
+    border: 1px solid #bbdefb;
+    border-left: 4px solid #1565c0;
+    border-radius: 0 3px 3px 0;
+    padding: 7px 12px;
+    font-size: 11px;
+    color: #0d47a1;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .nfpa-strip strong { font-weight: 700; }
+
+  .next-block {
+    background: #000;
+    border-radius: 3px;
+    padding: 11px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .next-block .nb-step {
+    background: #cd040b;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .next-block .nb-text { font-size: 11.5px; color: #ddd; line-height: 1.45; }
+  .next-block .nb-text strong { color: #fff; }
+
+  /* BOTTOM BAR */
+  .bottom-bar {
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    flex-shrink: 0;
+  }
+  .bottom-vzw-logo {
+    font-family: Arial Black, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: #cd040b;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    text-transform: lowercase;
+  }
+  .bottom-confidential { font-size: 10px; color: #555; text-align: center; flex: 1; padding: 0 20px; }
+
+  .print-hint {
+    position: fixed;
+    bottom: 12px;
+    right: 16px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 3px;
+    font-family: Arial, sans-serif;
+  }
+
+  @media print {
+    body { background: #fff; display: block; }
+    .slide { width: 100%; height: auto; page-break-after: avoid; }
+    .print-hint { display: none; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="vzw-logo">verizon</div>
+      <div class="top-divider"></div>
+      <div class="top-title">CP&amp;G National Planning &nbsp;|&nbsp; Generator Fuel Tank &amp; Additive Evaluation</div>
+    </div>
+    <div class="nda-badge">&#10003; NDA Signed &mdash; May 2, 2026 &nbsp;|&nbsp; CW2654798</div>
+  </div>
+
+  <div class="red-bar"></div>
+
+  <div class="body">
+
+    <!-- LEFT -->
+    <div class="left">
+      <div>
+        <div class="headline-label">Carbon Fuel Services / Solutions &mdash; Two-Track Evaluation</div>
+        <div class="headline"><span>39,521</span> Diesel Gen Sites<br>Likely Never Fuel-Serviced</div>
+        <div class="subhead">
+          VZW generators average <strong>21.3 hrs/yr runtime</strong> — fuel sits in tanks for 11+ months
+          between significant runs. Ideal conditions for water accumulation, microbial growth, and sludge.
+          Most sites receive no fuel quality maintenance unless a generator fails to start.
+          <strong>NFPA 110 §8.3.8 requires annual fuel quality testing — compliance gap at virtually every site.</strong>
+        </div>
+      </div>
+
+      <div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="num">39,521</div>
+            <div class="lbl">VZW Diesel<br>Gen Sites</div>
+          </div>
+          <div class="stat-box">
+            <div class="num blue">21.3 hrs</div>
+            <div class="lbl">Avg Runtime/Yr<br>11 mo fuel sits</div>
+          </div>
+          <div class="stat-box">
+            <div class="num orange">~2.95M</div>
+            <div class="lbl">Gallons Diesel/Yr<br>Network Fleet</div>
+          </div>
+        </div>
+
+        <div class="degrade-block">
+          <div class="db-label">Why Generator Fuel Degrades — Low-Runtime Sites Are Highest Risk</div>
+          <ul class="degrade-list">
+            <li>Low fuel level → head space → condensation → free water → microbial growth</li>
+            <li>Bacteria &amp; fungi metabolize sulfur → H₂S production, steel pitting, sludge</li>
+            <li>Polysaccharide biofilm → filter plugging, emulsification → failed starts</li>
+            <li>Biodiesel / diesel mix produces crude glycerin sludge at tank bottom</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+
+      <div>
+        <div class="section-label">Two Tracks — Services + Additive</div>
+        <div class="track-grid">
+          <div class="track-card blue">
+            <div class="tc-label">Track 1 — Carbon Fuel Services LLC</div>
+            <div class="tc-title">Fuel Tank Services</div>
+            <div class="track-row"><span>Fuel polishing &amp; tank cleaning</span></div>
+            <div class="track-row"><span>STI SP001 tank inspections</span></div>
+            <div class="track-row"><span>NFPA 110 compliance testing</span></div>
+            <div class="track-row"><span>ASTM D975 fuel lab analysis</span></div>
+            <div class="track-row"><span>Offices: NC, SC, FL, TX, NV</span></div>
+            <div class="track-row"><span>Contact: Travis Wall (CFS)</span></div>
+          </div>
+          <div class="track-card purple">
+            <div class="tc-label">Track 2 — Carbon Fuel Solutions</div>
+            <div class="tc-title">Fuel Additive (NitroGenesis™)</div>
+            <div class="track-row"><span>Treat ratio</span><span class="val">1:3,000 gal</span></div>
+            <div class="track-row"><span>Fuel economy</span><span class="val">~5% typical</span></div>
+            <div class="track-row"><span>Cetane improvement</span><span class="val">+8 points</span></div>
+            <div class="track-row"><span>Emissions reduction</span><span class="val">up to 70%</span></div>
+            <div class="track-row"><span>Cold weather SKU</span><span class="val">Available</span></div>
+            <div class="track-row"><span>Gasoline version</span><span class="val">GasMaxx equiv.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nfpa-strip">
+        <strong>NFPA 110 §8.3.8</strong> — Annual fuel quality testing required. &nbsp;<strong>NFPA 25 §8.3.4.1</strong> — Annual fuel degradation testing per ASTM D975. &nbsp;<strong>STI SP001</strong> — Aboveground tank inspection compliance. Most VZW sites have no documented fuel service record.
+      </div>
+
+      <div>
+        <div class="section-label">Complementary Stack — CFS + DieselMaxx (No Interference)</div>
+        <div class="complement-block">
+          <div class="complement-header">Product &nbsp;&nbsp; What It Addresses &nbsp;&nbsp; How It Works</div>
+          <div class="complement-row">
+            <span class="product">CFS Tank Services</span>
+            <span class="layer">Fuel &amp; tank condition — physical</span>
+            <span class="mode">Polishing, cleaning, compliance testing</span>
+          </div>
+          <div class="complement-row">
+            <span class="product">CFS Additive</span>
+            <span class="layer">Fuel chemistry — cetane, stability, water</span>
+            <span class="mode">Chemical treatment at refuel</span>
+          </div>
+          <div class="complement-row">
+            <span class="product">DieselMaxx</span>
+            <span class="layer">Combustion efficiency — physics</span>
+            <span class="mode">Electrostatic charge → better atomization</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="next-block">
+        <div class="nb-step">Next Step</div>
+        <div class="nb-text">
+          <strong>Meeting with Travis Wall (Carbon Fuel Services) pending.</strong>
+          Scope: pilot market for annual tank service contract, NFPA 110 compliance audit sample,
+          and additive trial on matched gen pairs to quantify fuel economy delta alongside DieselMaxx evaluation.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="bottom-vzw-logo">verizon</div>
+    <div class="bottom-confidential">Verizon confidential and proprietary. Unauthorized disclosure, reproduction or other use prohibited.</div>
+    <div style="width:40px;"></div>
+  </div>
+
+</div>
+
+<div class="print-hint">Ctrl+P &rarr; Save as PDF &nbsp;|&nbsp; Set paper size to 16:9 / landscape</div>
+
+</body>
+</html>
