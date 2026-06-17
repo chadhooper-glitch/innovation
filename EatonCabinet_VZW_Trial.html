@@ -103,8 +103,8 @@
       <div class="lbl">OIDs Monitored<br><span style="font-size:10px;">per cabinet HVAC unit</span></div>
     </div>
     <div class="stat-card green">
-      <div class="num">$1.2M&ndash;$3.1M</div>
-      <div class="lbl">Estimated Annual Savings<br><span style="font-size:10px;">pending trial validation</span></div>
+      <div class="num">$400&ndash;$1,155</div>
+      <div class="lbl">Est. Savings Per Site/Yr<br><span style="font-size:10px;">WPU elimination; fleet scope TBD</span></div>
     </div>
     <div class="stat-card orange">
       <div class="num">Jun 12</div>
@@ -137,6 +137,7 @@
       <tr><td>Compressor/fan health</td><td>Not monitored</td><td>No early warning for compressor failure, refrigerant loss, or VFD issues</td></tr>
       <tr><td>Pressure monitoring</td><td>Not monitored</td><td>High/low refrigerant pressure faults go unreported until unit shuts down</td></tr>
       <tr><td>Cooling output (kW)</td><td>Not tracked</td><td>Energy consumption unknown; no baseline for efficiency improvements</td></tr>
+      <tr><td>WPU overcooling</td><td>5-ton WPUs cooling entire shelter for lightly loaded equipment; dead band cycling but oversized for actual heat load</td><td>WPU runs significant duty cycle to maintain 79&deg;F room temp — far more energy than close-coupled cabinet cooling of the same equipment</td></tr>
     </table>
 
     <div class="warn-box">
@@ -205,29 +206,47 @@
 
   <div class="section-box">
     <div class="info-box">
-      <strong>Basis:</strong> Eaton / Tripp-Lite SRCOOL cabinet units are typically 1&ndash;2 ton (12,000&ndash;24,000 BTU/hr), drawing <strong>1.2&ndash;2.0 kW</strong> electrical input under typical load. ASHRAE data supports <strong>2&ndash;3% cooling energy savings per 1&deg;F setpoint increase</strong>. Verizon's NSTD thermal standard permits 77&deg;F return air &mdash; most sites running factory default 65&ndash;68&deg;F have a <strong>9&ndash;12&deg;F setpoint headroom</strong>.
+      <strong>Basis &mdash; DT Morris Trial:</strong> Two Bard <strong>HR58BPA05EP</strong> 5-ton Wall Pack Units (WPUs), R-410A, ~5.8 kW electrical input at full load. <strong>N+1 configuration</strong> &mdash; one active unit at a time, alternating every 7 days. Active WPU cycles on dead band: <strong>setpoint 79&deg;F &rarr; kicks on at 81&deg;F &rarr; cools to 77&deg;F &rarr; shuts off</strong>. Not continuous runtime &mdash; duty cycle is driven by ambient climate and internal heat load. Goal: migrate remaining equipment into Eaton 33U self-cooling cabinet; raise WPU setpoint to ~90&deg;F or humidity-only mode; reduce WPU runtime to near zero.
     </div>
 
-    <h3>Annual Savings Estimate &mdash; Setpoint Optimization Only</h3>
+    <h3>WPU Duty Cycle &mdash; Current State Baseline (One Active Unit)</h3>
     <table>
-      <tr><th>Scenario</th><th>Avg HVAC Load</th><th>Setpoint Savings</th><th>Sites</th><th>kWh/Site/Yr</th><th>Annual Savings</th></tr>
-      <tr><td>Conservative</td><td>1.2 kW</td><td>8%</td><td>14,792</td><td>841</td><td><strong style="color:#2e7d32;">~$1.24M/yr</strong></td></tr>
-      <tr><td>Middle</td><td>1.5 kW</td><td>10%</td><td>14,792</td><td>1,314</td><td><strong style="color:#2e7d32;">~$1.94M/yr</strong></td></tr>
-      <tr><td>High</td><td>2.0 kW</td><td>12%</td><td>14,792</td><td>2,103</td><td><strong style="color:#2e7d32;">~$3.11M/yr</strong></td></tr>
+      <tr><th>Scenario</th><th>Annual Duty Cycle</th><th>WPU Run Hours/yr</th><th>WPU Energy (kWh/yr)</th><th>WPU Cost/yr</th></tr>
+      <tr><td>Conservative (mild climate, light load)</td><td>25%</td><td>2,190</td><td>12,702</td><td><strong>$1,270</strong></td></tr>
+      <tr><td>Middle (IL/WI summer-weighted)</td><td>35%</td><td>3,066</td><td>17,783</td><td><strong>$1,778</strong></td></tr>
+      <tr><td>High (hot summer, higher ambient)</td><td>50%</td><td>4,380</td><td>25,404</td><td><strong>$2,540</strong></td></tr>
     </table>
-    <p style="font-size:11px;color:#888;margin:0 0 14px 0;">Assumes $0.10/kWh blended energy rate; 8,760 hr/yr continuous operation; savings = HVAC load &times; savings % &times; 8,760 hr &times; $0.10/kWh &times; 14,792 sites. Samsung markets not yet included.</p>
+    <p style="font-size:11px;color:#888;margin:0 0 14px 0;">Bard HR58BPA05EP: 5 ton, ~5.8 kW input at full load. Dead band: on at 81&deg;F, off at 77&deg;F (4&deg;F swing). One active unit at a time (N+1, 7-day rotation). $0.10/kWh blended rate.</p>
+
+    <h3>Post-Eaton Cabinet &mdash; WPU Reduced to Humidity / Emergency Backup</h3>
+    <table>
+      <tr><th>Scenario</th><th>WPU Backup Duty</th><th>WPU Cost/yr</th><th>Eaton Cabinet (avg draw)</th><th>Net Annual Savings/Site</th></tr>
+      <tr><td>Conservative</td><td>5% &mdash; 438 hr/yr</td><td>$254</td><td>$613 &nbsp;<span style="color:#888;font-size:11px;">(0.7 kW avg)</span></td><td><strong style="color:#2e7d32;">~$400/yr</strong></td></tr>
+      <tr><td>Middle</td><td>7.5% &mdash; 657 hr/yr</td><td>$381</td><td>$613 &nbsp;<span style="color:#888;font-size:11px;">(0.7 kW avg)</span></td><td><strong style="color:#2e7d32;">~$785/yr</strong></td></tr>
+      <tr><td>High</td><td>10% &mdash; 876 hr/yr</td><td>$508</td><td>$876 &nbsp;<span style="color:#888;font-size:11px;">(1.0 kW avg)</span></td><td><strong style="color:#2e7d32;">~$1,155/yr</strong></td></tr>
+    </table>
+    <p style="font-size:11px;color:#888;margin:0 0 14px 0;">Eaton SRCOOL3KTP33U uses a DC-inverter variable-speed compressor &mdash; modulates to actual heat load. At light equipment load (2&ndash;3 kW), average draw is well below rated maximum. WPU setpoint raised to ~90&deg;F after equipment migration; both units remain in N+1 standby for extreme events and humidity. $0.10/kWh blended rate.</p>
+
+    <h3>Fleet Extrapolation &mdash; Shelter Sites with WPU HVAC (Fleet Scope TBD)</h3>
+    <table>
+      <tr><th>Candidate Fleet</th><th>Conservative (~$400/site)</th><th>Middle (~$785/site)</th><th>High (~$1,155/site)</th></tr>
+      <tr><td>1,000 shelter sites</td><td>$400K/yr</td><td>$785K/yr</td><td>$1.16M/yr</td></tr>
+      <tr><td>2,500 shelter sites</td><td>$1.0M/yr</td><td>$1.96M/yr</td><td>$2.89M/yr</td></tr>
+      <tr><td>5,000 shelter sites</td><td>$2.0M/yr</td><td>$3.93M/yr</td><td>$5.78M/yr</td></tr>
+    </table>
+    <p style="font-size:11px;color:#888;margin:0 0 14px 0;">VZ operates ~38,000 shelter sites. Eligible subset = sites with lightly loaded equipment that can consolidate into a 33U Eaton cabinet. Fleet scope to be determined after DT Morris trial validates the model.</p>
 
     <h3>Additional Value Streams (Not Yet Quantified)</h3>
     <table>
       <tr><th>Opportunity</th><th>Mechanism</th><th>Status</th></tr>
-      <tr><td>Free cooling activation</td><td>Script can enable economizer mode when ambient temp permits &mdash; eliminates compressor run hours</td><td>Pending ambient temp data from trial sites</td></tr>
-      <tr><td>Proactive failure detection</td><td>Compressor current drop, high PSI, condensate level alerts &mdash; catch failures before thermal shutdown</td><td>Qualitative; avoids emergency dispatch costs</td></tr>
-      <tr><td>Samsung market expansion</td><td>Same WEBCARDLX platform used in Samsung cabinet deployments</td><td>Market analysis pending</td></tr>
-      <tr><td>OAM / reduced truck rolls</td><td>Remote setpoint changes eliminate on-site visits for HVAC commissioning</td><td>Truck roll cost TBD</td></tr>
+      <tr><td>Proactive HVAC failure detection</td><td>Compressor current drop, high PSI, condensate level &mdash; catch failures before thermal shutdown</td><td>Qualitative; avoids emergency dispatch</td></tr>
+      <tr><td>Remote WPU setpoint control</td><td>Raise WPU setpoint further or trigger humidity mode remotely via SiteBoss &mdash; no truck roll</td><td>Enabled by Lua script</td></tr>
+      <tr><td>Generator fuel savings</td><td>Lower HVAC load during generator runs reduces fuel burn and runtime</td><td>Qualitative; quantify post-trial</td></tr>
+      <tr><td>Samsung &amp; Ericsson market expansion</td><td>Same WEBCARDLX platform; same SiteBoss Lua approach</td><td>Market analysis pending</td></tr>
     </table>
 
     <div class="warn-box">
-      <strong>&#9888; These projections are illustrative.</strong> Actual savings depend on current setpoint configuration per site, ambient climate, equipment utilization, and blended energy rates by market. Trial data will provide site-level validation before fleet commitment.
+      <strong>&#9888; These projections are illustrative.</strong> Actual savings depend on WPU duty cycle at each site (local climate, equipment heat load, dead band cycling), Eaton cabinet partial-load draw, and blended energy rate by market. DT Morris trial will provide measured before/after kWh data to validate the model before fleet commitment.
     </div>
   </div>
 
@@ -261,8 +280,8 @@
         <div class="tl-dot pending">3</div>
         <div class="tl-body">
           <div class="tl-date">August &mdash; September 2026 &mdash; Pending</div>
-          <div class="tl-title">Data Collection &amp; Setpoint Optimization</div>
-          <div class="tl-desc">Baseline 30 days at current setpoints. Then raise setpoints from factory default (65&ndash;68&deg;F) to NSTD-permitted 77&deg;F. Log return air temp, compressor current, cooling kW before/after. Compare SiteBoss power plant current (total site load) pre/post adjustment.</div>
+          <div class="tl-title">Equipment Migration &amp; WPU Baseline Capture</div>
+          <div class="tl-desc">Capture 30-day WPU runtime baseline at current 79&deg;F setpoint (dead band 77&ndash;81&deg;F, N+1 7-day rotation) before migration. Migrate existing shelter equipment (Ericsson baseband, switches, Telect DC fuse panels, patch panels) into Eaton 33U self-cooling cabinet. After migration, raise WPU setpoint to ~90&deg;F (humidity/emergency backup only). Log SiteBoss DC plant current, Eaton cabinet SNMP data (return air temp, compressor current, cooling kW, VFD Hz), and WPU runtime before/after to quantify duty cycle delta.</div>
         </div>
       </div>
 
@@ -271,7 +290,7 @@
         <div class="tl-body">
           <div class="tl-date">October 2026 &mdash; Pending</div>
           <div class="tl-title">Data Review &amp; Savings Validation</div>
-          <div class="tl-desc">Analyze 60-day trial dataset. Quantify kWh savings per site. Extrapolate to 14,792-site fleet with regional climate weighting. Present findings to CP&amp;G leadership.</div>
+          <div class="tl-desc">Analyze 60-day dataset. Quantify WPU duty cycle before/after migration. Calculate actual kWh delta (WPU eliminated &minus; Eaton cabinet added). Validate against modeled duty cycle assumptions. Extrapolate to eligible shelter fleet with regional climate weighting. Present findings to CP&amp;G leadership.</div>
         </div>
       </div>
 
@@ -318,7 +337,8 @@
       <tr><td>SiteBoss unit</td><td>Asentria SiteBoss 550A &mdash; Lua script slot, LuaSocket UDP for SNMP BER</td></tr>
       <tr><td>Script file</td><td>Chad Trial Folder\HVAC Cabinet\eaton_cabinet_monitor.lua</td></tr>
       <tr><td>MIB source</td><td>Chad Trial Folder\HVAC Cabinet\tripplite-mib.zip (TRIPPLITE-PRODUCTS.MIB v20.0.2)</td></tr>
-      <tr><td>Cooling capacity</td><td>Typical: 1&ndash;2 ton (12,000&ndash;24,000 BTU/hr); 1.2&ndash;2.0 kW electrical input</td></tr>
+      <tr><td>Cooling capacity (Eaton)</td><td>3.5 kW (12 kBTU/hr); DC-inverter variable-speed compressor modulates to actual heat load</td></tr>
+      <tr><td>Existing WPU (DT Morris baseline)</td><td>Bard HR58BPA05EP &mdash; 5 ton (60,000 BTU/hr), R-410A, 147 oz, ~5.8 kW input at full load; N+1 pair; setpoint 79&deg;F, dead band on at 81&deg;F / off at 77&deg;F, 7-day rotation</td></tr>
     </table>
   </div>
 
