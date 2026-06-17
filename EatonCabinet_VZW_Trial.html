@@ -250,9 +250,10 @@
       <div class="tl-item">
         <div class="tl-dot pending">2</div>
         <div class="tl-body">
-          <div class="tl-date">July 2026 &mdash; Pending</div>
+          <div class="tl-date">July 2026 &mdash; In Progress</div>
           <div class="tl-title">Trial Site Selection &amp; Deployment</div>
-          <div class="tl-desc">Select 3&ndash;5 Ericsson cabinet sites with accessible SiteBoss 550A units and confirmed WEBCARDLX cards. Deploy Lua script, validate SNMP connectivity, run cabinet_discover_vars() to confirm setpoint variable ID per site.</div>
+          <div class="tl-desc">Deploy Lua script, validate SNMP connectivity, run cabinet_discover_vars() to confirm setpoint variable ID per site.</div>
+          <div class="tl-desc" style="margin-top:8px;"><strong>Trial Site Selected:</strong> <strong style="color:#cd040b;">DT Morris</strong> &mdash; MDG_LI: <strong>5000092014</strong> &mdash; 7140 Lisbon Road, Morris, IL 60640 &mdash; Illinois/Wisconsin sub-market</div>
         </div>
       </div>
 
@@ -327,7 +328,7 @@
 
   <div class="section-box">
     <ol class="steps">
-      <li><strong>Identify trial sites</strong> &mdash; Select 3&ndash;5 Ericsson cabinet sites with SiteBoss 550A and WEBCARDLX confirmed. IL/WI market preferred for mid-summer ambient temp data.</li>
+      <li><strong>Identify trial sites</strong> &mdash; <span style="color:#2e7d32;font-weight:700;">&#10003; Site selected:</span> <strong>DT Morris</strong> (MDG_LI: 5000092014) &mdash; 7140 Lisbon Road, Morris, IL 60640 &mdash; IL/WI sub-market.</li>
       <li><strong>Verify WEBCARDLX connectivity</strong> &mdash; Confirm SiteBoss can reach WEBCARDLX IP on local subnet; run cabinet_discover_vars() to map setpoint variable ID.</li>
       <li><strong>Deploy script</strong> &mdash; Load eaton_cabinet_monitor.lua into SiteBoss Lua slot; configure CFG fields (cabinet_ip, communities, credentials, setpoint_var).</li>
       <li><strong>Baseline 30 days</strong> &mdash; Log all 20 OIDs plus SiteBoss DC plant current at factory setpoints. Establish energy baseline per site.</li>
