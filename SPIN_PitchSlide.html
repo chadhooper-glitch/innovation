@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SPIN — Battery Elimination Initiative</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  /* 16:9 slide container */
+  .slide {
+    width: 1280px;
+    height: 720px;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    background: #000;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    flex-shrink: 0;
+  }
+  .top-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .vzw-logo {
+    font-size: 28px;
+    font-weight: 900;
+    color: #cd040b;
+    letter-spacing: -1px;
+    font-family: Arial Black, Arial, sans-serif;
+  }
+  .top-divider {
+    width: 2px;
+    height: 32px;
+    background: #444;
+  }
+  .top-title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .nda-badge {
+    background: #2e7d32;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ── RED ACCENT BAR ── */
+  .red-bar {
+    background: #cd040b;
+    height: 5px;
+    flex-shrink: 0;
+  }
+
+  /* ── BODY ── */
+  .body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  /* LEFT PANEL */
+  .left {
+    background: #f9f9f9;
+    padding: 32px 36px 28px 40px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .headline-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #cd040b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .headline {
+    font-size: 30px;
+    font-weight: 900;
+    color: #000;
+    line-height: 1.15;
+    margin-bottom: 6px;
+    font-family: Arial Black, Arial, sans-serif;
+  }
+  .headline span { color: #cd040b; }
+  .subhead {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.55;
+    margin-bottom: 22px;
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .stat-box {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-top: 3px solid #cd040b;
+    border-radius: 3px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .stat-box .num {
+    font-size: 22px;
+    font-weight: 900;
+    color: #cd040b;
+    font-family: Arial Black, Arial, sans-serif;
+    line-height: 1.1;
+  }
+  .stat-box .num.blue { color: #0057a8; }
+  .stat-box .num.green { color: #2e7d32; }
+  .stat-box .lbl {
+    font-size: 10px;
+    color: #666;
+    margin-top: 3px;
+    line-height: 1.3;
+  }
+
+  .problem-block {
+    background: #fff3e0;
+    border-left: 4px solid #e65100;
+    border-radius: 0 3px 3px 0;
+    padding: 10px 14px;
+  }
+  .problem-block .pb-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #e65100;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  .problem-list {
+    list-style: none;
+    padding: 0;
+  }
+  .problem-list li {
+    font-size: 12px;
+    color: #444;
+    padding: 2px 0 2px 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .problem-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: #e65100;
+    font-weight: 700;
+  }
+
+  /* RIGHT PANEL */
+  .right {
+    padding: 28px 36px 28px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #0057a8;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .tech-card {
+    background: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    border-radius: 3px;
+    padding: 9px 12px;
+  }
+  .tech-card .tc-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #1b5e20;
+    margin-bottom: 3px;
+  }
+  .tech-card .tc-body {
+    font-size: 11px;
+    color: #333;
+    line-height: 1.4;
+  }
+
+  .nstd-block {
+    background: #e3f2fd;
+    border: 1px solid #bbdefb;
+    border-left: 4px solid #0057a8;
+    border-radius: 0 3px 3px 0;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+  }
+  .nstd-block .nb-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #0057a8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .nstd-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    padding: 3px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    color: #333;
+  }
+  .nstd-row:last-child { border-bottom: none; }
+  .nstd-row .req { font-weight: 700; color: #0057a8; }
+  .nstd-row .sites { color: #2e7d32; font-weight: 700; }
+
+  .next-block {
+    background: #000;
+    border-radius: 3px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .next-block .nb-step {
+    background: #cd040b;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .next-block .nb-text {
+    font-size: 12px;
+    color: #ddd;
+    line-height: 1.45;
+  }
+  .next-block .nb-text strong { color: #fff; }
+
+  /* ── BOTTOM BAR ── */
+  .bottom-bar {
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px 0 28px;
+    flex-shrink: 0;
+  }
+  .bottom-vzw-logo {
+    font-family: Arial Black, Arial Black, sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: #cd040b;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    text-transform: lowercase;
+  }
+  .bottom-confidential {
+    font-size: 10px;
+    color: #555;
+    text-align: center;
+    flex: 1;
+    padding: 0 20px;
+  }
+
+  /* ── PRINT / EXPORT HINT ── */
+  .print-hint {
+    position: fixed;
+    bottom: 12px;
+    right: 16px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 3px;
+    font-family: Arial, sans-serif;
+  }
+
+  @media print {
+    body { background: #fff; display: block; }
+    .slide { width: 100%; height: auto; page-break-after: avoid; }
+    .print-hint { display: none; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="vzw-logo">verizon</div>
+      <div class="top-divider"></div>
+      <div class="top-title">CP&amp;G National Planning &nbsp;|&nbsp; Energy Storage Initiative</div>
+    </div>
+    <div class="nda-badge">&#10003; NDA Signed — 2026-05-22</div>
+  </div>
+
+  <!-- RED ACCENT -->
+  <div class="red-bar"></div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- LEFT -->
+    <div class="left">
+      <div>
+        <div class="headline-label">SPIN Energy Systems — Flywheel Battery Replacement</div>
+        <div class="headline">Eliminate Batteries<br>from <span>80,259</span> Macro Sites</div>
+        <div class="subhead">
+          Replace degrading lead-acid and NiCd battery strings with SPIN's Halbach-array
+          magnetic levitation flywheel — kinetic energy storage with no chemical degradation,
+          no replacement cycles, and no hazardous material disposal.
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="num">80,259</div>
+          <div class="lbl">Total VZW<br>Macro Sites</div>
+        </div>
+        <div class="stat-box">
+          <div class="num blue">17,168</div>
+          <div class="lbl">Sites Without<br>Generator<br>(Priority Tier 1)</div>
+        </div>
+        <div class="stat-box">
+          <div class="num green">63,091</div>
+          <div class="lbl">Sites With<br>Generator<br>(Priority Tier 2)</div>
+        </div>
+      </div>
+
+      <div class="problem-block">
+        <div class="pb-label">Current Battery Problem — Every Site, Every Cycle</div>
+        <ul class="problem-list">
+          <li>VRLA strings replaced every 5–7 years — thousands of truck rolls per cycle</li>
+          <li>NiCd requires watering, quarterly testing, hazardous disposal at end of life</li>
+          <li>Capacity degrades in heat — shelf life reduces exactly when outages peak</li>
+          <li>Battery failure = site down; SPIN flywheel has no chemical degradation</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+
+      <div>
+        <div class="section-label">Why SPIN — Technology Advantages</div>
+        <div class="tech-grid">
+          <div class="tech-card">
+            <div class="tc-title">Halbach Array Maglev Rotor</div>
+            <div class="tc-body">Near-frictionless magnetic levitation. Kinetic energy — no chemical reactions, no thermal runaway, no capacity fade.</div>
+          </div>
+          <div class="tech-card">
+            <div class="tc-title">Regenerative Self-Charging</div>
+            <div class="tc-body">Load fluctuations on the AC bus help maintain rotor spin speed during normal grid operation — draws less net energy.</div>
+          </div>
+          <div class="tech-card">
+            <div class="tc-title">Stackable Cube Architecture</div>
+            <div class="tc-body">10–15 kWh per cube. Stack cubes to meet any reserve requirement. Modular — scale up without redesigning the site.</div>
+          </div>
+          <div class="tech-card">
+            <div class="tc-title">No Maintenance Burden</div>
+            <div class="tc-body">No watering, no capacity testing, no replacement schedule. Operational life measured in decades, not years.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nstd-block">
+        <div class="nb-label">NSTD900 — March 31, 2026 Revision Makes This Viable</div>
+        <div class="nstd-row">
+          <span>Macro w/ generator</span>
+          <span class="req">1-hr reserve &rarr; 2 cubes</span>
+          <span class="sites">63,091 sites</span>
+        </div>
+        <div class="nstd-row">
+          <span>Macro w/o generator</span>
+          <span class="req">3-hr reserve &rarr; 3–4 cubes</span>
+          <span class="sites">17,168 sites (Priority)</span>
+        </div>
+        <div class="nstd-row">
+          <span>Auth: SVP Srini Kalapala via Mike Cogar / Jen Taylor</span>
+          <span style="color:#888;font-size:10px;">Previous: 8 hrs w/o gen (not viable)</span>
+        </div>
+      </div>
+
+      <div class="next-block">
+        <div class="nb-step">Next Step</div>
+        <div class="nb-text">
+          <strong>Share VZW site configs with SPIN under NDA.</strong>
+          Typical load 8–12 kW @ 54V DC bus, shelter ambient &minus;40°F to +140°F,
+          10&times;19 or 10&times;12 ft enclosures. Request confirmed kWh/cube, kW output,
+          seismic (GR-63), and commercial pricing for pilot proposal.
+        </div>
+      </div>
+
+    </div>
+  </div><!-- end body -->
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <div class="bottom-vzw-logo">verizon</div>
+    <div class="bottom-confidential">Verizon confidential and proprietary. Unauthorized disclosure, reproduction or other use prohibited.</div>
+    <div style="width:40px;"></div>
+  </div>
+
+</div><!-- end slide -->
+
+<div class="print-hint">Ctrl+P &rarr; Save as PDF &nbsp;|&nbsp; Set paper size to 16:9 / landscape</div>
+
+</body>
+</html>
