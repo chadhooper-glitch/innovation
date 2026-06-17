@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DieselMaxx — VZW Fuel Efficiency Evaluation</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    background: #000;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    flex-shrink: 0;
+  }
+  .top-bar-left { display: flex; align-items: center; gap: 18px; }
+  .vzw-logo {
+    font-size: 28px;
+    font-weight: 900;
+    color: #cd040b;
+    letter-spacing: -1px;
+    font-family: Arial Black, Arial, sans-serif;
+  }
+  .top-divider { width: 2px; height: 32px; background: #444; }
+  .top-title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .nda-badge {
+    background: #2e7d32;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .red-bar { background: #cd040b; height: 5px; flex-shrink: 0; }
+
+  /* ── BODY ── */
+  .body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  /* LEFT */
+  .left {
+    background: #f9f9f9;
+    padding: 28px 36px 24px 40px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .headline-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #cd040b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .headline {
+    font-size: 27px;
+    font-weight: 900;
+    color: #000;
+    line-height: 1.15;
+    margin-bottom: 6px;
+    font-family: Arial Black, Arial, sans-serif;
+  }
+  .headline span { color: #cd040b; }
+  .subhead {
+    font-size: 12.5px;
+    color: #555;
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat-box {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-top: 3px solid #cd040b;
+    border-radius: 3px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .stat-box .num {
+    font-size: 22px;
+    font-weight: 900;
+    color: #cd040b;
+    font-family: Arial Black, Arial, sans-serif;
+    line-height: 1.1;
+  }
+  .stat-box .num.blue { color: #0057a8; }
+  .stat-box .num.green { color: #2e7d32; }
+  .stat-box .lbl { font-size: 10px; color: #666; margin-top: 3px; line-height: 1.3; }
+
+  .mechanism-block {
+    background: #e3f2fd;
+    border-left: 4px solid #0057a8;
+    border-radius: 0 3px 3px 0;
+    padding: 10px 14px;
+  }
+  .mechanism-block .mb-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #0057a8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  .mechanism-list { list-style: none; padding: 0; }
+  .mechanism-list li {
+    font-size: 11.5px;
+    color: #333;
+    padding: 2px 0 2px 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .mechanism-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: #0057a8;
+    font-weight: 700;
+  }
+
+  /* RIGHT */
+  .right {
+    padding: 24px 36px 24px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #0057a8;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  /* Savings table */
+  .savings-block {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .savings-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    background: #000;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 6px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    gap: 6px;
+  }
+  .savings-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    font-size: 11.5px;
+    padding: 5px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 6px;
+    align-items: center;
+  }
+  .savings-row:last-child { border-bottom: none; }
+  .savings-row:nth-child(even) { background: #fafafa; }
+  .savings-row .highlight { color: #2e7d32; font-weight: 700; }
+  .savings-row .pilot-row { background: #e8f5e9; }
+
+  /* Test result block */
+  .test-block {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .test-header {
+    background: #000;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 6px 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .test-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .test-col {
+    padding: 10px 12px;
+    font-size: 11.5px;
+  }
+  .test-col.without { background: #ffebee; border-right: 1px solid #e0e0e0; }
+  .test-col.with { background: #e8f5e9; }
+  .test-col .tc-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .test-col.without .tc-label { color: #cd040b; }
+  .test-col.with .tc-label { color: #2e7d32; }
+  .test-row { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px solid rgba(0,0,0,0.06); color: #444; }
+  .test-row:last-child { border-bottom: none; }
+  .test-row .val { font-weight: 700; }
+  .test-row .bad { color: #cd040b; }
+  .test-row .good { color: #2e7d32; }
+
+  .caution-strip {
+    background: #fff8e1;
+    border: 1px solid #f9a825;
+    border-left: 4px solid #f9a825;
+    border-radius: 0 3px 3px 0;
+    padding: 7px 12px;
+    font-size: 11px;
+    color: #555;
+    margin-bottom: 14px;
+    line-height: 1.45;
+  }
+  .caution-strip strong { color: #e65100; }
+
+  .next-block {
+    background: #000;
+    border-radius: 3px;
+    padding: 11px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .next-block .nb-step {
+    background: #cd040b;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .next-block .nb-text { font-size: 11.5px; color: #ddd; line-height: 1.45; }
+  .next-block .nb-text strong { color: #fff; }
+
+  /* BOTTOM BAR */
+  .bottom-bar {
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    flex-shrink: 0;
+  }
+  .bottom-vzw-logo {
+    font-family: Arial Black, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: #cd040b;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    text-transform: lowercase;
+  }
+  .bottom-confidential { font-size: 10px; color: #555; text-align: center; flex: 1; padding: 0 20px; }
+
+  .print-hint {
+    position: fixed;
+    bottom: 12px;
+    right: 16px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 3px;
+    font-family: Arial, sans-serif;
+  }
+
+  @media print {
+    body { background: #fff; display: block; }
+    .slide { width: 100%; height: auto; page-break-after: avoid; }
+    .print-hint { display: none; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="vzw-logo">verizon</div>
+      <div class="top-divider"></div>
+      <div class="top-title">CP&amp;G National Planning &nbsp;|&nbsp; Generator Fuel Efficiency Evaluation</div>
+    </div>
+    <div class="nda-badge">&#10003; NDA Signed &mdash; May 22, 2026</div>
+  </div>
+
+  <div class="red-bar"></div>
+
+  <div class="body">
+
+    <!-- LEFT -->
+    <div class="left">
+      <div>
+        <div class="headline-label">DieselMaxx / GasMaxx &mdash; Inline Fuel Conditioning Device</div>
+        <div class="headline"><span>5–15%</span> Fuel Savings<br>on 39,521 Gen Sites</div>
+        <div class="subhead">
+          Passive inline device installed between tank and injectors. Steel tube with copper mesh generates
+          electrostatic charge on fuel (flow electrification — documented in SAE literature), reducing
+          droplet diameter, improving air/fuel mixing, and increasing combustion completeness.
+          <strong>No magnets, no chemicals, no electronics. Applicable to any diesel genset brand.</strong>
+        </div>
+      </div>
+
+      <div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="num">39,521</div>
+            <div class="lbl">VZW Diesel<br>Gen Sites</div>
+          </div>
+          <div class="stat-box">
+            <div class="num">~$16.7M</div>
+            <div class="lbl">Est. Annual<br>Fuel Spend</div>
+          </div>
+          <div class="stat-box">
+            <div class="num green">$2.0M+</div>
+            <div class="lbl">Potential Savings/Yr<br>at 12% reduction</div>
+          </div>
+        </div>
+
+        <div class="mechanism-block">
+          <div class="mb-label">Technology — Validated Mechanism (Under NDA)</div>
+          <ul class="mechanism-list">
+            <li>Turbulent flow through copper mesh induces electrostatic charge on fuel</li>
+            <li>Charged fuel breaks Van der Waals bonds &rarr; smaller droplets &rarr; better atomization</li>
+            <li>4 SAE technical papers independently confirm electrostatic charge improves diesel combustion</li>
+            <li>Authors: R. Carlson M.S. (UCLA) + E. McBride (Siemens) &mdash; independent of vendor</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+
+      <div>
+        <div class="section-label">Bangalore CK Engine Test &mdash; Cummins 125 kVA (May 13, 2025)</div>
+        <div class="test-block">
+          <div class="test-header">Sinewave Generators Pvt. Ltd. (Auth. Cummins Dealer) &mdash; GENSET INDIA 104 &mdash; 1-hr runs, 50% load</div>
+          <div class="test-body">
+            <div class="test-col without">
+              <div class="tc-label">Without DieselMaxx</div>
+              <div class="test-row"><span>kWh Output</span><span class="val bad">10 kWh</span></div>
+              <div class="test-row"><span>Fuel Consumed</span><span class="val bad">14 litres</span></div>
+              <div class="test-row"><span>Specific Consumption</span><span class="val bad">1.40 L/kWh</span></div>
+            </div>
+            <div class="test-col with">
+              <div class="tc-label">With DieselMaxx</div>
+              <div class="test-row"><span>kWh Output</span><span class="val good">11 kWh</span></div>
+              <div class="test-row"><span>Fuel Consumed</span><span class="val good">12 litres</span></div>
+              <div class="test-row"><span>Specific Consumption</span><span class="val good">1.09 L/kWh</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="caution-strip">
+          <strong>&#9888; Methodology Under Review</strong> &mdash; Raw result 14.28% fuel reduction. 7 open methodology flags: single-run per condition (no replication), no control for fuel temperature differential, kWh discrepancy (10 vs 11 kWh at same declared load), no independent meter verification. <strong>Use as supporting evidence only pending controlled VZW pilot.</strong>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Savings Sensitivity &mdash; VZW Generator Fleet (39,521 Diesel Sites)</div>
+        <div class="savings-block">
+          <div class="savings-header">
+            <span>Savings Rate</span>
+            <span>Gal Saved/Yr</span>
+            <span>Annual $</span>
+            <span>10-Yr Value</span>
+          </div>
+          <div class="savings-row">
+            <span>8% (low claim)</span>
+            <span>~236K gal</span>
+            <span class="highlight">~$1.3M/yr</span>
+            <span>~$13M</span>
+          </div>
+          <div class="savings-row" style="background:#e8f5e9;">
+            <span><strong>12% (school bus)</strong></span>
+            <span><strong>~354K gal</strong></span>
+            <span class="highlight"><strong>~$2.0M/yr</strong></span>
+            <span><strong>~$20M</strong></span>
+          </div>
+          <div class="savings-row">
+            <span>15% (transport)</span>
+            <span>~442K gal</span>
+            <span class="highlight">~$2.5M/yr</span>
+            <span>~$25M</span>
+          </div>
+          <div class="savings-row">
+            <span>25% (gen case study)</span>
+            <span>~737K gal</span>
+            <span class="highlight">~$4.2M/yr</span>
+            <span>~$42M</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="next-block">
+        <div class="nb-step">Next Step</div>
+        <div class="nb-text">
+          <strong>Design controlled VZW pilot: matched gen pairs, identical load profiles, independent fuel metering.</strong>
+          Use 5–15% as success criteria per independent technical report.
+          Priority regions: Carolinas / Tennessee (3,660 diesel sites, 60.5% penetration).
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="bottom-vzw-logo">verizon</div>
+    <div class="bottom-confidential">Verizon confidential and proprietary. Unauthorized disclosure, reproduction or other use prohibited.</div>
+    <div style="width:40px;"></div>
+  </div>
+
+</div>
+
+<div class="print-hint">Ctrl+P &rarr; Save as PDF &nbsp;|&nbsp; Set paper size to 16:9 / landscape</div>
+
+</body>
+</html>
