@@ -307,7 +307,67 @@
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════ -->
-  <h2>6. Fleet Scope &mdash; Cabinet Sites by Market</h2>
+  <h2>6. Trial Measurement Methodology &mdash; DT Morris</h2>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <div class="section-box">
+    <p>Savings are validated by <strong>measured kWh</strong>, not modeled estimates. DT Morris is instrumented with four independent data sources that together provide a complete before/after energy picture. All data is collected by the new Asentria SiteBoss 550A installed at the site.</p>
+
+    <h3>Instrumentation Stack</h3>
+    <table>
+      <tr><th>Instrument</th><th>Measures</th><th>Protocol</th><th>Purpose</th></tr>
+      <tr><td><strong>WattNode</strong> (on ILC)</td><td>Total site AC energy — kWh, kW, voltage, PF</td><td>Modbus RTU / RS-485 &rarr; SiteBoss</td><td>Macro before/after: total AC consumption delta</td></tr>
+      <tr><td><strong>CTs on WPU circuits</strong></td><td>Individual WPU-1 and WPU-2 current (A)</td><td>Analog &rarr; SiteBoss</td><td>Isolate WPU energy from total; confirm WPU-1 near zero after migration</td></tr>
+      <tr><td><strong>Eaton WEBCARDLX</strong> (SNMP)</td><td>Cabinet cool output kW, compressor current, return/supply air, VFD Hz, EEV steps</td><td>SNMPv2c &rarr; SiteBoss Lua script</td><td>Measure Eaton cabinet energy addition; confirm equipment temps protected</td></tr>
+      <tr><td><strong>GE Infinity NE-M</strong> (DC plant)</td><td>DC plant current (A) &mdash; total site DC load</td><td>SiteBoss native</td><td>Control variable &mdash; confirms network load unchanged; any AC delta = HVAC savings</td></tr>
+      <tr><td><strong>SiteBoss temp sensor</strong></td><td>Shelter ambient temperature (&deg;F)</td><td>SiteBoss native</td><td>Validate WPU cycling behavior; confirm shelter temp allowed to rise after migration</td></tr>
+    </table>
+
+    <h3>Phase 1 &mdash; Pre-Migration Baseline (30 Days)</h3>
+    <div class="info-box">
+      <strong>Objective:</strong> Establish measured WPU energy consumption at NSTD1000 standard operating conditions (79&deg;F setpoint, dead band on at 81&deg;F / off at 75&deg;F, N+1 7-day rotation) before any equipment is moved.
+    </div>
+    <table>
+      <tr><th>Data Point</th><th>Source</th><th>Expected Result</th></tr>
+      <tr><td>WPU-1 &amp; WPU-2 kWh/day</td><td>CTs + WattNode</td><td>Active unit cycles; records actual duty cycle and kWh consumed</td></tr>
+      <tr><td>WPU dead band cycles/day</td><td>SiteBoss temp sensor + WPU CT</td><td>On at 81&deg;F, off at 75&deg;F &mdash; validates NSTD1000 settings in place</td></tr>
+      <tr><td>Economizer run hours</td><td>Bard LV1000 controller log</td><td>IL/WI climate &mdash; economizer likely active during mild periods; separates free-cooling from compressor hours</td></tr>
+      <tr><td>Total site AC kWh/day</td><td>WattNode (ILC)</td><td>Baseline total; WPU share isolated via CTs</td></tr>
+      <tr><td>DC plant current</td><td>GE Infinity NE-M &rarr; SiteBoss</td><td>Control variable &mdash; record to confirm network load stable through trial</td></tr>
+      <tr><td>Shelter ambient temp</td><td>SiteBoss temp sensor</td><td>Profile of daily/seasonal variation driving WPU duty cycle</td></tr>
+    </table>
+
+    <h3>Phase 2 &mdash; Post-Migration Measurement (30+ Days)</h3>
+    <div class="highlight-box">
+      <strong>After equipment migration:</strong> All shelter equipment moved into Eaton 33U self-cooling cabinet. WPU setpoint raised to ~90&deg;F (humidity/emergency backup per NSTD1000 N+1 requirement). Eaton WEBCARDLX SNMP polling active via Lua script every 5 minutes.
+    </div>
+    <table>
+      <tr><th>Data Point</th><th>Source</th><th>Expected Result</th></tr>
+      <tr><td>WPU-1 &amp; WPU-2 kWh/day</td><td>CTs + WattNode</td><td>Near-zero &mdash; WPUs only cycle on extreme heat or humidity events above 90&deg;F</td></tr>
+      <tr><td>Eaton cabinet cool output kW</td><td>WEBCARDLX SNMP OID</td><td>Partial load &mdash; DC-inverter compressor modulates to ~2&ndash;3 kW equipment heat; avg draw well below 3.5 kW rated</td></tr>
+      <tr><td>Eaton return/supply air temps</td><td>WEBCARDLX SNMP OIDs</td><td>Return air &le; NSTD1000 allowable; confirms equipment protected regardless of shelter ambient</td></tr>
+      <tr><td>Total site AC kWh/day</td><td>WattNode (ILC)</td><td>Delta vs. Phase 1 baseline = net savings</td></tr>
+      <tr><td>DC plant current</td><td>GE Infinity NE-M &rarr; SiteBoss</td><td>Unchanged &mdash; confirms savings are HVAC-only, not network load change</td></tr>
+    </table>
+
+    <h3>Savings Calculation</h3>
+    <table>
+      <tr><th>Line Item</th><th>Source</th><th>Sign</th></tr>
+      <tr><td>WPU energy eliminated (kWh/day)</td><td>Phase 1 WPU CT kWh &minus; Phase 2 WPU CT kWh</td><td style="color:#2e7d32;font-weight:700;">+ Savings</td></tr>
+      <tr><td>Eaton cabinet energy added (kWh/day)</td><td>Phase 2 WEBCARDLX cool output kWh</td><td style="color:#cd040b;font-weight:700;">&minus; Cost</td></tr>
+      <tr><td><strong>Net daily savings (kWh)</strong></td><td>WPU delta &minus; Eaton addition</td><td style="font-weight:700;">= Net</td></tr>
+      <tr><td><strong>Annual savings/site ($)</strong></td><td>Net kWh/day &times; 365 &times; $0.10/kWh (blended)</td><td style="color:#2e7d32;font-weight:700;">Fleet basis</td></tr>
+    </table>
+    <p style="font-size:12px;color:#666;margin:8px 0 0 0;">DC plant current (GE Infinity NE-M) serves as the control variable throughout. If DC current is stable, the WattNode delta is attributable entirely to HVAC load change &mdash; not network equipment changes.</p>
+
+    <h3>NSTD1000 Compliance Note</h3>
+    <div class="warn-box">
+      <strong>&#9888; Deviation Required:</strong> NSTD1000 (rev. 04-22-26) requires a 79&deg;F shelter setpoint. Raising WPU setpoint to ~90&deg;F for this trial requires a formal deviation request to HQ EOS. Basis for deviation: NSTD1000 &sect;2.18 specifies the critical temperature is <em>"at the entering air conditions to the electronics"</em> &mdash; all electronics are close-coupled cooled by the Eaton cabinet regardless of shelter ambient. N+1 redundancy is maintained: both Bard WPUs remain operational in standby. Trial duration: 60 days. Deviation scope: DT Morris (MDG_LI 5000092014) only.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>7. Fleet Scope &mdash; Cabinet Sites by Market</h2>
   <!-- ═══════════════════════════════════════════════════════════ -->
 
   <div class="section-box">
