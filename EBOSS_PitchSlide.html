@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EBOSS — ANA Inc. Hybrid Generator System</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  /* 16:9 slide container */
+  .slide {
+    width: 1280px;
+    height: 720px;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    background: #000;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    flex-shrink: 0;
+  }
+  .top-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .vzw-logo {
+    font-size: 28px;
+    font-weight: 900;
+    color: #cd040b;
+    letter-spacing: -1px;
+    font-family: Arial Black, Arial, sans-serif;
+  }
+  .top-divider {
+    width: 2px;
+    height: 32px;
+    background: #444;
+  }
+  .top-title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .nda-badge {
+    background: #2e7d32;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ── RED ACCENT BAR ── */
+  .red-bar {
+    background: #cd040b;
+    height: 5px;
+    flex-shrink: 0;
+  }
+
+  /* ── BODY ── */
+  .body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  /* LEFT PANEL */
+  .left {
+    background: #f9f9f9;
+    padding: 28px 36px 24px 40px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .headline-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #cd040b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .headline {
+    font-size: 28px;
+    font-weight: 900;
+    color: #000;
+    line-height: 1.15;
+    margin-bottom: 6px;
+    font-family: Arial Black, Arial, sans-serif;
+  }
+  .headline span { color: #cd040b; }
+  .subhead {
+    font-size: 12.5px;
+    color: #555;
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-box {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-top: 3px solid #2e7d32;
+    border-radius: 3px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .stat-box .num {
+    font-size: 24px;
+    font-weight: 900;
+    color: #2e7d32;
+    font-family: Arial Black, Arial, sans-serif;
+    line-height: 1.1;
+  }
+  .stat-box .num.blue { color: #0057a8; }
+  .stat-box .lbl {
+    font-size: 10px;
+    color: #666;
+    margin-top: 3px;
+    line-height: 1.3;
+  }
+
+  .source-tag {
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+
+  .problem-block {
+    background: #fff3e0;
+    border-left: 4px solid #e65100;
+    border-radius: 0 3px 3px 0;
+    padding: 10px 14px;
+  }
+  .problem-block .pb-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #e65100;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  .problem-list {
+    list-style: none;
+    padding: 0;
+  }
+  .problem-list li {
+    font-size: 11.5px;
+    color: #444;
+    padding: 2px 0 2px 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .problem-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: #e65100;
+    font-weight: 700;
+  }
+
+  /* RIGHT PANEL */
+  .right {
+    padding: 24px 36px 24px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #0057a8;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .tech-card {
+    background: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    border-radius: 3px;
+    padding: 9px 12px;
+  }
+  .tech-card .tc-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #1b5e20;
+    margin-bottom: 3px;
+  }
+  .tech-card .tc-body {
+    font-size: 11px;
+    color: #333;
+    line-height: 1.4;
+  }
+
+  .perf-block {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .perf-header {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    background: #000;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 6px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    gap: 8px;
+  }
+  .perf-header .ph-green { color: #66bb6a; }
+  .perf-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    font-size: 11.5px;
+    padding: 5px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 8px;
+    align-items: center;
+  }
+  .perf-row:last-child { border-bottom: none; }
+  .perf-row:nth-child(even) { background: #fafafa; }
+  .perf-row .bad { color: #cd040b; font-weight: 700; }
+  .perf-row .good { color: #2e7d32; font-weight: 700; }
+
+  .next-block {
+    background: #000;
+    border-radius: 3px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .next-block .nb-step {
+    background: #cd040b;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .next-block .nb-text {
+    font-size: 11.5px;
+    color: #ddd;
+    line-height: 1.45;
+  }
+  .next-block .nb-text strong { color: #fff; }
+
+  /* ── BOTTOM BAR ── */
+  .bottom-bar {
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    flex-shrink: 0;
+  }
+  .bottom-vzw-logo {
+    font-family: Arial Black, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: #cd040b;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    text-transform: lowercase;
+  }
+  .bottom-confidential {
+    font-size: 10px;
+    color: #555;
+    text-align: center;
+    flex: 1;
+    padding: 0 20px;
+  }
+
+  /* ── PRINT HINT ── */
+  .print-hint {
+    position: fixed;
+    bottom: 12px;
+    right: 16px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 3px;
+    font-family: Arial, sans-serif;
+  }
+
+  @media print {
+    body { background: #fff; display: block; }
+    .slide { width: 100%; height: auto; page-break-after: avoid; }
+    .print-hint { display: none; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="vzw-logo">verizon</div>
+      <div class="top-divider"></div>
+      <div class="top-title">CP&amp;G National Planning &nbsp;|&nbsp; Emergency &amp; Pre-Utility Generator Strategy</div>
+    </div>
+    <div class="nda-badge">&#10003; NDA Signed — June 8, 2026 &nbsp;|&nbsp; CW2652709</div>
+  </div>
+
+  <!-- RED ACCENT -->
+  <div class="red-bar"></div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- LEFT -->
+    <div class="left">
+      <div>
+        <div class="headline-label">ANA Inc. (Alliance North America) &mdash; EBOSS Hybrid Generator</div>
+        <div class="headline">72% Fuel Savings —<br><span>Live Multi-Carrier</span> Field Data</div>
+        <div class="subhead">
+          EBOSS pairs a diesel genset with an LTO battery pack. The battery handles continuous site load;
+          the generator only starts to recharge or cover spikes. The result: 70%+ less engine runtime,
+          fuel, and emissions vs. a conventional running generator. <strong>Use case: deployable emergency
+          response and pre-utility new builds &mdash; not stationary gen replacement.</strong>
+        </div>
+      </div>
+
+      <div>
+        <div class="source-tag">Maloney Ridge, PNW (WA) &mdash; 11/25/2025&ndash;04/20/2026 &mdash; Verizon, AT&amp;T, T-Mobile, BPA, BNSF shared asset &mdash; live telematics, multi-party verified</div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="num">72%</div>
+            <div class="lbl">Fuel Saved<br>16,877 gal</div>
+          </div>
+          <div class="stat-box">
+            <div class="num">74%</div>
+            <div class="lbl">Engine Hours<br>Reduced</div>
+          </div>
+          <div class="stat-box">
+            <div class="num blue">$101K</div>
+            <div class="lbl">Fuel Cost Saved<br>5 months</div>
+          </div>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Current Pain — Conventional Deployable Generators</div>
+          <ul class="problem-list">
+            <li>Engine runs continuously at partial load &mdash; 40&ndash;60% fuel wasted on light loads</li>
+            <li>500-hr oil change intervals &mdash; 6+ maintenance visits per year at remote sites</li>
+            <li>Cold start failures below &minus;20&deg;F &mdash; EBOSS Arctic pkg rated to &minus;50&deg;F</li>
+            <li>No telematics on standard gens &mdash; fuel &amp; runtime unknown until site visit</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+
+      <div>
+        <div class="section-label">EBOSS 70-45 &mdash; Technology Advantages</div>
+        <div class="tech-grid">
+          <div class="tech-card">
+            <div class="tc-title">LTO Battery — 90K Cycle Life</div>
+            <div class="tc-body">Lithium Titanium Oxide — no thermal runaway, safe unattended outdoor use. ~20 yr life at 3 kW avg. 7-yr mfr warranty.</div>
+          </div>
+          <div class="tech-card">
+            <div class="tc-title">Hybrid Load Management</div>
+            <div class="tc-body">25 kWh battery handles continuous load. Gen only starts to recharge (~45 min) or cover spikes. Peak output: 70 kVA / 56 kW.</div>
+          </div>
+          <div class="tech-card">
+            <div class="tc-title">Deployable Trailer Platform</div>
+            <div class="tc-body">Self-contained on trailer. 80.5-gal integral fuel tank. 120/240V 1&Phi; &amp; 208/480V 3&Phi; simultaneous output. Cam-Lok standard.</div>
+          </div>
+          <div class="tech-card">
+            <div class="tc-title">Live Telematics Dashboard</div>
+            <div class="tc-body">Fuel level, engine runtime, GPS, load data &mdash; visible to all carrier members in real time. ESG reporting built in.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Maloney Ridge &mdash; Standard Gen vs. EBOSS (5 Months)</div>
+        <div class="perf-block">
+          <div class="perf-header">
+            <span>Metric</span>
+            <span>Standard Gen</span>
+            <span class="ph-green">EBOSS (Actual)</span>
+          </div>
+          <div class="perf-row">
+            <span>Engine Runtime</span>
+            <span class="bad">3,440 hrs</span>
+            <span class="good">905 hrs</span>
+          </div>
+          <div class="perf-row">
+            <span>Fuel Consumed</span>
+            <span class="bad">23,395 gal</span>
+            <span class="good">6,517 gal</span>
+          </div>
+          <div class="perf-row">
+            <span>500-Hr Oil Changes</span>
+            <span class="bad">6</span>
+            <span class="good">1</span>
+          </div>
+          <div class="perf-row">
+            <span>CO&#x2082; Produced</span>
+            <span class="bad">525,208 lbs</span>
+            <span class="good">146,308 lbs</span>
+          </div>
+          <div class="perf-row">
+            <span>Fuel Cost (@$6/gal)</span>
+            <span class="bad">~$140,370</span>
+            <span class="good">~$39,102</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="next-block">
+        <div class="nb-step">Next Step</div>
+        <div class="nb-text">
+          <strong>Identify VZW emergency response and pre-utility use cases for EBOSS trial.</strong>
+          Coordinate with Network Operations on deployable gen inventory and dispatch workflow.
+          Request ANA commercial pricing and availability for 1-unit pilot deployment.
+        </div>
+      </div>
+
+    </div>
+  </div><!-- end body -->
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <div class="bottom-vzw-logo">verizon</div>
+    <div class="bottom-confidential">Verizon confidential and proprietary. Unauthorized disclosure, reproduction or other use prohibited.</div>
+    <div style="width:40px;"></div>
+  </div>
+
+</div><!-- end slide -->
+
+<div class="print-hint">Ctrl+P &rarr; Save as PDF &nbsp;|&nbsp; Set paper size to 16:9 / landscape</div>
+
+</body>
+</html>
