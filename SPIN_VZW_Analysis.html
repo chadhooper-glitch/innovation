@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SPIN Energy Systems — VZW Feasibility Analysis</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f4f4f4; color: #222; margin: 0; padding: 0; }
+  .header { background: #000; color: #fff; padding: 18px 32px; }
+  .header h1 { color: #cd040b; margin: 0 0 4px 0; font-size: 22px; }
+  .header p { margin: 0; font-size: 13px; color: #ccc; }
+  .container { max-width: 960px; margin: 24px auto; padding: 0 24px; }
+  h2 { color: #cd040b; border-bottom: 2px solid #cd040b; padding-bottom: 4px; margin-top: 32px; }
+  h3 { color: #333; margin-top: 20px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px 0; font-size: 13px; }
+  th { background: #000; color: #fff; padding: 8px 10px; text-align: left; }
+  td { padding: 7px 10px; border-bottom: 1px solid #ddd; background: #fff; }
+  tr:nth-child(even) td { background: #f9f9f9; }
+  .pass { color: #2e7d32; font-weight: 700; }
+  .fail { color: #c62828; font-weight: 700; }
+  .borderline { color: #e65100; font-weight: 700; }
+  .section-box { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 16px 20px; margin: 12px 0; }
+  .highlight-box { background: #e8f5e9; border: 2px solid #2e7d32; border-radius: 4px; padding: 14px 18px; margin: 16px 0; }
+  .warn-box { background: #fff8e1; border: 2px solid #f9a825; border-radius: 4px; padding: 14px 18px; margin: 16px 0; }
+  .info-box { background: #e3f2fd; border: 2px solid #1565c0; border-radius: 4px; padding: 14px 18px; margin: 16px 0; }
+  ul { margin: 8px 0; padding-left: 20px; }
+  li { margin-bottom: 5px; }
+  .footer { text-align: center; font-size: 11px; color: #888; margin: 40px 0 20px 0; border-top: 1px solid #ddd; padding-top: 12px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; margin-left: 6px; }
+  .badge-red { background: #cd040b; color: #fff; }
+  .badge-green { background: #2e7d32; color: #fff; }
+  .badge-blue { background: #0057a8; color: #fff; }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+  .stat-card { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 14px 16px; text-align: center; }
+  .stat-card .stat-num { font-size: 28px; font-weight: 700; line-height: 1.1; }
+  .stat-card .stat-label { font-size: 11px; color: #666; margin-top: 4px; }
+  .stat-card.red .stat-num { color: #cd040b; }
+  .stat-card.green .stat-num { color: #2e7d32; }
+  .stat-card.orange .stat-num { color: #e65100; }
+  .stat-card.blue .stat-num { color: #0057a8; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>SPIN Energy Systems — VZW Feasibility Analysis</h1>
+  <p>Chad Hooper &nbsp;|&nbsp; National CP&amp;G Planning &nbsp;|&nbsp; chad.hooper@verizonwireless.com &nbsp;|&nbsp; 2026-05-18</p>
+</div>
+
+<div class="container">
+
+  <h2>1. What Is SPIN</h2>
+  <div class="section-box">
+    <p>SPIN Energy Systems uses a <strong>Halbach array magnetic levitation flywheel</strong> to store kinetic energy. The rotor is magnetically suspended — near-frictionless — and spins at high speed to store energy. During a grid outage, the rotor spins down and the integrated motor/generator converts kinetic energy back to AC output.</p>
+    <p>The system is <strong>regenerative</strong>, similar to Tesla regenerative braking: during normal grid operation, load fluctuations and transitions allow the flywheel to recapture energy, reducing net grid energy draw. It is not a chemical battery — there is no degradation, no replacement cycle, and no hazardous materials.</p>
+    <ul>
+      <li><strong>Output:</strong> AC — fits upstream of panel schedule, feeds rectifiers; does not replace the −48VDC bus directly</li>
+      <li><strong>Capacity:</strong> 10–15 kWh per cube (usable; confirm exact value with SPIN)</li>
+      <li><strong>Scalable:</strong> Cubes are stackable for additional kWh and/or kW output</li>
+      <li><strong>Maintenance:</strong> Near-zero — no chemistry, no watering, no load testing, no replacement cycle</li>
+    </ul>
+  </div>
+
+  <h2>2. Strategic Goal</h2>
+  <div class="highlight-box">
+    <strong>Eliminate VRLA and NiCd battery strings from the VZW macro network entirely.</strong><br><br>
+    Battery-related costs per macro site over 20 years include:
+    <ul>
+      <li>VRLA string replacement every 5–7 years ($8,000–$15,000/string installed)</li>
+      <li>Annual capacity testing — load bank, truck roll</li>
+      <li>NiCd: electrolyte watering, cadmium hazmat disposal</li>
+      <li>Failed capacity test = outage risk + NORS filing (47 CFR Part 4)</li>
+      <li>End-of-life disposal/recycling costs</li>
+    </ul>
+    A SPIN flywheel that never needs replacement eliminates all of the above across tens of thousands of sites.
+  </div>
+
+  <h2>3. VZW Battery Reserve Requirements — NSTD900 (03/31/26)</h2>
+  <div class="section-box">
+    <p>Effective 03/31/26 — authorized by SVP Srini Kalapala via Central Engineering (Mike Cogar / Jen Taylor):</p>
+    <table>
+      <tr><th>Site Type</th><th>With Generator</th><th>Without Generator</th></tr>
+      <tr><td>Macro Coverage Site (All)</td><td>1 Hour (NSTD47)</td><td>3 Hours <span class="badge badge-red">Updated from 8 hrs</span></td></tr>
+      <tr><td>Macro Capacity Site — Coastal</td><td>1 Hour</td><td>3 Hours</td></tr>
+      <tr><td>Macro Capacity Site — Non-Coastal (county &gt;85% gen penetration)</td><td>1 Hour</td><td>1 Hour</td></tr>
+      <tr><td>Hub Site — Small/Medium</td><td colspan="2">4 Hours, min 2 strings, single generator</td></tr>
+      <tr><td>Hub Site — Large</td><td colspan="2">3 Hours, min 2 strings, single generator</td></tr>
+    </table>
+    <p class="warn-box" style="margin:0;"><strong>Note:</strong> SPIN is not currently referenced in any VZW network standard. Deployment will require a formal deviation via NPRC776 or an update to NSTD47 before network-wide rollout.</p>
+  </div>
+
+  <h2>4. Sizing Analysis — VZW Typical Macro Sites (8–12 kW)</h2>
+
+  <h3>Backup Duration by Configuration</h3>
+  <table>
+    <tr><th>Site Load</th><th>1 Cube (10–15 kWh)</th><th>2 Cubes (20–30 kWh)</th><th>3 Cubes (30–45 kWh)</th><th>4 Cubes (40–60 kWh)</th></tr>
+    <tr><td><strong>8 kW</strong></td><td>1.25 – 1.88 hrs</td><td>2.50 – 3.75 hrs</td><td>3.75 – 5.63 hrs</td><td>5.00 – 7.50 hrs</td></tr>
+    <tr><td><strong>10 kW</strong></td><td>1.00 – 1.50 hrs</td><td>2.00 – 3.00 hrs</td><td>3.00 – 4.50 hrs</td><td>4.00 – 6.00 hrs</td></tr>
+    <tr><td><strong>12 kW</strong></td><td>0.83 – 1.25 hrs</td><td>1.67 – 2.50 hrs</td><td>2.50 – 3.75 hrs</td><td>3.33 – 5.00 hrs</td></tr>
+  </table>
+
+  <h3>NSTD900 Compliance Map</h3>
+  <table>
+    <tr><th>Site Load</th><th>1 Cube<br><small>1-hr w/gen / 3-hr w/o gen</small></th><th>2 Cubes</th><th>3 Cubes</th><th>4 Cubes</th></tr>
+    <tr><td><strong>8 kW</strong></td>
+      <td><span class="pass">PASS</span> / <span class="fail">FAIL</span></td>
+      <td><span class="pass">PASS</span> / <span class="borderline">BORDERLINE*</span></td>
+      <td><span class="pass">PASS</span> / <span class="pass">PASS</span></td>
+      <td><span class="pass">PASS</span> / <span class="pass">PASS</span></td></tr>
+    <tr><td><strong>10 kW</strong></td>
+      <td><span class="pass">PASS</span> / <span class="fail">FAIL</span></td>
+      <td><span class="pass">PASS</span> / <span class="borderline">BORDERLINE*</span></td>
+      <td><span class="pass">PASS</span> / <span class="pass">PASS</span></td>
+      <td><span class="pass">PASS</span> / <span class="pass">PASS</span></td></tr>
+    <tr><td><strong>12 kW</strong></td>
+      <td><span class="borderline">BORDERLINE*</span> / <span class="fail">FAIL</span></td>
+      <td><span class="pass">PASS</span> / <span class="fail">FAIL</span></td>
+      <td><span class="borderline">BORDERLINE*</span> / <span class="borderline">BORDERLINE*</span></td>
+      <td><span class="pass">PASS</span> / <span class="pass">PASS</span></td></tr>
+  </table>
+  <p style="font-size:12px;color:#666;">*Borderline = passes at 15 kWh/cube, fails at 10 kWh/cube. Confirmed cube capacity from SPIN resolves this.</p>
+
+  <div class="highlight-box">
+    <strong>Bottom line:</strong>
+    <ul style="margin:8px 0 0 0;">
+      <li><strong>Sites with generator (majority of network):</strong> 2 cubes covers all load ranges with margin</li>
+      <li><strong>Sites without generator:</strong> 3–4 cubes depending on load and confirmed kWh spec</li>
+      <li>Most critical data point: confirmed usable kWh per cube from SPIN</li>
+    </ul>
+  </div>
+
+  <h2>5. Information to Provide SPIN Under NDA</h2>
+  <div class="section-box">
+    <table>
+      <tr><th>Item</th><th>Detail / Source</th></tr>
+      <tr><td><strong>Typical site DC load range</strong></td><td>8–12 kW total at 54V float (−48VDC bus)</td></tr>
+      <tr><td><strong>DC bus architecture</strong></td><td>−48VDC plant; OmniOn or NE-M rectifiers; VRLA or NiCd strings in parallel on bus; SiteBoss monitoring</td></tr>
+      <tr><td><strong>AC input available</strong></td><td>120V/1Ph and 208V/1Ph at panel; utility + generator transfer switch on most sites</td></tr>
+      <tr><td><strong>Battery reserve requirement</strong></td><td>1 hour with generator; 3 hours without generator (NSTD900, effective 03/31/26)</td></tr>
+      <tr><td><strong>Shelter ambient temperature range</strong></td><td>−40°F to +140°F interior (Telcordia GR-63 NEBS); HVAC maintains setpoint ~75°F operating</td></tr>
+      <tr><td><strong>Physical space envelope</strong></td><td>Typical shelters: 10×12 ft or 10×19 ft; floor load capacity varies — provide unit weight early</td></tr>
+      <tr><td><strong>Generator presence</strong></td><td>~85% of macro sites have permanent standby generators; remaining 15% battery-only</td></tr>
+      <tr><td><strong>Current battery chemistry</strong></td><td>VRLA (majority), NiCd at some legacy sites; VRLA string voltage 54V (nominal 48V); NiCd 57.2V float</td></tr>
+      <tr><td><strong>Scale of deployment</strong></td><td>Tens of thousands of macro sites nationwide — provide approximate site count under NDA</td></tr>
+      <tr><td><strong>Transfer switch / ride-through requirement</strong></td><td>Generator start time typically 10–30 sec; SPIN must bridge this gap reliably</td></tr>
+    </table>
+  </div>
+
+  <h2>6. Open Questions — Get Answers from SPIN Under NDA</h2>
+  <div class="section-box">
+    <ol>
+      <li><strong>Confirmed usable kWh per cube</strong> — is 10–15 kWh the full range, or does it vary by discharge rate?</li>
+      <li><strong>Maximum continuous kW output per cube</strong> — must meet full site load (8–12 kW)</li>
+      <li><strong>Parallel output</strong> — can cubes be combined for higher kW delivery, not just more kWh?</li>
+      <li><strong>Self-discharge rate</strong> — how many hours does a fully charged cube coast with no grid power? (Critical for no-gen sites)</li>
+      <li><strong>Operating ambient temperature range</strong> — must cover NEBS GR-63 envelope</li>
+      <li><strong>AC input spec</strong> — voltage, phase, current draw during charge/maintain</li>
+      <li><strong>AC output spec</strong> — voltage, phase, waveform quality (rectifiers are sensitive to THD)</li>
+      <li><strong>Recharge time</strong> — after partial or full discharge, how long to return to full capacity?</li>
+      <li><strong>Physical dimensions and weight per cube</strong> — shelter floor loading is a real constraint</li>
+      <li><strong>Seismic rating</strong> — VZW sites in Zone 4 (California) require GR-63 seismic compliance</li>
+      <li><strong>MTBF / warranty / service model</strong> — what does "no maintenance" actually mean contractually?</li>
+    </ol>
+  </div>
+
+  <h2>7. Path to Deployment</h2>
+  <div class="section-box">
+    <ol>
+      <li><strong>NDA</strong> — share site configurations; get confirmed SPIN specs in return</li>
+      <li><strong>Lab / bench test</strong> — validate AC output quality, self-discharge, temp performance</li>
+      <li><strong>Pilot (3–5 sites)</strong> — varied climate zones, with and without generator</li>
+      <li><strong>NSTD47 deviation or update</strong> — NPRC776 deviation request or Central Engineering update to permit flywheel as qualifying backup power</li>
+      <li><strong>VZW procurement / contract</strong> — sourcing approval, pricing, nationwide rollout</li>
+    </ol>
+  </div>
+
+  
+  <h2>8. Generator Penetration by VZW Region</h2>
+
+  <div class="stat-grid">
+    <div class="stat-card blue">
+      <div class="stat-num">80,259</div>
+      <div class="stat-label">Total Macro Sites<br><span style="font-size:10px;font-weight:400;">(Source: Site Types data)</span></div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-num">78.7%</div>
+      <div class="stat-label">Macro-Only Network Penetration<br><span style="font-size:10px;font-weight:400;">(Source: Generator Registry CSV)</span></div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-num">~17,059</div>
+      <div class="stat-label">Macro Sites Without Generators<br><span style="font-size:10px;font-weight:400;">(Source: Generator Registry CSV)</span></div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num">5 of 18</div>
+      <div class="stat-label">VZW Regions At or Above 85%<br>(FL, OPW, GA/AL, MI/IN/KY, CGC)</div>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card red">
+      <div class="stat-num">13 of 18</div>
+      <div class="stat-label">VZW Regions Below 85%</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-num">1 of 18</div>
+      <div class="stat-label">VZW Regions 75–84% (Close)<br>(W-B/Virginia at 84.9%)</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-num">NY / TX / CA</div>
+      <div class="stat-label">Lowest Penetration Regions<br>(62–67%, ~4,369 sites w/o gen)</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-num">CGC</div>
+      <div class="stat-label">Highest Penetration Region<br>(Central Gulf Coast — 91.8%)</div>
+    </div>
+  </div>
+
+  <div class="warn-box" style="margin:12px 0;">
+    <strong>Highest-priority SPIN opportunity states</strong> — large site counts, well below 85%, many in dense urban markets where generator installation is impractical:<br>
+    <span style="font-size:11px;color:#e65100;"><strong>Note:</strong> Site counts below are directional — source data may include non-macro types. Penetration % trends are valid for prioritization.</span>
+    <table style="margin-top:10px;">
+      <tr><th>State</th><th style="text-align:right">Total Sites</th><th style="text-align:right">Without Generator</th><th style="text-align:right">Penetration</th></tr>
+      <tr><td><strong>NY</strong></td><td style="text-align:right">4,852</td><td style="text-align:right">3,270</td><td style="text-align:right;color:#c62828;font-weight:700">32.6%</td></tr>
+      <tr><td><strong>TX</strong></td><td style="text-align:right">5,795</td><td style="text-align:right">3,361</td><td style="text-align:right;color:#c62828;font-weight:700">42.0%</td></tr>
+      <tr><td><strong>CA</strong></td><td style="text-align:right">7,619</td><td style="text-align:right">3,254</td><td style="text-align:right;color:#c62828;font-weight:700">57.3%</td></tr>
+      <tr><td><strong>VA</strong></td><td style="text-align:right">2,455</td><td style="text-align:right">1,594</td><td style="text-align:right;color:#c62828;font-weight:700">35.1%</td></tr>
+      <tr><td><strong>AZ</strong></td><td style="text-align:right">1,933</td><td style="text-align:right">1,164</td><td style="text-align:right;color:#c62828;font-weight:700">39.8%</td></tr>
+      <tr><td><strong>MA</strong></td><td style="text-align:right">1,514</td><td style="text-align:right">1,052</td><td style="text-align:right;color:#c62828;font-weight:700">30.5%</td></tr>
+      <tr><td><strong>CO</strong></td><td style="text-align:right">1,409</td><td style="text-align:right">946</td><td style="text-align:right;color:#c62828;font-weight:700">32.9%</td></tr>
+      <tr><td style="font-weight:700">NY + TX + CA Total</td><td style="text-align:right;font-weight:700">18,266</td><td style="text-align:right;font-weight:700;color:#c62828">~9,885</td><td style="text-align:right;font-weight:700;color:#c62828">~46%</td></tr>
+    </table>
+  </div>
+
+  <div class="section-box" style="margin-top:16px;">
+    <p>Source: Generator Registry CSV (macro-specific). Green bars = at or above 85% NSTD900 threshold. Red bars = below 85%.</p>
+    <canvas id="stateChart" style="width:100%;height:480px;"></canvas>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    const states  = ["SouthWest","New York","NorCal/Nevada","Southern California","Pacific Northwest","Tri State","Central Texas","New England","Mountain Plains","Carolina/Tennessee","Great Plains","Illinois/Wisconsin","W-B/Virginia","Florida","OPW","Georgia/Alabama","Michigan/Indiana/KY","Central Gulf Coast"];
+    const pcts    = [62.3, 62.8, 65.0, 67.2, 72.2, 73.5, 73.9, 77.5, 79.7, 81.7, 81.8, 82.2, 84.9, 85.1, 85.9, 87.7, 89.2, 91.8];
+    const totals  = [3401, 4739, 3649, 4038, 3375, 4253, 5305, 3907, 5913, 6045, 4256, 4267, 3656, 3900, 4847, 4437, 4694, 5683];
+    const withGen = [2119, 2976, 2372, 2714, 2437, 3126, 3920, 3028, 4713, 4939, 3481, 3507, 3104, 3319, 4163, 3891, 4187, 5217];
+    const colors  = [62.3,62.8,65.0,67.2,72.2,73.5,73.9,77.5,79.7,81.7,81.8,82.2,84.9,85.1,85.9,87.7,89.2,91.8].map(p => p >= 85 ? '#2e7d32' : '#cd040b');
+    new Chart(document.getElementById('stateChart'), {
+      type: 'bar',
+      data: {
+        labels: states,
+        datasets: [
+          {
+            label: '% Generator Penetration',
+            data: pcts,
+            backgroundColor: colors,
+            borderWidth: 0,
+            order: 2
+          },
+          {
+            label: 'NSTD900 85% Goal',
+            data: states.map(() => 85),
+            type: 'line',
+            borderColor: '#000',
+            borderWidth: 2,
+            borderDash: [6, 4],
+            pointRadius: 0,
+            fill: false,
+            order: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            labels: {
+              filter: item => item.text === 'NSTD900 85% Goal',
+              font: { size: 11 }
+            }
+          },
+          tooltip: {
+            filter: item => item.datasetIndex === 0,
+            callbacks: {
+              label: ctx => {
+                const i = ctx.dataIndex;
+                return [` ${pcts[i]}% penetration`, ` ${withGen[i].toLocaleString()} of ${totals[i].toLocaleString()} sites`];
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            min: 0, max: 100,
+            ticks: { callback: v => v + '%' },
+            title: { display: true, text: 'Generator Penetration %' }
+          },
+          x: { ticks: { font: { size: 10 } } }
+        }
+      }
+    });
+  </script>
+
+  <h3 style="margin-top:24px;">Regional Summary Table</h3>
+  <div class="section-box">
+    <table>
+      <tr><th>VZW Region</th><th style="text-align:right">Total Macros</th><th style="text-align:right">With Generator</th><th style="text-align:right">Without Generator</th><th style="text-align:right">Penetration</th><th>Status</th></tr>
+      <tr><td><strong>SouthWest</strong></td><td style="text-align:right">3,401</td><td style="text-align:right">2,119</td><td style="text-align:right">1,282</td><td style="text-align:right;color:#c62828;font-weight:700">62.3%</td><td style="color:#c62828;font-weight:700">BELOW</td></tr>
+      <tr><td><strong>New York</strong></td><td style="text-align:right">4,739</td><td style="text-align:right">2,976</td><td style="text-align:right">1,763</td><td style="text-align:right;color:#c62828;font-weight:700">62.8%</td><td style="color:#c62828;font-weight:700">BELOW</td></tr>
+      <tr><td><strong>NorCal/Nevada</strong></td><td style="text-align:right">3,649</td><td style="text-align:right">2,372</td><td style="text-align:right">1,277</td><td style="text-align:right;color:#c62828;font-weight:700">65.0%</td><td style="color:#c62828;font-weight:700">BELOW</td></tr>
+      <tr><td><strong>Southern California</strong></td><td style="text-align:right">4,038</td><td style="text-align:right">2,714</td><td style="text-align:right">1,324</td><td style="text-align:right;color:#c62828;font-weight:700">67.2%</td><td style="color:#c62828;font-weight:700">BELOW</td></tr>
+      <tr><td><strong>Pacific Northwest</strong></td><td style="text-align:right">3,375</td><td style="text-align:right">2,437</td><td style="text-align:right">938</td><td style="text-align:right;color:#c62828;font-weight:700">72.2%</td><td style="color:#c62828;font-weight:700">BELOW</td></tr>
+      <tr><td><strong>Tri State</strong></td><td style="text-align:right">4,253</td><td style="text-align:right">3,126</td><td style="text-align:right">1,127</td><td style="text-align:right;color:#c62828;font-weight:700">73.5%</td><td style="color:#c62828;font-weight:700">BELOW</td></tr>
+      <tr><td><strong>Central Texas</strong></td><td style="text-align:right">5,305</td><td style="text-align:right">3,920</td><td style="text-align:right">1,385</td><td style="text-align:right;color:#c62828;font-weight:700">73.9%</td><td style="color:#c62828;font-weight:700">BELOW</td></tr>
+      <tr><td><strong>New England</strong></td><td style="text-align:right">3,907</td><td style="text-align:right">3,028</td><td style="text-align:right">879</td><td style="text-align:right;color:#c62828;font-weight:700">77.5%</td><td style="color:#c62828;font-weight:700">BELOW</td></tr>
+      <tr><td><strong>Mountain Plains</strong></td><td style="text-align:right">5,913</td><td style="text-align:right">4,713</td><td style="text-align:right">1,200</td><td style="text-align:right;color:#c62828;font-weight:700">79.7%</td><td style="color:#c62828;font-weight:700">BELOW</td></tr>
+      <tr><td><strong>Carolina/Tennessee</strong></td><td style="text-align:right">6,045</td><td style="text-align:right">4,939</td><td style="text-align:right">1,106</td><td style="text-align:right;color:#c62828;font-weight:700">81.7%</td><td style="color:#c62828;font-weight:700">BELOW</td></tr>
+      <tr><td><strong>Great Plains</strong></td><td style="text-align:right">4,256</td><td style="text-align:right">3,481</td><td style="text-align:right">775</td><td style="text-align:right;color:#c62828;font-weight:700">81.8%</td><td style="color:#c62828;font-weight:700">BELOW</td></tr>
+      <tr><td><strong>Illinois/Wisconsin</strong></td><td style="text-align:right">4,267</td><td style="text-align:right">3,507</td><td style="text-align:right">760</td><td style="text-align:right;color:#c62828;font-weight:700">82.2%</td><td style="color:#c62828;font-weight:700">BELOW</td></tr>
+      <tr><td><strong>W-B/Virginia</strong></td><td style="text-align:right">3,656</td><td style="text-align:right">3,104</td><td style="text-align:right">552</td><td style="text-align:right;color:#e65100;font-weight:700">84.9%</td><td style="color:#e65100;font-weight:700">CLOSE</td></tr>
+      <tr><td><strong>Florida</strong></td><td style="text-align:right">3,900</td><td style="text-align:right">3,319</td><td style="text-align:right">581</td><td style="text-align:right;color:#2e7d32;font-weight:700">85.1%</td><td style="color:#2e7d32;font-weight:700">AT GOAL</td></tr>
+      <tr><td><strong>OPW</strong></td><td style="text-align:right">4,847</td><td style="text-align:right">4,163</td><td style="text-align:right">684</td><td style="text-align:right;color:#2e7d32;font-weight:700">85.9%</td><td style="color:#2e7d32;font-weight:700">AT GOAL</td></tr>
+      <tr><td><strong>Georgia/Alabama</strong></td><td style="text-align:right">4,437</td><td style="text-align:right">3,891</td><td style="text-align:right">546</td><td style="text-align:right;color:#2e7d32;font-weight:700">87.7%</td><td style="color:#2e7d32;font-weight:700">AT GOAL</td></tr>
+      <tr><td><strong>Michigan/Indiana/KY</strong></td><td style="text-align:right">4,694</td><td style="text-align:right">4,187</td><td style="text-align:right">507</td><td style="text-align:right;color:#2e7d32;font-weight:700">89.2%</td><td style="color:#2e7d32;font-weight:700">AT GOAL</td></tr>
+      <tr><td><strong>Central Gulf Coast</strong></td><td style="text-align:right">5,683</td><td style="text-align:right">5,217</td><td style="text-align:right">466</td><td style="text-align:right;color:#2e7d32;font-weight:700">91.8%</td><td style="color:#2e7d32;font-weight:700">AT GOAL</td></tr>
+      <tr style="background:#f0f0f0;"><td><strong>TOTAL</strong></td><td style="text-align:right;font-weight:700">80,365</td><td style="text-align:right;font-weight:700">63,197</td><td style="text-align:right;font-weight:700;color:#c62828">17,168</td><td style="text-align:right;font-weight:700;color:#e65100">78.7%</td><td style="color:#e65100;font-weight:700">BELOW GOAL</td></tr>
+    </table>
+    <p style="font-size:11px;color:#666;margin-top:8px;">Source: Generator Registry CSV (macro-specific) &nbsp;|&nbsp; Green = &ge;85% (NSTD900 goal met) &nbsp;|&nbsp; Orange = 75&ndash;84% (close) &nbsp;|&nbsp; Red = &lt;75%</p>
+  </div>
+
+  <div class="footer">
+    Chad Hooper &nbsp;|&nbsp; National CP&amp;G Planning &nbsp;|&nbsp; Verizon Wireless &nbsp;|&nbsp; chad.hooper@verizonwireless.com<br>
+    Analysis date: 2026-05-18 &nbsp;|&nbsp; Based on NSTD900 Rev 03/31/26 &nbsp;|&nbsp; SPIN specs preliminary — confirm under NDA
+  </div>
+
+</div>
+</body>
+</html>
