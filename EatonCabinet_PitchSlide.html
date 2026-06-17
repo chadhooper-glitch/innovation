@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Eaton Cabinet — Shelter HVAC Efficiency Trial</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    background: #000;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    flex-shrink: 0;
+  }
+  .top-bar-left { display: flex; align-items: center; gap: 18px; }
+  .vzw-logo {
+    font-size: 28px;
+    font-weight: 900;
+    color: #cd040b;
+    letter-spacing: -1px;
+    font-family: Arial Black, Arial, sans-serif;
+  }
+  .top-divider { width: 2px; height: 32px; background: #444; }
+  .top-title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .trial-badge {
+    background: #e65100;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .red-bar { background: #cd040b; height: 5px; flex-shrink: 0; }
+
+  /* ── BODY ── */
+  .body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  /* LEFT */
+  .left {
+    background: #f9f9f9;
+    padding: 26px 36px 22px 40px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .headline-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #cd040b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .headline {
+    font-size: 27px;
+    font-weight: 900;
+    color: #000;
+    line-height: 1.15;
+    margin-bottom: 6px;
+    font-family: Arial Black, Arial, sans-serif;
+  }
+  .headline span { color: #cd040b; }
+  .subhead {
+    font-size: 12.5px;
+    color: #555;
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat-box {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-top: 3px solid #cd040b;
+    border-radius: 3px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .stat-box .num {
+    font-size: 21px;
+    font-weight: 900;
+    color: #cd040b;
+    font-family: Arial Black, Arial, sans-serif;
+    line-height: 1.1;
+  }
+  .stat-box .num.blue { color: #0057a8; }
+  .stat-box .num.green { color: #2e7d32; }
+  .stat-box .lbl { font-size: 10px; color: #666; margin-top: 3px; line-height: 1.3; }
+
+  .problem-block {
+    background: #fff3e0;
+    border-left: 4px solid #e65100;
+    border-radius: 0 3px 3px 0;
+    padding: 10px 14px;
+  }
+  .problem-block .pb-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #e65100;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  .problem-list { list-style: none; padding: 0; }
+  .problem-list li {
+    font-size: 11.5px;
+    color: #444;
+    padding: 2px 0 2px 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .problem-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: #e65100;
+    font-weight: 700;
+  }
+
+  /* RIGHT */
+  .right {
+    padding: 24px 36px 22px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #0057a8;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  /* Before / After */
+  .ba-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .ba-card {
+    border-radius: 3px;
+    padding: 10px 12px;
+  }
+  .ba-card.before {
+    background: #ffebee;
+    border: 1px solid #ffcdd2;
+    border-top: 3px solid #cd040b;
+  }
+  .ba-card.after {
+    background: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    border-top: 3px solid #2e7d32;
+  }
+  .ba-card .ba-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .ba-card.before .ba-label { color: #cd040b; }
+  .ba-card.after  .ba-label { color: #2e7d32; }
+  .ba-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    padding: 2px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    color: #444;
+  }
+  .ba-row:last-child { border-bottom: none; }
+  .ba-row .bad  { font-weight: 700; color: #cd040b; }
+  .ba-row .good { font-weight: 700; color: #2e7d32; }
+
+  /* Savings table */
+  .savings-block {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .savings-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    background: #000;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 6px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    gap: 4px;
+  }
+  .savings-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    font-size: 11px;
+    padding: 5px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 4px;
+    align-items: center;
+  }
+  .savings-row:nth-child(2) { background: #fafafa; }
+  .savings-row:nth-child(3) { background: #e8f5e9; }
+  .savings-row:last-child { border-bottom: none; background: #fafafa; }
+  .savings-row .green { color: #2e7d32; font-weight: 700; }
+
+  /* Instrument strip */
+  .instrument-strip {
+    background: #e3f2fd;
+    border: 1px solid #bbdefb;
+    border-left: 4px solid #0057a8;
+    border-radius: 0 3px 3px 0;
+    padding: 7px 12px;
+    font-size: 11px;
+    color: #0d47a1;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .instrument-strip strong { font-weight: 700; }
+
+  .next-block {
+    background: #000;
+    border-radius: 3px;
+    padding: 11px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .next-block .nb-step {
+    background: #e65100;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .next-block .nb-text { font-size: 11.5px; color: #ddd; line-height: 1.45; }
+  .next-block .nb-text strong { color: #fff; }
+
+  /* BOTTOM BAR */
+  .bottom-bar {
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    flex-shrink: 0;
+  }
+  .bottom-vzw-logo {
+    font-family: Arial Black, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: #cd040b;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    text-transform: lowercase;
+  }
+  .bottom-confidential { font-size: 10px; color: #555; text-align: center; flex: 1; padding: 0 20px; }
+
+  .print-hint {
+    position: fixed;
+    bottom: 12px;
+    right: 16px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 3px;
+    font-family: Arial, sans-serif;
+  }
+
+  @media print {
+    body { background: #fff; display: block; }
+    .slide { width: 100%; height: auto; page-break-after: avoid; }
+    .print-hint { display: none; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="vzw-logo">verizon</div>
+      <div class="top-divider"></div>
+      <div class="top-title">CP&amp;G National Planning &nbsp;|&nbsp; Shelter HVAC Efficiency Trial</div>
+    </div>
+    <div class="trial-badge">&#9679; Trial Site: DT Morris &mdash; MDG_LI 5000092014</div>
+  </div>
+
+  <div class="red-bar"></div>
+
+  <div class="body">
+
+    <!-- LEFT -->
+    <div class="left">
+      <div>
+        <div class="headline-label">Eaton SRCOOL3KTP 33U &mdash; Close-Coupled Cabinet Cooling</div>
+        <div class="headline">Eliminate <span>Wall-Pack</span><br>Compressor Runtime</div>
+        <div class="subhead">
+          Install Eaton 33U self-cooling cabinet inside shelter. Migrate remaining equipment in.
+          The Eaton DC-inverter variable-speed compressor matches actual equipment heat load
+          (2–4 kW). Wall-pack WPUs are raised to ~90°F — humidity control and emergency
+          backup only. <strong>WPU compressor runtime drops from ~25–50% annual duty to &lt;5%.</strong>
+        </div>
+      </div>
+
+      <div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="num">~38,000</div>
+            <div class="lbl">VZ Shelter Sites<br>Eligible subset TBD</div>
+          </div>
+          <div class="stat-box">
+            <div class="num green">$400–$1,155</div>
+            <div class="lbl">Savings/Site/Yr<br>Conservative–High</div>
+          </div>
+          <div class="stat-box">
+            <div class="num blue">5.1 kW</div>
+            <div class="lbl">WPU Input at Full Load<br>vs 0.7–1.0 kW Eaton avg</div>
+          </div>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Problem — Oversized WPUs Short-Cycling in Lightly Loaded Shelters</div>
+          <ul class="problem-list">
+            <li>Modern sites with external RRHs: 2–4 kW actual heat load</li>
+            <li>Installed Bard HR58BPA05EP: 3.8-ton actual sensible (46,330 BTU/hr) — 2–3&times; oversized</li>
+            <li>Dead band cycling: on at 81&deg;F, off at 75&deg;F — 5.1 kW compressor cooling empty shelter space</li>
+            <li>N+1 pair (7-day rotation) — only one WPU active, but both maintained at full readiness</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+
+      <div>
+        <div class="section-label">Before vs. After — DT Morris (Bard HR58BPA05EP Baseline)</div>
+        <div class="ba-grid">
+          <div class="ba-card before">
+            <div class="ba-label">Before — WPU at NSTD1000</div>
+            <div class="ba-row"><span>Active WPU input</span><span class="bad">~5.1 kW</span></div>
+            <div class="ba-row"><span>Annual duty cycle</span><span class="bad">25–50%</span></div>
+            <div class="ba-row"><span>WPU run hours/yr</span><span class="bad">2,190–4,380 hr</span></div>
+            <div class="ba-row"><span>WPU energy cost/yr</span><span class="bad">$1,100–$2,230</span></div>
+            <div class="ba-row"><span>Cabinet cooling</span><span class="bad">None</span></div>
+          </div>
+          <div class="ba-card after">
+            <div class="ba-label">After — Eaton Cabinet Installed</div>
+            <div class="ba-row"><span>Eaton avg draw</span><span class="good">0.7–1.0 kW</span></div>
+            <div class="ba-row"><span>WPU backup duty</span><span class="good">&lt;5–10%</span></div>
+            <div class="ba-row"><span>WPU run hours/yr</span><span class="good">438–876 hr</span></div>
+            <div class="ba-row"><span>WPU energy cost/yr</span><span class="good">$254–$508</span></div>
+            <div class="ba-row"><span>Equipment cooling</span><span class="good">Close-coupled 3.5 kW</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Net Annual Savings/Site (WPU Eliminated &minus; Eaton Added)</div>
+        <div class="savings-block">
+          <div class="savings-header">
+            <span>Scenario</span>
+            <span>WPU Duty Before</span>
+            <span>WPU Cost/Yr</span>
+            <span>Eaton Cost/Yr</span>
+            <span>Net Savings</span>
+          </div>
+          <div class="savings-row">
+            <span>Conservative</span>
+            <span>25% — 2,190 hr</span>
+            <span>$1,117</span>
+            <span>$613</span>
+            <span class="green">~$400/yr</span>
+          </div>
+          <div class="savings-row">
+            <span><strong>Middle</strong></span>
+            <span>35% — 3,066 hr</span>
+            <span>$1,564</span>
+            <span>$613</span>
+            <span class="green"><strong>~$785/yr</strong></span>
+          </div>
+          <div class="savings-row">
+            <span>High</span>
+            <span>50% — 4,380 hr</span>
+            <span>$2,234</span>
+            <span>$876</span>
+            <span class="green">~$1,155/yr</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="instrument-strip">
+        <strong>Measured savings, not modeled</strong> — DT Morris instrumented with: WattNode on ILC (total AC kWh) &bull; CTs on WPU-1 &amp; WPU-2 circuits &bull; Eaton WEBCARDLX SNMP (cabinet draw) &bull; GE Infinity NE-M DC plant (control variable — network load unchanged). All via new SiteBoss 550A.
+      </div>
+
+      <div class="next-block">
+        <div class="nb-step">Trial</div>
+        <div class="nb-text">
+          <strong>DT Morris (MDG_LI 5000092014) — Morris, IL — IL/WI sub-market.</strong>
+          Phase 1: 30-day WPU baseline. Phase 2: equipment migration + 60-day post measurement.
+          Fleet rollout decision Dec 2026 based on measured kWh delta.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="bottom-vzw-logo">verizon</div>
+    <div class="bottom-confidential">Verizon confidential and proprietary. Unauthorized disclosure, reproduction or other use prohibited.</div>
+    <div style="width:40px;"></div>
+  </div>
+
+</div>
+
+<div class="print-hint">Ctrl+P &rarr; Save as PDF &nbsp;|&nbsp; Set paper size to 16:9 / landscape</div>
+
+</body>
+</html>
