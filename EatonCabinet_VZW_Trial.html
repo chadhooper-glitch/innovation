@@ -137,7 +137,7 @@
       <tr><td>Compressor/fan health</td><td>Not monitored</td><td>No early warning for compressor failure, refrigerant loss, or VFD issues</td></tr>
       <tr><td>Pressure monitoring</td><td>Not monitored</td><td>High/low refrigerant pressure faults go unreported until unit shuts down</td></tr>
       <tr><td>Cooling output (kW)</td><td>Not tracked</td><td>Energy consumption unknown; no baseline for efficiency improvements</td></tr>
-      <tr><td>WPU overcooling</td><td>5-ton WPUs cooling entire shelter for lightly loaded equipment; dead band cycling but oversized for actual heat load</td><td>WPU runs significant duty cycle to maintain 79&deg;F room temp — far more energy than close-coupled cabinet cooling of the same equipment</td></tr>
+      <tr><td>WPU oversizing &amp; short-cycling</td><td>3.8-ton actual sensible WPUs cooling entire shelter; NSTD1000 notes modern sites with external RRHs have 2&ndash;4 kW load requiring only 1&ndash;1.5 tons &mdash; DT Morris is ~2.5&times; oversized; dead band cycles on at 81&deg;F / off at 75&deg;F</td><td>Oversized unit short-cycles, causing humidity swings, condensation risk, and excess compressor wear; room cooling consumes far more energy than close-coupled cabinet cooling of the same load</td></tr>
     </table>
 
     <div class="warn-box">
@@ -206,7 +206,7 @@
 
   <div class="section-box">
     <div class="info-box">
-      <strong>Basis &mdash; DT Morris Trial:</strong> Two Bard <strong>HR58BPA05EP</strong> 5-ton Wall Pack Units (WPUs), R-410A, ~5.8 kW electrical input at full load. <strong>N+1 configuration</strong> &mdash; one active unit at a time, alternating every 7 days. Active WPU cycles on dead band: <strong>setpoint 79&deg;F &rarr; kicks on at 81&deg;F &rarr; cools to 77&deg;F &rarr; shuts off</strong>. Not continuous runtime &mdash; duty cycle is driven by ambient climate and internal heat load. Goal: migrate remaining equipment into Eaton 33U self-cooling cabinet; raise WPU setpoint to ~90&deg;F or humidity-only mode; reduce WPU runtime to near zero.
+      <strong>Basis &mdash; DT Morris Trial (per NSTD1000 Cell Site HVAC Standard, rev. 04-22-26):</strong> Two Bard <strong>HR58BPA05EP</strong> Wall Pack Units, R-410A, 11 EER, ~5.1 kW electrical input at full load. Nameplate is 5-ton but <strong>actual sensible capacity = 3.8 tons</strong> (46,330 BTU/hr per AHRI 390). <strong>N+1 &mdash; one active unit, 7-day auto-sequence rotation.</strong> Active WPU cycles on NSTD1000 standard dead band: <strong>setpoint 79&deg;F &rarr; kicks on at 81&deg;F (+2&deg;F) &rarr; cools to 75&deg;F (&minus;4&deg;F) &rarr; shuts off</strong>. Modern sites with external RRHs yield 2&ndash;4 kW internal load (NSTD1000 &sect;1.1) &mdash; DT Morris 3.8-ton actual capacity is ~2.5&times; oversized for current heat load, causing short-cycling. Goal: migrate remaining equipment into Eaton 33U self-cooling cabinet; raise WPU setpoint to ~90&deg;F (humidity/emergency backup); reduce WPU runtime to near zero.
     </div>
 
     <h3>WPU Duty Cycle &mdash; Current State Baseline (One Active Unit)</h3>
@@ -216,7 +216,7 @@
       <tr><td>Middle (IL/WI summer-weighted)</td><td>35%</td><td>3,066</td><td>17,783</td><td><strong>$1,778</strong></td></tr>
       <tr><td>High (hot summer, higher ambient)</td><td>50%</td><td>4,380</td><td>25,404</td><td><strong>$2,540</strong></td></tr>
     </table>
-    <p style="font-size:11px;color:#888;margin:0 0 14px 0;">Bard HR58BPA05EP: 5 ton, ~5.8 kW input at full load. Dead band: on at 81&deg;F, off at 77&deg;F (4&deg;F swing). One active unit at a time (N+1, 7-day rotation). $0.10/kWh blended rate.</p>
+    <p style="font-size:11px;color:#888;margin:0 0 14px 0;">Bard HR58BPA05EP: 11 EER, ~5.1 kW input at full load (56,000 BTU/hr &divide; 11 EER). NSTD1000 dead band: on at 81&deg;F (+2&deg;F above setpoint), off at 75&deg;F (&minus;4&deg;F below setpoint) &mdash; 6&deg;F total swing. One active unit at a time (N+1, 7-day rotation per NSTD1000 &sect;2.17). $0.10/kWh blended rate.</p>
 
     <h3>Post-Eaton Cabinet &mdash; WPU Reduced to Humidity / Emergency Backup</h3>
     <table>
@@ -281,7 +281,7 @@
         <div class="tl-body">
           <div class="tl-date">August &mdash; September 2026 &mdash; Pending</div>
           <div class="tl-title">Equipment Migration &amp; WPU Baseline Capture</div>
-          <div class="tl-desc">Capture 30-day WPU runtime baseline at current 79&deg;F setpoint (dead band 77&ndash;81&deg;F, N+1 7-day rotation) before migration. Migrate existing shelter equipment (Ericsson baseband, switches, Telect DC fuse panels, patch panels) into Eaton 33U self-cooling cabinet. After migration, raise WPU setpoint to ~90&deg;F (humidity/emergency backup only). Log SiteBoss DC plant current, Eaton cabinet SNMP data (return air temp, compressor current, cooling kW, VFD Hz), and WPU runtime before/after to quantify duty cycle delta.</div>
+          <div class="tl-desc">Capture 30-day WPU runtime baseline at current 79&deg;F setpoint (NSTD1000 dead band: on at 81&deg;F / off at 75&deg;F, N+1 7-day rotation) before migration. Migrate existing shelter equipment (Ericsson baseband, switches, Telect DC fuse panels, patch panels) into Eaton 33U self-cooling cabinet. After migration, raise WPU setpoint to ~90&deg;F (humidity/emergency backup only). Log SiteBoss DC plant current, Eaton cabinet SNMP data (return air temp, compressor current, cooling kW, VFD Hz), and WPU runtime before/after to quantify duty cycle delta.</div>
         </div>
       </div>
 
@@ -338,7 +338,8 @@
       <tr><td>Script file</td><td>Chad Trial Folder\HVAC Cabinet\eaton_cabinet_monitor.lua</td></tr>
       <tr><td>MIB source</td><td>Chad Trial Folder\HVAC Cabinet\tripplite-mib.zip (TRIPPLITE-PRODUCTS.MIB v20.0.2)</td></tr>
       <tr><td>Cooling capacity (Eaton)</td><td>3.5 kW (12 kBTU/hr); DC-inverter variable-speed compressor modulates to actual heat load</td></tr>
-      <tr><td>Existing WPU (DT Morris baseline)</td><td>Bard HR58BPA05EP &mdash; 5 ton (60,000 BTU/hr), R-410A, 147 oz, ~5.8 kW input at full load; N+1 pair; setpoint 79&deg;F, dead band on at 81&deg;F / off at 77&deg;F, 7-day rotation</td></tr>
+      <tr><td>Existing WPU (DT Morris baseline)</td><td>Bard HR58BPA05EP &mdash; 5-ton nameplate, <strong>3.8-ton actual sensible</strong> (46,330 BTU/hr per AHRI 390), 11 EER, ~5.1 kW input at full load, R-410A, 147 oz; N+1 pair; NSTD1000 setpoint 79&deg;F, dead band on at 81&deg;F / off at 75&deg;F (+2/&minus;4&deg;F), 7-day auto-sequence rotation; humidity control 70% RH; high temp alarm 85&deg;F (6&deg;F above setpoint)</td></tr>
+      <tr><td>Governing standard</td><td>NSTD1000 Cell Site HVAC Standard, rev. 04-22-26 &mdash; approved WPU manufacturers: Airsys, Bard, Marvair; right-sizing tool: OTHR3000; modern sites with external RRHs: 2&ndash;4 kW heat load, ~1&ndash;1.5 tons sensible cooling required</td></tr>
     </table>
   </div>
 
