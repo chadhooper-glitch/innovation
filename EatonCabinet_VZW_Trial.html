@@ -95,8 +95,8 @@
 
   <div class="stat-grid">
     <div class="stat-card blue">
-      <div class="num">14,792</div>
-      <div class="lbl">Outdoor Cabinet Sites<br><span style="font-size:10px;">(Ericsson + SE markets; Samsung pending)</span></div>
+      <div class="num">~38,000</div>
+      <div class="lbl">VZ Shelter Sites<br><span style="font-size:10px;">Eligible subset TBD after DT Morris trial</span></div>
     </div>
     <div class="stat-card red">
       <div class="num">20</div>
@@ -113,14 +113,14 @@
   </div>
 
   <div class="section-box">
-    <p>Verizon operates <strong>14,792 outdoor cabinet sites</strong> (Ericsson and Southeast markets; Samsung markets analysis pending) equipped with Eaton / Tripp-Lite precision cooling units managed by the <strong>WEBCARDLX LX Platform</strong>. These cabinets have no existing remote temperature monitoring or setpoint control capability in the standard SiteBoss alarming configuration &mdash; operators cannot view real-time cooling conditions or adjust setpoints without a physical site visit.</p>
+    <p>Verizon operates approximately <strong>38,000 cell site shelters</strong> cooled by wall-pack HVAC units (Bard, Marvair, Airsys) sized to NSTD1000's legacy full-equipment load. Modern sites with external RRHs carry only 2&ndash;4 kW of actual heat load &mdash; yet the installed 5-ton Bard HR58BPA05EP delivers 3.8-ton actual sensible capacity (46,330 BTU/hr, 5.1 kW input) at NSTD1000's 11 EER rating. The result is a 2&ndash;3&times; oversized cooling plant running in short-cycle dead band (on at 81&deg;F, off at 75&deg;F), consuming compressor energy to cool largely empty shelter space.</p>
 
-    <p>This initiative deploys a <strong>SiteBoss Lua script</strong> that polls each cabinet HVAC unit every 5 minutes via SNMPv2c and controls cooling setpoints remotely via the PADM20 HTTP REST API. The script is fully integrated with the existing SiteBoss infrastructure &mdash; no new hardware required.</p>
+    <p>This initiative installs an <strong>Eaton SRCOOL3KTP 33U self-cooling cabinet</strong> inside the shelter and migrates the remaining equipment into it. The Eaton cabinet's DC-inverter variable-speed compressor provides close-coupled precision cooling matched to the actual equipment heat load (&lt;3.5 kW). The wall-pack WPUs are then placed in standby at a raised setpoint (~90&deg;F) &mdash; available for humidity control and emergency backup per NSTD1000 N+1 requirements &mdash; with compressor runtime reduced to near-zero under normal conditions. A <strong>SiteBoss Lua script</strong> polls the Eaton cabinet every 5 minutes via SNMP (WEBCARDLX LX Platform) and controls setpoints via the PADM20 HTTP REST API. WattNode AC metering and CT current sensors on the SiteBoss provide before/after kWh measurement.</p>
 
     <div class="highlight-box">
-      <strong>&#10003; No new hardware required</strong> &mdash; leverages existing SiteBoss 550A units already deployed at cabinet sites.<br>
-      <strong>&#10003; Dual control path</strong> &mdash; SNMP monitoring + HTTP setpoint write in a single Lua script.<br>
-      <strong>&#10003; Fleet-ready</strong> &mdash; script accepts configurable IP, community, and credentials; deployable at scale via SiteBoss Lua slot.
+      <strong>&#10003; Close-coupled precision cooling</strong> &mdash; Eaton variable-speed compressor modulates to actual heat load; avg draw 0.7&ndash;1.0 kW vs. 5.1 kW per WPU at full load.<br>
+      <strong>&#10003; WPU duty cycle eliminated</strong> &mdash; wall-pack compressor runtime drops from ~25&ndash;50% annual duty to &lt;5% emergency/humidity backup only.<br>
+      <strong>&#10003; Measured savings, not modeled</strong> &mdash; WattNode on ILC + CT sensors on WPU circuits provide independent before/after kWh data via SiteBoss.
     </div>
   </div>
 
@@ -367,19 +367,20 @@
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════ -->
-  <h2>7. Fleet Scope &mdash; Cabinet Sites by Market</h2>
+  <h2>7. Fleet Scope &mdash; Shelter Sites with Wall-Pack HVAC</h2>
   <!-- ═══════════════════════════════════════════════════════════ -->
 
   <div class="section-box">
     <div class="info-box" style="margin:0 0 14px 0;">
-      <strong>Source:</strong> Cabinet_Sites_Master.xlsx (Downloads) &mdash; 14,792 live cabinet sites across Ericsson and Southeast markets as of June 2026. Three tabs: Tripp-Lite WEBCARDLX, non-WEBCARDLX HVAC, and no HVAC. Samsung market analysis in progress.
+      VZ operates approximately <strong>38,000 cell site shelters</strong> nationwide. Eligible sites for this initiative are shelters with: (1) lightly loaded equipment that consolidates into a 33U cabinet footprint, (2) wall-pack WPU HVAC (Bard, Marvair, or Airsys), and (3) existing or planned SiteBoss. Exact eligible count requires market-by-market analysis &mdash; <strong>to be conducted after DT Morris trial validates the energy model.</strong>
     </div>
     <table>
-      <tr><th>Market Segment</th><th style="text-align:right">Sites</th><th>HVAC Controller</th><th>Script Compatible</th></tr>
-      <tr><td>Ericsson markets</td><td style="text-align:right">~12,000</td><td>Eaton / Tripp-Lite WEBCARDLX</td><td style="color:#2e7d32;font-weight:700;">&#10003; Yes</td></tr>
-      <tr><td>Southeast markets</td><td style="text-align:right">~2,792</td><td>Eaton / Tripp-Lite WEBCARDLX</td><td style="color:#2e7d32;font-weight:700;">&#10003; Yes</td></tr>
-      <tr><td>Samsung markets</td><td style="text-align:right">TBD</td><td>WEBCARDLX (same platform)</td><td style="color:#e65100;font-weight:700;">&#9888; Analysis pending</td></tr>
-      <tr><td style="background:#000;color:#fff;font-weight:700;">Current Total</td><td style="text-align:right;background:#000;color:#fff;font-weight:700;">14,792</td><td style="background:#000;color:#fff;"></td><td style="background:#cd040b;color:#fff;font-weight:700;">&#10003; Ready to deploy</td></tr>
+      <tr><th>Eligibility Criterion</th><th>Status</th><th>Notes</th></tr>
+      <tr><td>Equipment fits 33U cabinet</td><td style="color:#e65100;font-weight:700;">&#9888; Site-by-site assessment</td><td>DT Morris confirmed: Ericsson baseband, switches, Telect fuse panels, patch panels</td></tr>
+      <tr><td>Wall-pack WPU installed (Bard/Marvair/Airsys)</td><td style="color:#2e7d32;font-weight:700;">&#10003; Most shelter sites</td><td>NSTD1000 approved manufacturers; Bard HR58 most common in IL/WI market</td></tr>
+      <tr><td>SiteBoss present or planned</td><td style="color:#2e7d32;font-weight:700;">&#10003; Broad deployment</td><td>New SiteBoss 550A being installed at DT Morris; existing fleet already instrumented</td></tr>
+      <tr><td>Eaton WEBCARDLX LX Platform</td><td style="color:#2e7d32;font-weight:700;">&#10003; Standard on SRCOOL3KTP</td><td>SNMP + HTTP control via Lua script; no additional gateway hardware</td></tr>
+      <tr><td style="background:#000;color:#fff;font-weight:700;">Eligible Fleet Estimate</td><td style="background:#000;color:#fff;color:#fff;font-weight:700;">TBD after DT Morris</td><td style="background:#000;color:#fff;">See Financial Opportunity §4 for 1K / 2.5K / 5K site extrapolations</td></tr>
     </table>
   </div>
 
