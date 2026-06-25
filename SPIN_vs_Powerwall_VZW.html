@@ -81,7 +81,7 @@
       <ul>
         <li>Residential product — consumer warranty, consumer support</li>
         <li>10-year replacement cycle (better than VRLA, still a replacement program)</li>
-        <li>Fails NEBS GR-63: discharge floor −4°F (−20°C), charge floor +32°F (0°C) — VZW requires −40°F (−40°C)</li>
+        <li>Fails NEBS GR-63: operating floor −4°F (−20°C) per official datasheet — VZW requires −40°F (−40°C); de-rated above +104°F</li>
         <li>Not NEBS certified — hard disqualifier for VZW network equipment</li>
         <li>Proprietary monitoring — no SiteBoss / RMU integration</li>
         <li>Chemistry degradation — capacity declines over time</li>
@@ -144,10 +144,9 @@
       <td><strong>Operating Temperature</strong></td>
       <td class="spin-win"><strong>−40°C to +65°C&nbsp;&nbsp;(−40°F to +149°F)</strong><br><span style="font-size:12px;">Full NEBS GR-63 envelope ✓</span></td>
       <td class="pw-win fail">
-        <strong>Discharge:</strong> −20°C to +50°C &nbsp;(−4°F to +122°F)<br>
-        <strong>Charge:&nbsp;&nbsp;&nbsp;&nbsp;</strong> 0°C to +40°C &nbsp;&nbsp;(+32°F to +104°F)<br>
-        <span style="color:#c62828;font-size:12px;">Will NOT charge below freezing — dead after a winter outage until temps rise above 32°F.<br>
-        Does NOT meet NEBS GR-63 low-temp floor of −40°C / −40°F.</span>
+        <strong>−20°C to +50°C &nbsp;(−4°F to +122°F)</strong> — per official Tesla datasheet<br>
+        <span style="color:#c62828;font-size:12px;">Does NOT meet NEBS GR-63 low-temp floor of −40°C / −40°F (36°F gap).<br>
+        Performance is de-rated above +40°C / +104°F per Tesla footnote — hot-climate sites affected.</span>
         <span class="badge badge-red">HARD FAIL</span>
       </td>
     </tr>
@@ -295,46 +294,32 @@
   <h2>Critical Disqualifiers — Tesla Powerwall 3 at VZW</h2>
 
   <div class="disqualifier">
-    <strong>1. NEBS GR-63 Low-Temperature Failure (Two Counts):</strong>
-    Powerwall 3 has two operating temperature limits — both fail VZW's standard:
-    <ul style="margin:8px 0 0 0;">
-      <li><strong>Discharge floor: −20°C / −4°F</strong> — stops delivering backup power below this. NEBS GR-63 requires −40°C / −40°F. Gap: 36°F.</li>
-      <li><strong>Charge floor: 0°C / +32°F</strong> — will not recharge below freezing. After a winter outage, the Powerwall remains dead until ambient temps exceed 32°F — the site has no backup protection for the rest of the weather event. SPIN operates across its full envelope (−40°C to +65°C / −40°F to +149°F) in both charge and discharge. NEBS GR-63 is a hard network equipment requirement — not optional.</li>
-    </ul>
+    <strong>1. NEBS GR-63 Low-Temperature Failure:</strong> Per the official Tesla Powerwall 3 datasheet, minimum operating temperature is −20°C / −4°F. VZW cell sites in northern markets (MN, ND, MT, WI, upstate NY) routinely see −40°F ambient. Any shelter HVAC failure in winter puts the Powerwall out of spec — a 36°F gap from the NEBS GR-63 floor. Additionally, the datasheet notes performance is de-rated above +40°C / +104°F — a secondary exposure at hot-climate sites in AZ, TX, and FL. SPIN operates across −40°C to +65°C / −40°F to +149°F without de-rating. NEBS GR-63 is a hard VZW network equipment requirement, not optional.
   </div>
 
   <div style="background:#1a1a2e;border-left:6px solid #cd040b;border-radius:0 6px 6px 0;padding:18px 22px;margin:8px 0 16px 0;color:#fff;">
     <div style="font-size:12px;font-weight:700;color:#cd040b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Plain Language — For the Meeting</div>
     <p style="margin:0 0 10px 0;font-size:14px;line-height:1.7;">
       <strong style="color:#fff;">A lower minimum temperature = tougher equipment.</strong>
-      The Powerwall has <em>two</em> temperature limits — and both fail VZW's network:
-      it stops <em>discharging</em> below <strong style="color:#f9a825;">−4°F (−20°C)</strong>, and it stops
-      <em>charging</em> below <strong style="color:#ff7043;">+32°F (0°C)</strong> — it cannot recharge after a winter outage
-      until ambient temps rise above freezing. NEBS GR-63 requires equipment to survive to
-      <strong style="color:#4fc3f7;">−40°F (−40°C)</strong>. That is a <strong style="color:#cd040b;">36°F gap on discharge and a 72°F gap on charge.</strong>
+      The Powerwall stops working below <strong style="color:#f9a825;">−4°F (−20°C)</strong> — confirmed on the official Tesla datasheet.
+      Verizon's NEBS GR-63 standard requires equipment to survive down to <strong style="color:#4fc3f7;">−40°F (−40°C)</strong>.
+      That is a <strong style="color:#cd040b;">36-degree gap</strong> — the Powerwall is not rated cold enough.
+      On the other end, performance is de-rated above <strong style="color:#f9a825;">+104°F (+40°C)</strong> — a problem for sites in AZ, TX, and FL.
     </p>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;">
-      <div style="background:#b71c1c;border-radius:4px;padding:12px 14px;text-align:center;">
-        <div style="font-size:11px;font-weight:700;color:#ffcdd2;margin-bottom:6px;">POWERWALL DISCHARGE FLOOR</div>
-        <div style="font-size:26px;font-weight:700;color:#fff;">−4°F</div>
-        <div style="font-size:11px;color:#ffcdd2;margin-top:4px;">−20°C<br><em>Stops discharging below this</em></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
+      <div style="background:#b71c1c;border-radius:4px;padding:14px 16px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#fff;">−4°F</div>
+        <div style="font-size:11px;color:#ffcdd2;margin-top:4px;">Tesla Powerwall 3<br>Minimum Operating Temperature<br><em>Per official Tesla datasheet</em></div>
       </div>
-      <div style="background:#7b1fa2;border-radius:4px;padding:12px 14px;text-align:center;">
-        <div style="font-size:11px;font-weight:700;color:#e1bee7;margin-bottom:6px;">POWERWALL CHARGE FLOOR</div>
-        <div style="font-size:26px;font-weight:700;color:#fff;">+32°F</div>
-        <div style="font-size:11px;color:#e1bee7;margin-top:4px;">0°C<br><em>Won't recharge below freezing</em></div>
-      </div>
-      <div style="background:#1b5e20;border-radius:4px;padding:12px 14px;text-align:center;">
-        <div style="font-size:11px;font-weight:700;color:#c8e6c9;margin-bottom:6px;">VZW NEBS GR-63 REQUIREMENT</div>
-        <div style="font-size:26px;font-weight:700;color:#fff;">−40°F</div>
-        <div style="font-size:11px;color:#c8e6c9;margin-top:4px;">−40°C<br><em>MN, ND, MT, WI, Upstate NY</em></div>
+      <div style="background:#1b5e20;border-radius:4px;padding:14px 16px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#fff;">−40°F</div>
+        <div style="font-size:11px;color:#c8e6c9;margin-top:4px;">VZW NEBS GR-63 Requirement<br>Minimum Equipment Must Survive<br><em>MN, ND, MT, WI, Upstate NY</em></div>
       </div>
     </div>
     <p style="margin:14px 0 0 0;font-size:13px;color:#ccc;line-height:1.6;">
       If a cell site's HVAC fails on a January night in Fargo and the shelter drops to −20°F,
-      the Powerwall shuts down. When utility power restores, it still won't recharge if temps
-      are below 32°F — leaving the site unprotected through the rest of the winter storm.
-      <strong style="color:#fff;">NEBS GR-63 exists precisely to prevent this scenario.</strong>
+      the Powerwall shuts down. That is a backup power system failing during a weather emergency —
+      exactly when the network needs it most. <strong style="color:#fff;">NEBS GR-63 exists precisely to prevent this scenario.</strong>
     </p>
   </div>
 
