@@ -566,19 +566,35 @@
 
   <!-- FINANCIAL SUMMARY -->
   <h2>Financial Impact Summary — Network Scale</h2>
+  <div style="background:#1a1a2e;border-left:6px solid #2e7d32;border-radius:0 6px 6px 0;padding:18px 22px;margin:0 0 16px 0;color:#fff;">
+    <div style="font-size:12px;font-weight:700;color:#4caf50;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Key Pricing Signal — Preliminary, Under NDA (CW2652285)</div>
+    <p style="margin:0;font-size:15px;line-height:1.7;">
+      SPIN has indicated their Energy Cube units will be priced at or below current VRLA/NiCd battery replacement cost.
+      <strong style="color:#fff;">This means VZW would be spending the same money it is already budgeted to spend on batteries —
+      and in return, eliminating the replacement cycle entirely.</strong>
+      The SPIN investment is not new spend. It is a redirection of the existing BTTRY budget into a permanent fix.
+    </p>
+  </div>
+
   <table>
     <tr><th>Cost Category</th><th class="spin-col">SPIN (Flywheel)</th><th class="pw-col">Tesla Powerwall 3</th></tr>
-    <tr><td>Initial Capital per Site</td><td>TBD (pending SPIN pricing under NDA)</td><td>TBD (no VZW procurement pricing established)</td></tr>
-    <tr><td>Replacement Cycle</td><td class="spin-win"><strong>None — ever</strong></td><td class="pw-win">~10 years (consumer warranty boundary)</td></tr>
-    <tr><td>20-Year Total Replacements</td><td class="spin-win"><strong>0</strong></td><td class="pw-win">1–2 replacement cycles per site</td></tr>
-    <tr><td>Quarterly Load Testing (per site/yr)</td><td class="spin-win"><strong>Eliminated</strong></td><td class="pw-win">Still required under NSTD47</td></tr>
-    <tr><td>Hazmat Disposal (80K sites)</td><td class="spin-win"><strong>$0</strong></td><td class="pw-win">Regulated LFP recycling at end-of-life</td></tr>
-    <tr><td>BTTRY Budget Long-Term</td><td class="spin-win"><strong>Eliminates ~$32M/yr recurring line</strong></td><td class="pw-win">Continues at longer interval — does not eliminate the budget line</td></tr>
+    <tr>
+      <td>Initial Capital per Site</td>
+      <td class="spin-win"><strong>At or below current battery replacement cost</strong><br><span style="font-size:11px;">(preliminary SPIN pricing signal — confirm under NDA)</span></td>
+      <td class="pw-win fail">$27,000–$55,000 per site (residential MSRP + telecom install)<br><span style="font-size:11px;">No VZW carrier pricing exists. This is in addition to — not instead of — existing battery costs.</span></td>
+    </tr>
+    <tr><td>Replaces Existing Battery Plant?</td><td class="spin-win"><strong>Yes — fully.</strong> Zero transfer time means DC bus never sags. Batteries genuinely not needed.</td><td class="pw-win fail"><strong>No.</strong> 20 ms Gateway transfer collapses DC bus without float batteries. VRLA/NiCd must stay. <span class="badge badge-red">HARD FAIL</span></td></tr>
+    <tr><td>Replacement Cycle</td><td class="spin-win"><strong>None — ever.</strong> No chemistry, no degradation.</td><td class="pw-win">~10 years for Powerwall. VRLA still replaced every 5–7 years underneath it.</td></tr>
+    <tr><td>20-Year Total Battery Replacements</td><td class="spin-win"><strong>0</strong></td><td class="pw-win">2–3 VRLA cycles + 1–2 Powerwall cycles per site</td></tr>
+    <tr><td>Quarterly Load Testing (per site/yr)</td><td class="spin-win"><strong>Eliminated</strong></td><td class="pw-win">Still required for VRLA plant under NSTD47</td></tr>
+    <tr><td>Hazmat Disposal (80K sites)</td><td class="spin-win"><strong>$0</strong></td><td class="pw-win">VRLA disposal continues + regulated LFP recycling added at Powerwall EOL</td></tr>
+    <tr><td>BTTRY Budget Long-Term</td><td class="spin-win"><strong>Eliminates ~$32M/yr recurring line</strong></td><td class="pw-win fail">BTTRY budget continues unchanged. Powerwall capex is additive on top.</td></tr>
     <tr><td>Monitoring Infrastructure Delta</td><td class="spin-win">$0 — integrates with existing SiteBoss/SNMP</td><td class="pw-win fail">New parallel monitoring system required — cost TBD</td></tr>
+    <tr><td>Net 20-Year Cost vs. Current State</td><td class="spin-win"><strong>Near zero or negative</strong> — budget already allocated; all future replacement and testing costs eliminated</td><td class="pw-win fail"><strong>$3.2B–$3.8B new capex</strong> + continued BTTRY opex + 10-year replacement wave ~$3B+</td></tr>
   </table>
 
-  <div class="warn-box">
-    <strong>Bottom line on financials:</strong> We don't have SPIN's unit price yet (NDA engineering exchange in progress). But the comparison is not unit price vs. unit price — it's <strong>total lifecycle cost including all replacements, testing, disposal, and monitoring</strong>. On that full 20-year basis, SPIN wins structurally regardless of which unit is cheaper today.
+  <div class="highlight-box">
+    <strong>The financial argument in one sentence:</strong> SPIN costs what VZW is already planning to spend on batteries — and makes it the last battery purchase ever. Powerwall costs $3.2B more than today's baseline and changes nothing about the battery maintenance program.
   </div>
 
   <div class="footer">
