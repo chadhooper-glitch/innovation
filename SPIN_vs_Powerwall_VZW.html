@@ -378,6 +378,112 @@
     <strong>Note:</strong> Even in a head-to-head trial, Powerwall cannot be deployed on sites below −4°F ambient risk without a heating solution — which adds cost and complexity that SPIN does not require.
   </div>
 
+  <!-- CELL SITE SIZING -->
+  <h2>How Many Powerwall Units Does a VZW Cell Site Actually Need?</h2>
+
+  <div class="section-box">
+    <strong>Typical VZW macro site load (DC load + HVAC):</strong>
+    <table style="margin:10px 0;">
+      <tr><th>Load Component</th><th>kW</th><th>Notes</th></tr>
+      <tr><td>DC equipment (radios, BBUs, etc.) — 9 kW at −48V through rectifiers</td><td>~10.0 kW AC</td><td>~90% rectifier efficiency adds ~10% overhead</td></tr>
+      <tr><td>3-ton HVAC Wall Pack Unit (Bard WPU, running load)</td><td>~3.5 kW AC</td><td>Startup surge: 150–185A LRA</td></tr>
+      <tr><td><strong>Total site running load</strong></td><td><strong>~13.5 kW</strong></td><td></td></tr>
+    </table>
+    <em style="font-size:12px;">Note: Powerwall outputs 120/240 VAC split-phase. The cell site's DC equipment requires rectifiers to remain powered during the outage to convert AC back to −48 VDC, adding the ~10% conversion loss above.</em>
+  </div>
+
+  <table>
+    <tr>
+      <th>Configuration</th>
+      <th>Units</th>
+      <th>Total Energy</th>
+      <th>Runtime @ 13.5 kW</th>
+      <th>NSTD900?</th>
+      <th>Equipment Cost (MSRP)</th>
+    </tr>
+    <tr>
+      <td><strong>Minimum — gen sites</strong><br><em>1-hr reserve required</em></td>
+      <td>2 × Powerwall 3</td>
+      <td>27 kWh</td>
+      <td>~2.0 hrs</td>
+      <td class="pass">✓ With generator</td>
+      <td>~$20,100</td>
+    </tr>
+    <tr>
+      <td><strong>Minimum — no-gen sites</strong><br><em>3-hr reserve required</em></td>
+      <td>3 × Powerwall 3</td>
+      <td>40.5 kWh</td>
+      <td>~3.0 hrs</td>
+      <td class="pass">✓ Without generator</td>
+      <td>~$29,400</td>
+    </tr>
+    <tr>
+      <td><strong>Extended runtime</strong></td>
+      <td>4 × Powerwall 3 + 3 × Expansion</td>
+      <td>94.5 kWh</td>
+      <td>~7.0 hrs</td>
+      <td class="pass">✓</td>
+      <td>~$52,000</td>
+    </tr>
+  </table>
+
+  <div class="danger-box">
+    <strong>Key constraints from the 2025 Tesla datasheet:</strong>
+    <ul>
+      <li><strong>Maximum system: 4 Powerwall 3 inverter units + 3 Expansion units = 7 total.</strong> Expansion units add energy only — no additional inverter capacity. Max power is still capped at 4 × 11.5 kW = 46 kW.</li>
+      <li><strong>Expansion stacking requires floor mount only</strong> — wall-mount configurations cannot stack Expansion units. Cell shelter floor space is limited; many sites cannot accommodate this layout.</li>
+      <li><strong>Expansion units are not field serviceable</strong> — per the Tesla datasheet. Entire unit must be replaced on failure. On a carrier network this is a critical operational gap.</li>
+      <li><strong>Expansion units use a proprietary harness</strong> — only compatible with Powerwall 3. No standard DC bus interface, no SiteBoss integration path.</li>
+      <li><strong>No VZW carrier pricing exists</strong> — all figures above are residential MSRP. Actual telecom procurement pricing is unknown. No carrier-tier volume agreement has ever been negotiated with Tesla for this product.</li>
+    </ul>
+  </div>
+
+  <h2>Cost at Scale — 80,259 VZW Macro Sites</h2>
+
+  <table>
+    <tr>
+      <th>Scenario</th>
+      <th>Sites</th>
+      <th>Units/Site</th>
+      <th>Equipment Cost (MSRP)</th>
+      <th>+ Install &amp; Permitting <span style="font-weight:400;font-size:11px;">(est. $18K–$25K/site)</span></th>
+      <th>Total Deployment Cost</th>
+    </tr>
+    <tr>
+      <td>Generator sites (78.7%) — 1-hr reserve</td>
+      <td>63,164</td>
+      <td>2 × PW3</td>
+      <td>$1.27B</td>
+      <td>$1.14B–$1.58B</td>
+      <td class="pw-win"><strong>$2.4B–$2.9B</strong></td>
+    </tr>
+    <tr>
+      <td>No-generator sites (21.3%) — 3-hr reserve</td>
+      <td>17,095</td>
+      <td>3 × PW3</td>
+      <td>$502M</td>
+      <td>$308M–$427M</td>
+      <td class="pw-win"><strong>$810M–$929M</strong></td>
+    </tr>
+    <tr style="background:#ffebee;">
+      <td><strong>TOTAL NETWORK DEPLOYMENT</strong></td>
+      <td><strong>80,259</strong></td>
+      <td>—</td>
+      <td><strong>$1.77B</strong></td>
+      <td><strong>$1.45B–$2.0B</strong></td>
+      <td><strong style="color:#b71c1c;font-size:15px;">$3.2B–$3.8B</strong></td>
+    </tr>
+    <tr>
+      <td colspan="6" style="font-size:11px;color:#888;background:#fff;">
+        Equipment: Powerwall 3 @ $9,300/unit MSRP + Gateway 3 @ $1,500/site. Install: estimated $15,000–$20,000/site (telecom contractor rate, not residential rate). Permitting: NFPA 855 AHJ review estimated $2,000–$5,000/site. Monitoring integration cost not included. Replacement cycle at ~10 years not included. All pricing residential MSRP — no VZW volume discount exists.
+      </td>
+    </tr>
+  </table>
+
+  <div class="danger-box">
+    <strong>And that's before the 10-year replacement cycle.</strong> Powerwall 3 warranty is 10 years. At 80,000 sites, the fleet would require a full replacement program starting around 2036 — adding another $3B+ at that time. SPIN eliminates this entirely: no chemistry, no degradation, no replacement cycle, ever.
+  </div>
+
   <!-- FINANCIAL SUMMARY -->
   <h2>Financial Impact Summary — Network Scale</h2>
   <table>
