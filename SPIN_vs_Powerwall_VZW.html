@@ -73,7 +73,9 @@
         <li>20+ year operational life</li>
         <li>No load testing, no hazmat disposal</li>
         <li>Eliminates BTTRY recurring capex long-term</li>
-        <li>Industrial/telecom operating temp range</li>
+        <li>Industrial/telecom operating temp range (−40°F to +149°F)</li>
+        <li>Zero transfer time — flywheel is always spinning; rectifiers never know utility failed</li>
+        <li>Conditions incoming utility power — cleans sags, swells, harmonics; protects rectifier fleet</li>
       </ul>
     </div>
     <div class="verdict-card verdict-pw">
@@ -212,9 +214,25 @@
     </tr>
 
     <tr>
-      <td><strong>DC Bus Architecture</strong></td>
-      <td class="spin-win">AC output feeds upstream of rectifiers. Rectifiers remain on AC bus. DC bus served normally.</td>
-      <td class="pw-win fail"><strong>AC-coupled only.</strong> During outage, Powerwall AC → rectifiers → −48V DC bus. If any rectifier fails during the outage, Powerwall cannot power the site — even if fully charged. SPIN/VRLA sit on the DC bus directly; no rectifier dependency. <span class="badge badge-red">ARCHITECTURE FLAW</span></td>
+      <td><strong>AC-Side Architecture &amp; Transfer Time</strong></td>
+      <td class="spin-win">
+        <strong>Sits on the AC utility input — upstream of the rectifiers.</strong>
+        Flywheel spins continuously, synchronized to utility frequency.
+        On utility failure: flywheel instantly continues supplying clean AC —
+        <strong>rectifiers never see an interruption. Zero transfer time. Zero switching event.</strong>
+        SPIN also <strong>conditions incoming utility power</strong> during normal operation —
+        cleans voltage sags, swells, and harmonics before they reach the rectifiers,
+        reducing rectifier faults and extending plant life.
+      </td>
+      <td class="pw-win fail">
+        <strong>Also AC-coupled — sits upstream of rectifiers via Gateway 3.</strong>
+        However: Gateway must <em>detect</em> the outage, disconnect from grid, and island the site —
+        introducing a measurable transfer switching event (~20 ms typical).
+        Rectifiers see this transition and must remain stable through it.
+        <strong>No power conditioning during normal operation</strong> — dirty utility power passes through untreated.
+        Powerwall inverter THD has never been validated against VZW's rectifier fleet.
+        <span class="badge badge-red">INFERIOR ARCHITECTURE</span>
+      </td>
     </tr>
 
     <tr>
@@ -343,6 +361,14 @@
   <h2>Why SPIN Is the Right Trial for VZW</h2>
 
   <div class="advantage">
+    <strong>No-Break Architecture — Rectifiers Never Know:</strong> SPIN sits on the AC utility input, upstream of the rectifiers. The flywheel spins continuously synchronized to the utility. When utility fails, SPIN instantly continues supplying clean AC — there is no transfer time, no switching event, no voltage sag. The rectifiers see continuous power and keep running. The Powerwall also sits on the AC side, but requires the Gateway to detect the outage and island the site (~20 ms transfer), creating a switching event that the rectifiers must survive. SPIN eliminates that event entirely.
+  </div>
+
+  <div class="advantage">
+    <strong>Power Conditioning — Cleans Dirty Utility:</strong> SPIN conditions incoming utility power during normal operation, filtering voltage sags, swells, frequency deviations, and harmonics before they reach the rectifier plant. This protects the rectifiers, reduces nuisance faults, and extends plant life — a benefit SPIN delivers 24/7, not just during outages. The Powerwall passes utility power through untreated during normal operation.
+  </div>
+
+  <div class="advantage">
     <strong>Purpose-Built for This Problem:</strong> SPIN was designed as a commercial/industrial battery replacement product, not adapted from a residential use case. It targets the exact pain point VZW has at macro sites: recurring VRLA maintenance, load testing, and replacement cycles.
   </div>
 
@@ -389,7 +415,7 @@
       <tr><td>3-ton HVAC Wall Pack Unit (Bard WPU, running load)</td><td>~3.5 kW AC</td><td>Startup surge: 150–185A LRA</td></tr>
       <tr><td><strong>Total site running load</strong></td><td><strong>~13.5 kW</strong></td><td></td></tr>
     </table>
-    <em style="font-size:12px;">Note: Powerwall outputs 120/240 VAC split-phase. The cell site's DC equipment requires rectifiers to remain powered during the outage to convert AC back to −48 VDC, adding the ~10% conversion loss above.</em>
+    <em style="font-size:12px;">Both SPIN and Powerwall supply AC to the rectifiers, which convert to −48 VDC. SPIN's advantage: the flywheel is always spinning — rectifiers see zero interruption, zero transfer event. Powerwall requires a ~20 ms Gateway switching event. The ~10% rectifier conversion overhead applies to both, but SPIN's power conditioning reduces rectifier stress during normal operation.</em>
   </div>
 
   <table>
