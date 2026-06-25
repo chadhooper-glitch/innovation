@@ -236,6 +236,23 @@
     </tr>
 
     <tr>
+      <td><strong>Can Existing Batteries Be Removed?</strong></td>
+      <td class="spin-win">
+        <strong>Yes — batteries genuinely not needed.</strong>
+        Zero transfer time means the DC bus never sags during a utility outage.
+        SPIN is a true battery elimination strategy.
+      </td>
+      <td class="pw-win fail">
+        <strong>No — VRLA/NiCd must remain on the −48V bus.</strong>
+        Gateway 3's ~20 ms transfer gap collapses the DC bus if no batteries are floating on it.
+        Every radio, BBU, and transport device resets — site goes dark.
+        Powerwall <em>requires</em> the existing battery plant to stay in service.
+        <strong>You cannot remove the batteries. Powerwall is an add-on to the battery program, not a replacement for it.</strong>
+        <span class="badge badge-red">HARD FAIL</span>
+      </td>
+    </tr>
+
+    <tr>
       <td><strong>Inverter Harmonic Distortion (THD)</strong></td>
       <td class="spin-win">Commercial/industrial inverter designed for mission-critical loads; waveform quality compatible with telecom rectifiers</td>
       <td class="pw-win fail">Residential inverter THD never validated against VZW rectifier fleet (OmniOn, NE-M). High THD can cause rectifiers to fault or derate output. No test data exists. <span class="badge badge-orange">UNVALIDATED</span></td>
@@ -354,7 +371,44 @@
   </div>
 
   <div class="disqualifier">
-    <strong>5. Still a Replacement Program:</strong> The core problem with VRLA is the recurring 5–7 year replacement cycle. Powerwall stretches that to ~10 years. SPIN eliminates it. If the goal is to stop spending ~$32M/yr on batteries, Powerwall is not the answer — it just reschedules the spend.
+    <strong>5. Still a Replacement Program:</strong> The core problem with VRLA is the recurring 5–7 year replacement cycle. Powerwall stretches that to ~10 years. SPIN eliminates it. If the goal is to stop spending ~$32M/yr on batteries, Powerwall is not the answer — it just reschedules the spend. And as Disqualifier #6 explains, you can't even remove the VRLA batteries in the first place.
+  </div>
+
+  <div class="disqualifier">
+    <strong>6. Powerwall Cannot Replace the Battery Plant — The Site Crashes Without Batteries on the −48V Bus:</strong>
+    The Tesla Gateway 3 requires approximately 20 ms to detect a utility outage, disconnect from the grid, and island the site before Powerwall output reaches the rectifiers. During those 20 ms, the rectifiers have no AC input and cannot sustain the −48V DC bus. <strong>Without VRLA or NiCd batteries floating on the bus, the DC bus collapses and every radio, BBU, and transport device on the site resets — the site goes dark.</strong>
+    <br><br>
+    This means a Powerwall deployment at a VZW cell site <strong>must retain the existing VRLA/NiCd battery plant</strong> to bridge the Gateway transfer gap. The batteries cannot be removed. Powerwall becomes an expensive AC-side addition layered on top of an unchanged battery maintenance program:
+    <ul style="margin:8px 0 0 0;">
+      <li>VRLA still replaced every 5–7 years (or NiCd every 15–20 years)</li>
+      <li>Quarterly load-bank testing still required under NSTD47</li>
+      <li>Hazmat disposal still required at end of battery life</li>
+      <li>NSTD900 battery reserve maintenance still required</li>
+      <li>Powerwall hardware added on top — $27K–$55K per site in new capex</li>
+    </ul>
+    <br>
+    <strong>Powerwall is not a battery elimination strategy. It is a $3.2B addition to an unchanged battery maintenance program.</strong>
+    SPIN's flywheel has zero transfer time — the rectifiers never see an interruption, the DC bus never sags, and there is no momentary gap to bridge. That is why SPIN can genuinely eliminate the battery plant. Powerwall cannot.
+  </div>
+
+  <div style="background:#1a1a2e;border-left:6px solid #cd040b;border-radius:0 6px 6px 0;padding:18px 22px;margin:8px 0 16px 0;color:#fff;">
+    <div style="font-size:12px;font-weight:700;color:#cd040b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Plain Language — For the Meeting</div>
+    <p style="margin:0 0 12px 0;font-size:14px;line-height:1.7;">
+      <strong style="color:#fff;">The Powerwall takes ~20 milliseconds to switch on after a utility outage.</strong>
+      That is long enough for the −48V DC bus to collapse and crash the site.
+      To prevent this, you must keep your VRLA batteries on the DC bus — the same batteries you were trying to replace.
+      <strong style="color:#cd040b;">You cannot remove the batteries. Powerwall is an add-on, not a replacement.</strong>
+    </p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;">
+      <div style="background:#b71c1c;border-radius:4px;padding:14px 16px;text-align:center;">
+        <div style="font-size:26px;font-weight:700;color:#fff;">~20 ms</div>
+        <div style="font-size:11px;color:#ffcdd2;margin-top:4px;">Tesla Gateway 3 Transfer Time<br><em>DC bus collapses — site crashes<br>without batteries to bridge the gap</em></div>
+      </div>
+      <div style="background:#1b5e20;border-radius:4px;padding:14px 16px;text-align:center;">
+        <div style="font-size:26px;font-weight:700;color:#fff;">0 ms</div>
+        <div style="font-size:11px;color:#c8e6c9;margin-top:4px;">SPIN Flywheel Transfer Time<br><em>Rectifiers never know utility failed.<br>Batteries genuinely not needed.</em></div>
+      </div>
+    </div>
   </div>
 
   <!-- WHY SPIN -->
