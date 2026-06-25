@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIN vs Powerwall — Battery Sizing Calculator</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+  .header { background: #000; padding: 16px 28px; }
+  .header h1 { color: #cd040b; margin: 0 0 3px; font-size: 20px; }
+  .header p  { margin: 0; font-size: 12px; color: #aaa; }
+  .container { max-width: 900px; margin: 28px auto; padding: 0 20px 48px; }
+
+  /* ── Section labels ─────────────────────────────────────────────── */
+  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .07em; color: #888; margin: 28px 0 10px;
+    border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+
+  /* ── Base calc ───────────────────────────────────────────────────── */
+  .base-card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 22px 24px; }
+  .base-grid { display: grid; grid-template-columns: 1fr 32px 1fr 32px 1fr; align-items: end; gap: 10px; }
+  .op { text-align: center; font-size: 22px; color: #bbb; padding-bottom: 10px; }
+  .field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .07em; color: #888; margin-bottom: 5px; }
+  .field input { width: 100%; padding: 11px 13px; border: 2px solid #ddd; border-radius: 6px;
+    font-size: 20px; font-family: inherit; background: #fff; transition: border-color .15s, background .15s; }
+  .field input:focus { outline: none; border-color: #cd040b; }
+  .field input.solved { background: #e8f5e9; border-color: #2e7d32; color: #1b5e20; font-weight: 700; }
+  .field .unit { font-size: 11px; color: #aaa; margin-top: 3px; }
+  .hint { font-size: 11px; color: #bbb; text-align: center; margin-top: 10px; }
+  .clear-btn { margin-top: 14px; padding: 8px 18px; background: #f4f4f4; border: 1px solid #ddd;
+    border-radius: 5px; font-size: 12px; color: #888; cursor: pointer; font-family: inherit; }
+  .clear-btn:hover { background: #eee; }
+
+  /* ── Side-by-side comparison ─────────────────────────────────────── */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
+
+  .side { border-radius: 8px; border: 2px solid #ddd; overflow: hidden; }
+  .side.spin-side { border-color: #2e7d32; }
+  .side.pw-side   { border-color: #1a237e; }
+
+  .side-header { padding: 14px 18px 12px; color: #fff; }
+  .spin-side .side-header { background: #1b5e20; }
+  .pw-side   .side-header { background: #1a237e; }
+  .side-header h3 { margin: 0 0 2px; font-size: 15px; }
+  .side-header p  { margin: 0; font-size: 11px; opacity: .8; }
+
+  .side-specs { background: #f9f9f9; padding: 12px 18px; border-bottom: 1px solid #eee; }
+  .side-specs .spec-label { font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .07em; color: #888; margin-bottom: 8px; }
+  .spec-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .spec-field { display: flex; flex-direction: column; }
+  .spec-field label { font-size: 10px; color: #999; margin-bottom: 3px; }
+  .spec-field input { padding: 7px 9px; border: 1.5px solid #ddd; border-radius: 4px;
+    font-size: 13px; font-family: inherit; background: #fff; width: 100%; }
+  .spec-field input:focus { outline: none; border-color: #555; }
+  .spec-field input[readonly] { background: #f0f0f0; color: #555; }
+
+  .side-results { padding: 14px 18px; background: #fff; }
+  .result-row { display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0; border-bottom: 1px solid #f4f4f4; font-size: 13px; }
+  .result-row:last-child { border-bottom: none; }
+  .result-row .rlbl { color: #666; }
+  .result-row .rval { font-weight: 700; font-size: 14px; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-size: 11px; font-weight: 700; }
+  .badge.pass { background: #e8f5e9; color: #2e7d32; }
+  .badge.fail { background: #ffebee; color: #c62828; }
+  .badge.warn { background: #fff8e1; color: #e65100; }
+  .badge.na   { background: #f5f5f5; color: #999; }
+
+  /* ── Winner box ──────────────────────────────────────────────────── */
+  .winner-box { border-radius: 8px; padding: 16px 20px; margin-top: 16px;
+    border: 2px solid #2e7d32; background: #e8f5e9; font-size: 14px; line-height: 1.6; }
+  .winner-box strong { color: #1b5e20; }
+
+  @media (max-width: 600px) {
+    .base-grid    { grid-template-columns: 1fr; }
+    .op           { display: none; }
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>SPIN Energy Cube vs. Tesla Powerwall 3 — Sizing Calculator</h1>
+  <p>Fill in any two of kW / Hours / kWh — the third solves automatically</p>
+</div>
+
+<div class="container">
+
+  <!-- BASE CALCULATOR -->
+  <div class="section-label">Step 1 — Define the Load</div>
+  <div class="base-card">
+    <div class="base-grid">
+      <div class="field">
+        <label>Power (kW)</label>
+        <input type="number" id="kw" value="13.5" min="0" step="any" oninput="calc('kw')">
+        <div class="unit">kilowatts — total site load</div>
+      </div>
+      <div class="op">×</div>
+      <div class="field">
+        <label>Time (Hours)</label>
+        <input type="number" id="hrs" value="3" min="0" step="any" oninput="calc('hrs')">
+        <div class="unit">reserve hours required</div>
+      </div>
+      <div class="op">=</div>
+      <div class="field">
+        <label>Energy (kWh)</label>
+        <input type="number" id="kwh" min="0" step="any" oninput="calc('kwh')">
+        <div class="unit">kilowatt-hours needed</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <button class="clear-btn" onclick="clearAll()">Clear All</button>
+      <span class="hint">Green field = calculated result</span>
+    </div>
+  </div>
+
+  <!-- SIDE BY SIDE -->
+  <div class="section-label">Step 2 — Compare Technologies</div>
+  <div class="compare-grid">
+
+    <!-- SPIN -->
+    <div class="side spin-side">
+      <div class="side-header">
+        <h3>&#9889; SPIN Energy Cube</h3>
+        <p>Kinetic flywheel — no chemistry, no replacement</p>
+      </div>
+      <div class="side-specs">
+        <div class="spec-label">Cube Specifications (enter when available under NDA)</div>
+        <div class="spec-row">
+          <div class="spec-field">
+            <label>kWh per Module</label>
+            <input type="number" id="spin_kwh" value="15" min="0" step="any" oninput="updateAll()">
+          </div>
+          <div class="spec-field">
+            <label>kW Continuous per Module</label>
+            <input type="number" id="spin_kw" value="3" min="0" step="any" oninput="updateAll()">
+          </div>
+          <div class="spec-field">
+            <label>Cost per Module ($)</label>
+            <input type="number" id="spin_cost" placeholder="TBD" min="0" step="any" oninput="updateAll()">
+          </div>
+          <div class="spec-field">
+            <label>Replacement Cycle (yrs)</label>
+            <input type="number" id="spin_life" value="25" readonly style="background:#f0f0f0;color:#2e7d32;font-weight:700;">
+          </div>
+        </div>
+        <div style="font-size:11px;color:#2e7d32;margin-top:8px;">&#10003; CORE-15K: 15 kWh / 3 kW continuous per module · <5 ms response · −40°C to +65°C · 25+ yr life · infinite cycles · NDA CW2652285</div>
+      </div>
+      <div class="side-results" id="spin_results">
+        <div class="result-row"><span class="rlbl">Cubes needed</span><span class="rval" id="spin_units">—</span></div>
+        <div class="result-row"><span class="rlbl">Total energy</span><span class="rval" id="spin_total_kwh">—</span></div>
+        <div class="result-row"><span class="rlbl">Total power capacity</span><span class="rval" id="spin_total_kw"><span class="badge warn">Pending NDA</span></span></div>
+        <div class="result-row"><span class="rlbl">Runtime</span><span class="rval" id="spin_runtime">—</span></div>
+        <div class="result-row"><span class="rlbl">Equipment cost</span><span class="rval" id="spin_eq_cost">—</span></div>
+        <div class="result-row"><span class="rlbl">Cost at 80,259 sites</span><span class="rval" id="spin_network_cost">—</span></div>
+        <div class="result-row"><span class="rlbl">NSTD900 — 1-hr (w/ gen)</span><span class="rval" id="spin_1hr">—</span></div>
+        <div class="result-row"><span class="rlbl">NSTD900 — 3-hr (no gen)</span><span class="rval" id="spin_3hr">—</span></div>
+        <div class="result-row"><span class="rlbl">Response time</span><span class="rval"><span class="badge pass">&lt;5 ms zero-gap</span></span></div>
+        <div class="result-row"><span class="rlbl">Output THD</span><span class="rval"><span class="badge pass">&lt;3%</span></span></div>
+        <div class="result-row"><span class="rlbl">Power factor</span><span class="rval"><span class="badge pass">0.95+ dynamic</span></span></div>
+        <div class="result-row"><span class="rlbl">Standby loss</span><span class="rval"><span class="badge pass">&lt;1% (sealed vacuum)</span></span></div>
+        <div class="result-row"><span class="rlbl">Replaces battery plant?</span><span class="rval"><span class="badge pass">Yes — &lt;5 ms, no transfer gap</span></span></div>
+        <div class="result-row"><span class="rlbl">Replacement cycle</span><span class="rval"><span class="badge pass">25 years — infinite cycles</span></span></div>
+      </div>
+    </div>
+
+    <!-- POWERWALL -->
+    <div class="side pw-side">
+      <div class="side-header">
+        <h3>&#8854; Tesla Powerwall 3</h3>
+        <p>LFP battery — residential, 10-yr warranty</p>
+      </div>
+      <div class="side-specs">
+        <div class="spec-label">Unit Specifications (per official Tesla datasheet 2025)</div>
+        <div class="spec-row">
+          <div class="spec-field">
+            <label>kWh per Unit</label>
+            <input type="number" id="pw_kwh" value="13.5" readonly>
+          </div>
+          <div class="spec-field">
+            <label>kW per Unit</label>
+            <input type="number" id="pw_kw_unit" value="11.5" readonly>
+          </div>
+          <div class="spec-field">
+            <label>Cost per Unit ($) MSRP</label>
+            <input type="number" id="pw_cost" value="9300" min="0" step="any" oninput="updateAll()">
+          </div>
+          <div class="spec-field">
+            <label>Replacement Cycle (yrs)</label>
+            <input type="number" id="pw_life" value="10" min="0" step="any" oninput="updateAll()">
+          </div>
+        </div>
+      </div>
+      <div class="side-results" id="pw_results">
+        <div class="result-row"><span class="rlbl">Units needed</span><span class="rval" id="pw_units">—</span></div>
+        <div class="result-row"><span class="rlbl">Total energy</span><span class="rval" id="pw_total_kwh">—</span></div>
+        <div class="result-row"><span class="rlbl">Total power</span><span class="rval" id="pw_total_kw">—</span></div>
+        <div class="result-row"><span class="rlbl">Runtime</span><span class="rval" id="pw_runtime">—</span></div>
+        <div class="result-row"><span class="rlbl">Equipment cost (MSRP)</span><span class="rval" id="pw_eq_cost">—</span></div>
+        <div class="result-row"><span class="rlbl">Cost at 80,259 sites (MSRP)</span><span class="rval" id="pw_network_cost">—</span></div>
+        <div class="result-row"><span class="rlbl">NSTD900 — 1-hr (w/ gen)</span><span class="rval" id="pw_1hr">—</span></div>
+        <div class="result-row"><span class="rlbl">NSTD900 — 3-hr (no gen)</span><span class="rval" id="pw_3hr">—</span></div>
+        <div class="result-row"><span class="rlbl">Replaces battery plant?</span><span class="rval"><span class="badge fail">No — VRLA must stay</span></span></div>
+        <div class="result-row"><span class="rlbl">Replacement cycle</span><span class="rval" id="pw_replace_badge">—</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- WINNER -->
+  <div class="winner-box" id="winner_box" style="display:none">
+    <span id="winner_text"></span>
+  </div>
+
+</div>
+
+<script>
+function calc(changed) {
+  var kwEl  = document.getElementById('kw');
+  var hrsEl = document.getElementById('hrs');
+  var kwhEl = document.getElementById('kwh');
+
+  [kwEl, hrsEl, kwhEl].forEach(function(el) { el.classList.remove('solved'); });
+
+  var kw  = parseFloat(kwEl.value);
+  var hrs = parseFloat(hrsEl.value);
+  var kwh = parseFloat(kwhEl.value);
+  var hk = !isNaN(kw)  && kwEl.value  !== '';
+  var hh = !isNaN(hrs) && hrsEl.value !== '';
+  var hw = !isNaN(kwh) && kwhEl.value !== '';
+
+  if      (hk && hh && !hw) { kwhEl.value = r(kw * hrs);  kwhEl.classList.add('solved'); }
+  else if (hw && hh && !hk) { kwEl.value  = r(kwh / hrs); kwEl.classList.add('solved'); }
+  else if (hk && hw && !hh) { hrsEl.value = r(kwh / kw);  hrsEl.classList.add('solved'); }
+  else if (hk && hh &&  hw) {
+    if      (changed === 'kwh') { hrsEl.value = r(kwh / kw);  hrsEl.classList.add('solved'); }
+    else if (changed === 'hrs') { kwhEl.value = r(kw * hrs);  kwhEl.classList.add('solved'); }
+    else                        { kwhEl.value = r(kw * hrs);  kwhEl.classList.add('solved'); }
+  }
+  updateAll();
+}
+
+function r(v, d) { d = d === undefined ? 2 : d; return Math.round(v * Math.pow(10,d)) / Math.pow(10,d); }
+
+function fmt$(v) {
+  if (isNaN(v)) return '—';
+  if (v >= 1e9) return '$' + r(v/1e9, 2) + 'B';
+  if (v >= 1e6) return '$' + r(v/1e6, 1) + 'M';
+  if (v >= 1e3) return '$' + Math.round(v).toLocaleString();
+  return '$' + r(v, 0);
+}
+
+function badge(pass, label) {
+  return '<span class="badge ' + (pass ? 'pass' : 'fail') + '">' + (pass ? '✓ ' : '✗ ') + label + '</span>';
+}
+
+function updateAll() {
+  var kw  = parseFloat(document.getElementById('kw').value);
+  var hrs = parseFloat(document.getElementById('hrs').value);
+  var kwh = parseFloat(document.getElementById('kwh').value);
+
+  // Recalculate kwh if missing
+  if (isNaN(kwh) && !isNaN(kw) && !isNaN(hrs)) kwh = kw * hrs;
+  if (isNaN(kw)  && !isNaN(kwh) && !isNaN(hrs)) kw = kwh / hrs;
+
+  var valid = !isNaN(kw) && kw > 0 && !isNaN(kwh) && kwh > 0;
+
+  // ── POWERWALL ──────────────────────────────────────────────────
+  var pw_kwh_unit = 13.5;
+  var pw_kw_unit  = 11.5;
+  var pw_unit_cost = parseFloat(document.getElementById('pw_cost').value) || 9300;
+  var pw_life      = parseFloat(document.getElementById('pw_life').value);
+
+  if (valid) {
+    var pw_byE  = Math.ceil(kwh / pw_kwh_unit);
+    var pw_byP  = Math.ceil(kw  / pw_kw_unit);
+    var pw_n    = Math.max(pw_byE, pw_byP);
+    var pw_t_kwh = pw_n * pw_kwh_unit;
+    var pw_t_kw  = pw_n * pw_kw_unit;
+    var pw_rt    = pw_t_kwh / kw;
+    var pw_eq    = pw_n * pw_unit_cost + 1500; // +Gateway
+
+    document.getElementById('pw_units').textContent       = pw_n + ' unit' + (pw_n !== 1 ? 's' : '');
+    document.getElementById('pw_total_kwh').textContent   = pw_t_kwh.toFixed(1) + ' kWh';
+    document.getElementById('pw_total_kw').textContent    = pw_t_kw.toFixed(1) + ' kW';
+    document.getElementById('pw_runtime').textContent     = r(pw_rt) + ' hrs';
+    document.getElementById('pw_eq_cost').textContent     = fmt$(pw_eq) + ' (+ install / permitting)';
+    document.getElementById('pw_network_cost').innerHTML  = fmt$(pw_eq * 80259) + ' <span style="font-size:11px;font-weight:400;color:#999;">equip only</span>';
+    document.getElementById('pw_1hr').innerHTML           = badge(pw_t_kwh >= kw * 1, r(kw * 1) + ' kWh req');
+    document.getElementById('pw_3hr').innerHTML           = badge(pw_t_kwh >= kw * 3, r(kw * 3) + ' kWh req');
+    document.getElementById('pw_replace_badge').innerHTML = !isNaN(pw_life) && pw_life > 0
+      ? '<span class="badge fail">Every ' + pw_life + ' yrs</span>'
+      : '<span class="badge na">—</span>';
+  } else {
+    ['pw_units','pw_total_kwh','pw_total_kw','pw_runtime','pw_eq_cost','pw_network_cost','pw_1hr','pw_3hr','pw_replace_badge']
+      .forEach(function(id) { document.getElementById(id).textContent = '—'; });
+  }
+
+  // ── SPIN ───────────────────────────────────────────────────────
+  var sp_kwh_unit  = parseFloat(document.getElementById('spin_kwh').value);
+  var sp_kw_unit   = parseFloat(document.getElementById('spin_kw').value);
+  var sp_unit_cost = parseFloat(document.getElementById('spin_cost').value);
+  var sp_life      = parseFloat(document.getElementById('spin_life').value);
+
+  var sp_has_kwh  = !isNaN(sp_kwh_unit)  && sp_kwh_unit  > 0;
+  var sp_has_kw   = !isNaN(sp_kw_unit)   && sp_kw_unit   > 0;
+  var sp_has_cost = !isNaN(sp_unit_cost) && sp_unit_cost >= 0;
+
+  if (valid && sp_has_kwh) {
+    // Size by energy AND power
+    var sp_byE = Math.ceil(kwh / sp_kwh_unit);
+    var sp_byP = sp_has_kw ? Math.ceil(kw / sp_kw_unit) : 0;
+    var sp_n   = Math.max(sp_byE, sp_byP);
+    var sp_t_kwh = sp_n * sp_kwh_unit;
+    var sp_t_kw  = sp_has_kw ? sp_n * sp_kw_unit : null;
+    var sp_rt    = sp_t_kwh / kw;
+    var sp_eq    = sp_has_cost ? sp_n * sp_unit_cost : null;
+
+    document.getElementById('spin_units').textContent     = sp_n + ' cube' + (sp_n !== 1 ? 's' : '');
+    document.getElementById('spin_total_kwh').textContent = sp_t_kwh.toFixed(1) + ' kWh';
+    document.getElementById('spin_total_kw').innerHTML    = sp_t_kw !== null
+      ? sp_t_kw.toFixed(1) + ' kW'
+      : '<span class="badge warn">Pending NDA</span>';
+    document.getElementById('spin_runtime').textContent   = r(sp_rt) + ' hrs';
+    document.getElementById('spin_eq_cost').textContent   = sp_eq !== null ? fmt$(sp_eq) : 'Enter cost above';
+    document.getElementById('spin_network_cost').innerHTML = sp_eq !== null
+      ? fmt$(sp_eq * 80259) + ' <span style="font-size:11px;font-weight:400;color:#999;">equip only</span>'
+      : 'Enter cost above';
+    document.getElementById('spin_1hr').innerHTML = badge(sp_t_kwh >= kw * 1, r(kw * 1) + ' kWh req');
+    document.getElementById('spin_3hr').innerHTML = badge(sp_t_kwh >= kw * 3, r(kw * 3) + ' kWh req');
+  } else {
+    document.getElementById('spin_units').textContent        = valid ? 'Enter kWh/cube above' : '—';
+    document.getElementById('spin_total_kwh').textContent    = '—';
+    document.getElementById('spin_total_kw').innerHTML       = '<span class="badge warn">Pending NDA</span>';
+    document.getElementById('spin_runtime').textContent      = '—';
+    document.getElementById('spin_eq_cost').textContent      = '—';
+    document.getElementById('spin_network_cost').textContent = '—';
+    document.getElementById('spin_1hr').innerHTML            = '—';
+    document.getElementById('spin_3hr').innerHTML            = '—';
+  }
+
+  // ── Winner summary ────────────────────────────────────────────
+  var wb = document.getElementById('winner_box');
+  var wt = document.getElementById('winner_text');
+  if (valid && sp_has_kwh && sp_has_cost) {
+    var sp_n2  = Math.max(Math.ceil(kwh / sp_kwh_unit), sp_has_kw ? Math.ceil(kw / sp_kw_unit) : 0);
+    var pw_n2  = Math.max(Math.ceil(kwh/pw_kwh_unit), Math.ceil(kw/pw_kw_unit));
+    var sp_eq2 = sp_n2 * sp_unit_cost;
+    var pw_eq2 = pw_n2 * pw_unit_cost + 1500;
+    var savings = pw_eq2 - sp_eq2;
+    var net80k  = savings * 80259;
+    wt.innerHTML = '<strong>Per-site:</strong> SPIN = ' + fmt$(sp_eq2) + ' &nbsp;|&nbsp; Powerwall = ' + fmt$(pw_eq2) +
+      (savings > 0
+        ? ' &nbsp;→&nbsp; <strong>SPIN saves ' + fmt$(savings) + '/site (' + fmt$(net80k) + ' across 80,259 sites)</strong>'
+        : ' &nbsp;→&nbsp; <strong>Powerwall saves ' + fmt$(Math.abs(savings)) + '/site</strong>') +
+      '<br><em style="font-size:12px;color:#555;">Note: Powerwall cost does not include VRLA batteries that must remain on the −48V bus. SPIN eliminates them.</em>';
+    wb.style.display = 'block';
+  } else {
+    wb.style.display = 'none';
+  }
+}
+
+function clearAll() {
+  ['kw','hrs','kwh'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.value = '';
+    el.classList.remove('solved');
+  });
+  updateAll();
+}
+
+// Fire on load with default values
+window.onload = function() { calc('kw'); };
+</script>
+</body>
+</html>
